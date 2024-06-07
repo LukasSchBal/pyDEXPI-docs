@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>pydexpi.syndata package &mdash; pyDEXPI v0.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=fa47ad08"></script>
+        <script src="_static/doctools.js?v=9a2dae69"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="pydexpi.toolkits package" href="pydexpi.toolkits.html" />
+    <link rel="prev" title="pydexpi.pid_development package" href="pydexpi.pid_development.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            pyDEXPI
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">pydexpi</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="pydexpi.html">pydexpi package</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="pydexpi.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="pydexpi.dexpi_classes.html">pydexpi.dexpi_classes package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pydexpi.loaders.html">pydexpi.loaders package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pydexpi.pid_development.html">pydexpi.pid_development package</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">pydexpi.syndata package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pydexpi.toolkits.html">pydexpi.toolkits package</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="pydexpi.html#module-pydexpi">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">pyDEXPI</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="modules.html">pydexpi</a></li>
+          <li class="breadcrumb-item"><a href="pydexpi.html">pydexpi package</a></li>
+      <li class="breadcrumb-item active">pydexpi.syndata package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/pydexpi.syndata.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="pydexpi-syndata-package">
+<h1>pydexpi.syndata package<a class="headerlink" href="#pydexpi-syndata-package" title="Link to this heading"></a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading"></a></h2>
+</section>
+<section id="module-pydexpi.syndata.generator">
+<span id="pydexpi-syndata-generator-module"></span><h2>pydexpi.syndata.generator module<a class="headerlink" href="#module-pydexpi.syndata.generator" title="Link to this heading"></a></h2>
+<p>This python class creates random dexpi P&amp;ID using markov-like random
+sequences. Adopted from Vogel et al.
+(<a class="reference external" href="https://doi.org/10.1016/j.compchemeng.2023.108162">https://doi.org/10.1016/j.compchemeng.2023.108162</a>) and Hirtreiter et al.
+(<a class="reference external" href="https://doi.org/10.1002/aic.18259">https://doi.org/10.1002/aic.18259</a>).</p>
+<p>At the moment this only includes topological equipment and piping network
+systems.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="pydexpi.syndata.generator.SyntheticPIDGenerator">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pydexpi.syndata.generator.</span></span><span class="sig-name descname"><span class="pre">SyntheticPIDGenerator</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">generatorFunction</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#pydexpi.syndata.generator_function.GeneratorFunction" title="pydexpi.syndata.generator_function.GeneratorFunction"><span class="pre">GeneratorFunction</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_steps</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pydexpi.syndata.generator.SyntheticPIDGenerator" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>The generator contains mechanisms to connect patterns to a larger pattern
+and collect them in pattern distributions.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="pydexpi.syndata.generator.SyntheticPIDGenerator.continue_loop">
+<span class="sig-name descname"><span class="pre">continue_loop</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pydexpi.syndata.generator.SyntheticPIDGenerator.continue_loop" title="Link to this definition"></a></dt>
+<dd><p>Checks stopping criteria for P&amp;ID generation. Stops if no open
+connectors are available or the maximum number of generation steps is
+reached.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pydexpi.syndata.generator.SyntheticPIDGenerator.generate_pattern">
+<span class="sig-name descname"><span class="pre">generate_pattern</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pydexpi.syndata.generator.SyntheticPIDGenerator.generate_pattern" title="Link to this definition"></a></dt>
+<dd><p>Top-level function to create a random dexpi flowsheet</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pydexpi.syndata.generator.SyntheticPIDGenerator.generate_pids">
+<span class="sig-name descname"><span class="pre">generate_pids</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">amount</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">savepath</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pydexpi.syndata.generator.SyntheticPIDGenerator.generate_pids" title="Link to this definition"></a></dt>
+<dd><p>Generates a given amount of P&amp;IDs and saves them locally.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>amount</strong> (<em>int</em>) – Number of P&amp;IDs to be generated.</p></li>
+<li><p><strong>savepath</strong> (<em>Path</em>) – Storage path for P&amp;IDs.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pydexpi.syndata.generator.SyntheticPIDGenerator.next_step">
+<span class="sig-name descname"><span class="pre">next_step</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pydexpi.syndata.generator.SyntheticPIDGenerator.next_step" title="Link to this definition"></a></dt>
+<dd><p>Adds a further pattern to the P&amp;ID.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-pydexpi.syndata.generator_function">
+<span id="pydexpi-syndata-generator-function-module"></span><h2>pydexpi.syndata.generator_function module<a class="headerlink" href="#module-pydexpi.syndata.generator_function" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="pydexpi.syndata.generator_function.GeneratorFunction">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pydexpi.syndata.generator_function.</span></span><span class="sig-name descname"><span class="pre">GeneratorFunction</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">distribution_range</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#pydexpi.syndata.pattern_distribution.PatternDistribution" title="pydexpi.syndata.pattern_distribution.PatternDistribution"><span class="pre">PatternDistribution</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pydexpi.syndata.generator_function.GeneratorFunction" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ABC</span></code></p>
+<p>Abstract class for the generator function. Generator function contains
+the logic of determining the next pattern to be connected, in accordance
+with the strategy design pattern. The logic follows:</p>
+<dl class="simple">
+<dt>f(current_pattern) = current_pattern_connection,</dt><dd><p>next_pattern,
+next_pattern_connection</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="pydexpi.syndata.generator_function.GeneratorFunction.initialize_pattern">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">initialize_pattern</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#pydexpi.syndata.pattern.Pattern" title="pydexpi.syndata.pattern.Pattern"><span class="pre">Pattern</span></a></span></span><a class="headerlink" href="#pydexpi.syndata.generator_function.GeneratorFunction.initialize_pattern" title="Link to this definition"></a></dt>
+<dd><p>Initializes the P&amp;ID generation with a seed pattern.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Seed pattern to start the P&amp;ID generation with.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#pydexpi.syndata.pattern.Pattern" title="pydexpi.syndata.pattern.Pattern">Pattern</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pydexpi.syndata.generator_function.MarkovChainGeneratorFunction">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pydexpi.syndata.generator_function.</span></span><span class="sig-name descname"><span class="pre">MarkovChainGeneratorFunction</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">distribution_range</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#pydexpi.syndata.pattern_distribution.PatternDistribution" title="pydexpi.syndata.pattern_distribution.PatternDistribution"><span class="pre">PatternDistribution</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pydexpi.syndata.generator_function.MarkovChainGeneratorFunction" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#pydexpi.syndata.generator_function.GeneratorFunction" title="pydexpi.syndata.generator_function.GeneratorFunction"><code class="xref py py-class docutils literal notranslate"><span class="pre">GeneratorFunction</span></code></a></p>
+<p>Example implementation of a generator function. Takes a random pattern
+and connects it to a random available connector.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="pydexpi.syndata.generator_function.MarkovChainGeneratorFunction.initialize_pattern">
+<span class="sig-name descname"><span class="pre">initialize_pattern</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#pydexpi.syndata.pattern.Pattern" title="pydexpi.syndata.pattern.Pattern"><span class="pre">Pattern</span></a></span></span><a class="headerlink" href="#pydexpi.syndata.generator_function.MarkovChainGeneratorFunction.initialize_pattern" title="Link to this definition"></a></dt>
+<dd><p>Initializes the P&amp;ID generation with a seed pattern.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Seed pattern to start the P&amp;ID generation with.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#pydexpi.syndata.pattern.Pattern" title="pydexpi.syndata.pattern.Pattern">Pattern</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-pydexpi.syndata.pattern">
+<span id="pydexpi-syndata-pattern-module"></span><h2>pydexpi.syndata.pattern module<a class="headerlink" href="#module-pydexpi.syndata.pattern" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="pydexpi.syndata.pattern.BasicPipingInConnector">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pydexpi.syndata.pattern.</span></span><span class="sig-name descname"><span class="pre">BasicPipingInConnector</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">label</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reference_object</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pydexpi.syndata.pattern.BasicPipingInConnector" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#pydexpi.syndata.pattern.Connector" title="pydexpi.syndata.pattern.Connector"><code class="xref py py-class docutils literal notranslate"><span class="pre">Connector</span></code></a></p>
+<p>Extends the Connector for a basic piping in connection</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="pydexpi.syndata.pattern.BasicPipingInConnector.connect_to_counterpart">
+<span class="sig-name descname"><span class="pre">connect_to_counterpart</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">counterpart</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#pydexpi.syndata.pattern.BasicPipingOutConnector" title="pydexpi.syndata.pattern.BasicPipingOutConnector"><span class="pre">BasicPipingOutConnector</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pydexpi.syndata.pattern.BasicPipingInConnector.connect_to_counterpart" title="Link to this definition"></a></dt>
+<dd><p>The method invokes a connection between the connection and its
+counterpart. The implementation to this is subclass specific.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>counterpart</strong> (<em>(</em><em>subclass specific type</em><em>)</em>) – The other connector that is to be connected to.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>This method only performs the connection in the pattern and deletes
+the connector object and its counterpart.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pydexpi.syndata.pattern.BasicPipingInConnector.referencable_types">
+<span class="sig-name descname"><span class="pre">referencable_types</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">(&lt;class</span> <span class="pre">'pydexpi.dexpi_classes.piping.pipingNode.PipingNode'&gt;,</span> <span class="pre">&lt;class</span> <span class="pre">'pydexpi.dexpi_classes.piping.pipingTargetItem.PipingTargetItem'&gt;)</span></em><a class="headerlink" href="#pydexpi.syndata.pattern.BasicPipingInConnector.referencable_types" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pydexpi.syndata.pattern.BasicPipingOutConnector">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pydexpi.syndata.pattern.</span></span><span class="sig-name descname"><span class="pre">BasicPipingOutConnector</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">label</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reference_object</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pydexpi.syndata.pattern.BasicPipingOutConnector" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#pydexpi.syndata.pattern.Connector" title="pydexpi.syndata.pattern.Connector"><code class="xref py py-class docutils literal notranslate"><span class="pre">Connector</span></code></a></p>
+<p>Extends the Connector for a basic piping out connection</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="pydexpi.syndata.pattern.BasicPipingOutConnector.connect_to_counterpart">
+<span class="sig-name descname"><span class="pre">connect_to_counterpart</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">counterpart</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#pydexpi.syndata.pattern.BasicPipingInConnector" title="pydexpi.syndata.pattern.BasicPipingInConnector"><span class="pre">BasicPipingInConnector</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pydexpi.syndata.pattern.BasicPipingOutConnector.connect_to_counterpart" title="Link to this definition"></a></dt>
+<dd><p>The method invokes a connection between the connection and its
+counterpart. The implementation to this is subclass specific.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>counterpart</strong> (<em>(</em><em>subclass specific type</em><em>)</em>) – The other connector that is to be connected to.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>This method only performs the connection in the pattern and deletes
+the connector object and its counterpart.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pydexpi.syndata.pattern.BasicPipingOutConnector.referencable_types">
+<span class="sig-name descname"><span class="pre">referencable_types</span></span><a class="headerlink" href="#pydexpi.syndata.pattern.BasicPipingOutConnector.referencable_types" title="Link to this definition"></a></dt>
+<dd><p>alias of <a class="reference internal" href="pydexpi.dexpi_classes.piping.html#pydexpi.dexpi_classes.piping.pipingNetworkSegment.PipingNetworkSegment" title="pydexpi.dexpi_classes.piping.pipingNetworkSegment.PipingNetworkSegment"><code class="xref py py-class docutils literal notranslate"><span class="pre">PipingNetworkSegment</span></code></a></p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pydexpi.syndata.pattern.Connector">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pydexpi.syndata.pattern.</span></span><span class="sig-name descname"><span class="pre">Connector</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">label</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reference_object</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="pydexpi.dexpi_classes.customization.html#pydexpi.dexpi_classes.customization.customAttributeOwner.CustomAttributeOwner" title="pydexpi.dexpi_classes.customization.customAttributeOwner.CustomAttributeOwner"><span class="pre">CustomAttributeOwner</span></a></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pydexpi.syndata.pattern.Connector" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ABC</span></code></p>
+<p>Pattern instances contain connectors. These contain information and logic
+on the connector that can be accessed by the generator to base its decision
+on connection on.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pydexpi.syndata.pattern.Connector.referenced_types">
+<span class="sig-name descname"><span class="pre">referenced_types</span></span><a class="headerlink" href="#pydexpi.syndata.pattern.Connector.referenced_types" title="Link to this definition"></a></dt>
+<dd><p>Abstract, static attribute. A tuple of types that may be referenced by
+this object</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>tuple of types</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pydexpi.syndata.pattern.Connector.label">
+<span class="sig-name descname"><span class="pre">label</span></span><a class="headerlink" href="#pydexpi.syndata.pattern.Connector.label" title="Link to this definition"></a></dt>
+<dd><p>The label of the connector</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pydexpi.syndata.pattern.Connector.kwinfos">
+<span class="sig-name descname"><span class="pre">kwinfos</span></span><a class="headerlink" href="#pydexpi.syndata.pattern.Connector.kwinfos" title="Link to this definition"></a></dt>
+<dd><p>A dictionary that contains relevant infos which can be retrieved by
+keyword. The contents can be dynamically manipulated during generation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dict</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pydexpi.syndata.pattern.Connector.add_dexpi_label">
+<span class="sig-name descname"><span class="pre">add_dexpi_label</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pydexpi.syndata.pattern.Connector.add_dexpi_label" title="Link to this definition"></a></dt>
+<dd><p>Adds a label in the form of a custom attribute to the referenced
+object, so that it can be recovered after serialization.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pydexpi.syndata.pattern.Connector.connect_to_counterpart">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">connect_to_counterpart</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">counterpart</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pydexpi.syndata.pattern.Connector.connect_to_counterpart" title="Link to this definition"></a></dt>
+<dd><p>The method invokes a connection between the connection and its
+counterpart. The implementation to this is subclass specific.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>counterpart</strong> (<em>(</em><em>subclass specific type</em><em>)</em>) – The other connector that is to be connected to.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>This method only performs the connection in the pattern and deletes
+the connector object and its counterpart.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pydexpi.syndata.pattern.Connector.get_dexpi_custom_attribute_label">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">get_dexpi_custom_attribute_label</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pydexpi.syndata.pattern.Connector.get_dexpi_custom_attribute_label" title="Link to this definition"></a></dt>
+<dd><p>Get the name of the attribute label associated to each of the
+connector subclasses, as used to store the reference in dexpi.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pydexpi.syndata.pattern.Connector.get_information">
+<span class="sig-name descname"><span class="pre">get_information</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pydexpi.syndata.pattern.Connector.get_information" title="Link to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pydexpi.syndata.pattern.Connector.import_from_valid_reference_object">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">import_from_valid_reference_object</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">reference_object</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="pydexpi.dexpi_classes.customization.html#pydexpi.dexpi_classes.customization.customAttributeOwner.CustomAttributeOwner" title="pydexpi.dexpi_classes.customization.customAttributeOwner.CustomAttributeOwner"><span class="pre">CustomAttributeOwner</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pydexpi.syndata.pattern.Connector.import_from_valid_reference_object" title="Link to this definition"></a></dt>
+<dd><p>Create an instance from a valid reference object.</p>
+<p>This class method attempts to create an instance of the class by
+searching for an associated custom attribute within the provided
+reference object. If no appropriate label is not found, a <cite>ValueError</cite> is raised.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>reference_object</strong> (<a class="reference internal" href="pydexpi.dexpi_classes.customization.html#pydexpi.dexpi_classes.customization.customAttributeOwner.CustomAttributeOwner" title="pydexpi.dexpi_classes.customization.customAttributeOwner.CustomAttributeOwner"><em>CustomAttributeOwner</em></a>) – An object that contains custom attributes.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>An instance of the class initialized with the value of the found
+custom attribute and the reference object.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>instance of cls</p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>ValueError</strong> – If no appropriate label is not found.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="pydexpi.syndata.pattern.Connector.referencable_types">
+<em class="property"><span class="pre">abstract</span><span class="w"> </span><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">referencable_types</span></span><a class="headerlink" href="#pydexpi.syndata.pattern.Connector.referencable_types" title="Link to this definition"></a></dt>
+<dd><p>Tuple of classes that are valid to be referenced. This static
+attribute is subclass-specific.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pydexpi.syndata.pattern.Connector.remove_dexpi_label">
+<span class="sig-name descname"><span class="pre">remove_dexpi_label</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pydexpi.syndata.pattern.Connector.remove_dexpi_label" title="Link to this definition"></a></dt>
+<dd><p>Removes the custom attribute labels used for serialization from the
+referenced object to avoid artefacts in exporting patterns.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="pydexpi.syndata.pattern.Pattern">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pydexpi.syndata.pattern.</span></span><span class="sig-name descname"><span class="pre">Pattern</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="pydexpi.dexpi_classes.dexpiModel.html#pydexpi.dexpi_classes.dexpiModel.dexpiModel.DexpiModel" title="pydexpi.dexpi_classes.dexpiModel.dexpiModel.DexpiModel"><span class="pre">DexpiModel</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">connectors</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#pydexpi.syndata.pattern.Connector" title="pydexpi.syndata.pattern.Connector"><span class="pre">Connector</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pydexpi.syndata.pattern.Pattern" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>A pattern is a wrapper class for a DexpiModel for the generator.
+It describes a given P&amp;ID state and contatins connector references as
+interfaces.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pydexpi.syndata.pattern.Pattern.name">
+<span class="sig-name descname"><span class="pre">name</span></span><a class="headerlink" href="#pydexpi.syndata.pattern.Pattern.name" title="Link to this definition"></a></dt>
+<dd><p>The name reference of the Pattern</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pydexpi.syndata.pattern.Pattern.model">
+<span class="sig-name descname"><span class="pre">model</span></span><a class="headerlink" href="#pydexpi.syndata.pattern.Pattern.model" title="Link to this definition"></a></dt>
+<dd><p>The instance of the dexpi model wrapped by this pattern for the
+generator.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="pydexpi.dexpi_classes.dexpiModel.html#pydexpi.dexpi_classes.dexpiModel.dexpiModel.DexpiModel" title="pydexpi.dexpi_classes.dexpiModel.dexpiModel.DexpiModel">DexpiModel</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pydexpi.syndata.pattern.Pattern.connectors">
+<span class="sig-name descname"><span class="pre">connectors</span></span><a class="headerlink" href="#pydexpi.syndata.pattern.Pattern.connectors" title="Link to this definition"></a></dt>
+<dd><p>The connectors associated to this pattern, defining its interfaces for
+connection by the generator.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list[Connectors]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pydexpi.syndata.pattern.Pattern.connect_to_counterpart">
+<span class="sig-name descname"><span class="pre">connect_to_counterpart</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">own_connector</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#pydexpi.syndata.pattern.Connector" title="pydexpi.syndata.pattern.Connector"><span class="pre">Connector</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">counterpart</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#pydexpi.syndata.pattern.Pattern" title="pydexpi.syndata.pattern.Pattern"><span class="pre">Pattern</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">counterpart_connector</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#pydexpi.syndata.pattern.Connector" title="pydexpi.syndata.pattern.Connector"><span class="pre">Connector</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference internal" href="#pydexpi.syndata.pattern.Pattern" title="pydexpi.syndata.pattern.Pattern"><span class="pre">Pattern</span></a></span></span><a class="headerlink" href="#pydexpi.syndata.pattern.Pattern.connect_to_counterpart" title="Link to this definition"></a></dt>
+<dd><p>This method connects this pattern to another pattern via the
+connectors specified.</p>
+<p>Note that the contents of the counterpart pattern are imported into this
+pattern, instead of generating a new pattern (Notably, the contents of
+its dexpi model, such as meta data). That way, e.g. the current_pattern
+in a generator can be conserved rather than having to be replaced at
+every step.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>own_connector</strong> (<a class="reference internal" href="#pydexpi.syndata.pattern.Connector" title="pydexpi.syndata.pattern.Connector"><em>Connector</em></a>) – The connector in this pattern (self) that should be used for
+connection to the counterpart.</p></li>
+<li><p><strong>counterpart</strong> (<a class="reference internal" href="#pydexpi.syndata.pattern.Pattern" title="pydexpi.syndata.pattern.Pattern"><em>Pattern</em></a>) – The counterpart that should be connected and incorporated to this.
+pattern.</p></li>
+<li><p><strong>counterpart_connector</strong> (<a class="reference internal" href="#pydexpi.syndata.pattern.Connector" title="pydexpi.syndata.pattern.Connector"><em>Connector</em></a>) – The connector in the counterpart pattern that should be used for
+connection to this pattern (self).</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A reference to self after connection is completed.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#pydexpi.syndata.pattern.Pattern" title="pydexpi.syndata.pattern.Pattern">Pattern</a></p>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>ValueError</strong> – If either the own_connector or the connector of the counterpart are
+    not associated to the corresponding patterns.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pydexpi.syndata.pattern.Pattern.init_by_inferring_connectors">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">init_by_inferring_connectors</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="pydexpi.dexpi_classes.dexpiModel.html#pydexpi.dexpi_classes.dexpiModel.dexpiModel.DexpiModel" title="pydexpi.dexpi_classes.dexpiModel.dexpiModel.DexpiModel"><span class="pre">DexpiModel</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pydexpi.syndata.pattern.Pattern.init_by_inferring_connectors" title="Link to this definition"></a></dt>
+<dd><p>This method acts as a second constructor in which the connectors are
+not passed explicitly, but are inferred by the labels in the dexpi
+model.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<em>str</em>) – The name of the pattern.</p></li>
+<li><p><strong>model</strong> (<a class="reference internal" href="pydexpi.dexpi_classes.dexpiModel.html#pydexpi.dexpi_classes.dexpiModel.dexpiModel.DexpiModel" title="pydexpi.dexpi_classes.dexpiModel.dexpiModel.DexpiModel"><em>DexpiModel</em></a>) – The model to be stored in the pattern.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The newly generated pattern.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#pydexpi.syndata.pattern.Pattern" title="pydexpi.syndata.pattern.Pattern">Pattern</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pydexpi.syndata.pattern.Pattern.load_pattern">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">load_pattern</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path_dir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">serializer</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="pydexpi.loaders.html#pydexpi.loaders.serializer.Serializer" title="pydexpi.loaders.serializer.Serializer"><span class="pre">Serializer</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pydexpi.syndata.pattern.Pattern.load_pattern" title="Link to this definition"></a></dt>
+<dd><p>Loads a pattern in the directory specified in path_dir with the name
+given in name.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>path_dir</strong> (<em>Path</em>) – The directory the pattern is saved in.</p></li>
+<li><p><strong>name</strong> (<em>str</em>) – The name of the pattern.</p></li>
+<li><p><strong>serializer</strong> (<a class="reference internal" href="pydexpi.loaders.html#pydexpi.loaders.serializer.Serializer" title="pydexpi.loaders.serializer.Serializer"><em>Serializer</em></a>) – The serializer to be used for loading.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The loaded pattern.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#pydexpi.syndata.pattern.Pattern" title="pydexpi.syndata.pattern.Pattern">Pattern</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pydexpi.syndata.pattern.Pattern.save_pattern">
+<span class="sig-name descname"><span class="pre">save_pattern</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">path_dir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">serializer</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="pydexpi.loaders.html#pydexpi.loaders.serializer.Serializer" title="pydexpi.loaders.serializer.Serializer"><span class="pre">Serializer</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pydexpi.syndata.pattern.Pattern.save_pattern" title="Link to this definition"></a></dt>
+<dd><p>Saves a pattern to a directory in dirpath with the file name taken
+from its name attribute. For this, it uses the dexpi serializer
+specified in serializer.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>path_dir</strong> (<em>Path</em>) – The path of the directory the pattern is stored in</p></li>
+<li><p><strong>serializer</strong> (<a class="reference internal" href="pydexpi.loaders.html#pydexpi.loaders.serializer.Serializer" title="pydexpi.loaders.serializer.Serializer"><em>Serializer</em></a>) – The serializer object to be used for saving</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-pydexpi.syndata.pattern_distribution">
+<span id="pydexpi-syndata-pattern-distribution-module"></span><h2>pydexpi.syndata.pattern_distribution module<a class="headerlink" href="#module-pydexpi.syndata.pattern_distribution" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="pydexpi.syndata.pattern_distribution.PatternDistribution">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pydexpi.syndata.pattern_distribution.</span></span><span class="sig-name descname"><span class="pre">PatternDistribution</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">distribution</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#pydexpi.syndata.pattern.Pattern" title="pydexpi.syndata.pattern.Pattern"><span class="pre">Pattern</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">connector_labels</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pydexpi.syndata.pattern_distribution.PatternDistribution" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>A PatternDistribution is a collection of Patterns that share the same
+properties with regards to the generation logic. The patterns are grouped
+for the sake of randomness and for structure. The grouping is based on
+similarity mainly regarding:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>Outside connectors.</p></li>
+<li><p>Transition logic.</p></li>
+<li><p>Conceptual similarity (e.g. distillation equipment).</p></li>
+</ul>
+</div></blockquote>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pydexpi.syndata.pattern_distribution.PatternDistribution.name">
+<span class="sig-name descname"><span class="pre">name</span></span><a class="headerlink" href="#pydexpi.syndata.pattern_distribution.PatternDistribution.name" title="Link to this definition"></a></dt>
+<dd><p>The name of the pattern distribution, preferably an umbrella term for
+the patterns contained.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pydexpi.syndata.pattern_distribution.PatternDistribution.distribution">
+<span class="sig-name descname"><span class="pre">distribution</span></span><a class="headerlink" href="#pydexpi.syndata.pattern_distribution.PatternDistribution.distribution" title="Link to this definition"></a></dt>
+<dd><p>The patterns contained in the distribution(keys), with the corresponding
+probabilities stored as the dictionary values.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dict[<a class="reference internal" href="#pydexpi.syndata.pattern.Pattern" title="pydexpi.syndata.pattern.Pattern">Pattern</a>, float]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pydexpi.syndata.pattern_distribution.PatternDistribution.connector_labels">
+<span class="sig-name descname"><span class="pre">connector_labels</span></span><a class="headerlink" href="#pydexpi.syndata.pattern_distribution.PatternDistribution.connector_labels" title="Link to this definition"></a></dt>
+<dd><p>The labels of the connectors that each of the patterns in the
+distribution must contain.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list[str]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pydexpi.syndata.pattern_distribution.PatternDistribution.add_pattern">
+<span class="sig-name descname"><span class="pre">add_pattern</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pattern</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#pydexpi.syndata.pattern.Pattern" title="pydexpi.syndata.pattern.Pattern"><span class="pre">Pattern</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">probability</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">normalize</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pydexpi.syndata.pattern_distribution.PatternDistribution.add_pattern" title="Link to this definition"></a></dt>
+<dd><p>Add a pattern to the distribution with a specified probability.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<em>str</em>) – Name of the new patterndistribution</p></li>
+<li><p><strong>pattern</strong> (<a class="reference internal" href="#pydexpi.syndata.pattern.Pattern" title="pydexpi.syndata.pattern.Pattern"><em>Pattern</em></a>) – The pattern to be added to the distribution.</p></li>
+<li><p><strong>probability</strong> (<em>float</em>) – The probability associated with the pattern. Must be between 0 and 1.</p></li>
+<li><p><strong>normalize</strong> (<em>bool</em>) – Wherther the probabilities should be normalized after adding the pattern.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>ValueError</strong> – If the pattern does not contain all required connectors.
+    If the pattern is already part of the distribution.
+    If the probability is not between 0 and 1.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pydexpi.syndata.pattern_distribution.PatternDistribution.check_pattern_compatibility">
+<span class="sig-name descname"><span class="pre">check_pattern_compatibility</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pattern</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#pydexpi.syndata.pattern.Pattern" title="pydexpi.syndata.pattern.Pattern"><span class="pre">Pattern</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pydexpi.syndata.pattern_distribution.PatternDistribution.check_pattern_compatibility" title="Link to this definition"></a></dt>
+<dd><p>Checks if the pattern is compatible with the pattern distribution, ie
+contains all required connector labels. Note that a pattern may have more
+connectors than the required ones to be valid.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>pattern</strong> (<a class="reference internal" href="#pydexpi.syndata.pattern.Pattern" title="pydexpi.syndata.pattern.Pattern"><em>Pattern</em></a>) – The pattern to be evaluated for compatibility</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>True if compatible, else False</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pydexpi.syndata.pattern_distribution.PatternDistribution.load_distribution">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">load_distribution</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dir_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">serializer</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="pydexpi.loaders.html#pydexpi.loaders.serializer.Serializer" title="pydexpi.loaders.serializer.Serializer"><span class="pre">Serializer</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pydexpi.syndata.pattern_distribution.PatternDistribution.load_distribution" title="Link to this definition"></a></dt>
+<dd><p>Loads a distribution in the directory specified in path_dir with the
+name given in name, as previously saved by the save_distribution method.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>path_dir</strong> (<em>Path</em>) – The directory the distribution is saved in.</p></li>
+<li><p><strong>name</strong> (<em>str</em>) – The name of the distribution.</p></li>
+<li><p><strong>serializer</strong> (<a class="reference internal" href="pydexpi.loaders.html#pydexpi.loaders.serializer.Serializer" title="pydexpi.loaders.serializer.Serializer"><em>Serializer</em></a>) – The serializer to be used for loading.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The loaded pattern.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#pydexpi.syndata.pattern.Pattern" title="pydexpi.syndata.pattern.Pattern">Pattern</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pydexpi.syndata.pattern_distribution.PatternDistribution.normalize_probabilities">
+<span class="sig-name descname"><span class="pre">normalize_probabilities</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pydexpi.syndata.pattern_distribution.PatternDistribution.normalize_probabilities" title="Link to this definition"></a></dt>
+<dd><p>Normalize the probabilities in the distribution so they sum to 1.</p>
+<p>This method modifies the probabilities in the distribution such that
+the total sum of all probabilities equals 1. If the total probability
+is greater than 0, each probability is divided by the total probability.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pydexpi.syndata.pattern_distribution.PatternDistribution.random_pattern">
+<span class="sig-name descname"><span class="pre">random_pattern</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pydexpi.syndata.pattern_distribution.PatternDistribution.random_pattern" title="Link to this definition"></a></dt>
+<dd><p>Samples a pattern from the distribution completely at random,
+disregarding the probabilities.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The randomly sampled pattern.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#pydexpi.syndata.pattern.Pattern" title="pydexpi.syndata.pattern.Pattern">Pattern</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pydexpi.syndata.pattern_distribution.PatternDistribution.sample_pattern">
+<span class="sig-name descname"><span class="pre">sample_pattern</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pydexpi.syndata.pattern_distribution.PatternDistribution.sample_pattern" title="Link to this definition"></a></dt>
+<dd><p>Samples a pattern from the pattern distribution with respect to the
+probabilities of the distribution.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The sampled pattern.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="#pydexpi.syndata.pattern.Pattern" title="pydexpi.syndata.pattern.Pattern">Pattern</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pydexpi.syndata.pattern_distribution.PatternDistribution.save_distribution">
+<span class="sig-name descname"><span class="pre">save_distribution</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dir_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">serializer</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="pydexpi.loaders.html#pydexpi.loaders.serializer.Serializer" title="pydexpi.loaders.serializer.Serializer"><span class="pre">Serializer</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pydexpi.syndata.pattern_distribution.PatternDistribution.save_distribution" title="Link to this definition"></a></dt>
+<dd><p>Saves a distribution to a directory in dirpath with the folder name
+taken from its name attribute. All patterns are saved in a new folder
+with the distribution name, using the dexpi serializer specified in
+serializer. Metadata, specifically the distribution probabilities, are
+saved along in a separate json in that folder.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>path_dir</strong> (<em>str</em>) – The path of the directory the pattern is stored in</p></li>
+<li><p><strong>serializer</strong> (<a class="reference internal" href="pydexpi.loaders.html#pydexpi.loaders.serializer.Serializer" title="pydexpi.loaders.serializer.Serializer"><em>Serializer</em></a>) – The serializer object to be used for saving</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-pydexpi.syndata">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-pydexpi.syndata" title="Link to this heading"></a></h2>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="pydexpi.pid_development.html" class="btn btn-neutral float-left" title="pydexpi.pid_development package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="pydexpi.toolkits.html" class="btn btn-neutral float-right" title="pydexpi.toolkits package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Domink Goldstein, Lukas Schulze Balhorn, Artur Schweidtmann.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
