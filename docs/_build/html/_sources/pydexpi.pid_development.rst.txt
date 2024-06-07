@@ -4,13 +4,10 @@ pydexpi.pid\_development package
 Submodules
 ----------
 
-pydexpi.pid\_development.rule\_manager module
----------------------------------------------
+.. toctree::
+   :maxdepth: 4
 
-.. automodule:: pydexpi.pid_development.rule_manager
-   :members:
-   :undoc-members:
-   :show-inheritance:
+   pydexpi.pid_development.rule_manager
 
 Module contents
 ---------------

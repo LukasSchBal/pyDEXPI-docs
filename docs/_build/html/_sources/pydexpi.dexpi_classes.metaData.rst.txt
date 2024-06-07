@@ -4,13 +4,10 @@ pydexpi.dexpi\_classes.metaData package
 Submodules
 ----------
 
-pydexpi.dexpi\_classes.metaData.metaData module
------------------------------------------------
+.. toctree::
+   :maxdepth: 4
 
-.. automodule:: pydexpi.dexpi_classes.metaData.metaData
-   :members:
-   :undoc-members:
-   :show-inheritance:
+   pydexpi.dexpi_classes.metaData.metaData
 
 Module contents
 ---------------

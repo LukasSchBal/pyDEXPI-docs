@@ -1,0 +1,1402 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>pydexpi.toolkits.piping_toolkit &mdash; pyDEXPI v0.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../../_static/documentation_options.js?v=fa47ad08"></script>
+        <script src="../../../_static/doctools.js?v=9a2dae69"></script>
+        <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            pyDEXPI
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">pydexpi</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">pyDEXPI</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">pydexpi.toolkits.piping_toolkit</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for pydexpi.toolkits.piping_toolkit</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Dexpi Piping Toolkit</span>
+<span class="sd">--------------------</span>
+<span class="sd">This module contains functions and tools to manipulate the main piping</span>
+<span class="sd">concepts of a dexpi model. This includes mainly manipulations of piping network</span>
+<span class="sd">segments.</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">warnings</span>
+<span class="kn">from</span> <span class="nn">enum</span> <span class="kn">import</span> <span class="n">Enum</span>
+
+<span class="kn">from</span> <span class="nn">pydexpi.dexpi_classes</span> <span class="kn">import</span> <span class="n">dexpiModel</span><span class="p">,</span> <span class="n">piping</span>
+
+
+<div class="viewcode-block" id="DexpiConnectionException">
+<a class="viewcode-back" href="../../../pydexpi.toolkits.piping_toolkit.html#pydexpi.toolkits.piping_toolkit.DexpiConnectionException">[docs]</a>
+<span class="k">class</span> <span class="nc">DexpiConnectionException</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Custom exception for dexpi piping, connection-related errors.&quot;&quot;&quot;</span>
+
+    <span class="k">pass</span></div>
+
+
+
+<div class="viewcode-block" id="DexpiCorruptPipingSegmentException">
+<a class="viewcode-back" href="../../../pydexpi.toolkits.piping_toolkit.html#pydexpi.toolkits.piping_toolkit.DexpiCorruptPipingSegmentException">[docs]</a>
+<span class="k">class</span> <span class="nc">DexpiCorruptPipingSegmentException</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Custom exception in a case that a segment is encountered that violates</span>
+<span class="sd">    the convention for piping network segments&quot;&quot;&quot;</span>
+
+    <span class="k">pass</span></div>
+
+
+
+<div class="viewcode-block" id="PipingValidityCode">
+<a class="viewcode-back" href="../../../pydexpi.toolkits.piping_toolkit.html#pydexpi.toolkits.piping_toolkit.PipingValidityCode">[docs]</a>
+<span class="k">class</span> <span class="nc">PipingValidityCode</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Enumeration of validity codes for piping related objects.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    VALID : int = 0</span>
+<span class="sd">    INTERNAL_VIOLATION : int = 1</span>
+<span class="sd">        Violation code for an internal violation in a pipingNetworkSegment.</span>
+<span class="sd">        Examples are unconnected, loose pipes or items, interrupted segments.</span>
+<span class="sd">    CONNECTION_CONVENTION_VIOLATION : int = 2</span>
+<span class="sd">        Violation code if the connection convention regarding a</span>
+<span class="sd">        pipingNetworkSegment and its pipingConnections is violated</span>
+<span class="sd">    MULTIPLE_NODE_REFERENCE_VIOLATION : int = 3</span>
+<span class="sd">        Violation of the convention that a node can only be referenced once</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">VALID</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">INTERNAL_VIOLATION</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="n">CONNECTION_CONVENTION_VIOLATION</span> <span class="o">=</span> <span class="mi">2</span>
+    <span class="n">MULTIPLE_NODE_REFERENCE_VIOLATION</span> <span class="o">=</span> <span class="mi">3</span></div>
+
+
+
+<div class="viewcode-block" id="PipingConnectionConvention">
+<a class="viewcode-back" href="../../../pydexpi.toolkits.piping_toolkit.html#pydexpi.toolkits.piping_toolkit.PipingConnectionConvention">[docs]</a>
+<span class="k">class</span> <span class="nc">PipingConnectionConvention</span><span class="p">(</span><span class="n">Enum</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Convention enumeration for creating connections for higher level piping</span>
+<span class="sd">    tools where explicit assignment of source and target nodes/items becomes</span>
+<span class="sd">    impractical.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    IN_NODE_0_OUT_NODE_1 : int = 0</span>
+<span class="sd">        Node with index 0 is used as main inlet, node with index one is main</span>
+<span class="sd">        outlet</span>
+<span class="sd">    USE_ITEMS : int = 1</span>
+<span class="sd">        Use direct assignments to items</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">IN_NODE_0_OUT_NODE_1</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">USE_ITEMS</span> <span class="o">=</span> <span class="mi">1</span></div>
+
+
+
+<div class="viewcode-block" id="segment_is_free_and_unconnected">
+<a class="viewcode-back" href="../../../pydexpi.toolkits.piping_toolkit.html#pydexpi.toolkits.piping_toolkit.segment_is_free_and_unconnected">[docs]</a>
+<span class="k">def</span> <span class="nf">segment_is_free_and_unconnected</span><span class="p">(</span>
+    <span class="n">the_segment</span><span class="p">:</span> <span class="n">piping</span><span class="o">.</span><span class="n">PipingNetworkSegment</span><span class="p">,</span> <span class="n">as_source</span><span class="o">=</span><span class="kc">False</span>
+<span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Checks if a segment ends in a connection that is unconnected, in which</span>
+<span class="sd">    case it is suitable for connection</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    the_segment : PipingNetworkSegment</span>
+<span class="sd">        The segment to be evaluated</span>
+<span class="sd">    as_source : bool, optional</span>
+<span class="sd">        Whether the segments source should be checked, by default False</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    bool</span>
+<span class="sd">        True if the segment is free and unconnected</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">the_segment</span><span class="o">.</span><span class="n">connections</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">False</span>
+    <span class="n">final_connection</span> <span class="o">=</span> <span class="n">find_final_connection</span><span class="p">(</span><span class="n">the_segment</span><span class="p">,</span> <span class="n">as_source</span><span class="o">=</span><span class="n">as_source</span><span class="p">)</span>
+    <span class="n">is_unconnected</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="k">if</span> <span class="n">as_source</span><span class="p">:</span>
+        <span class="k">if</span> <span class="p">(</span>
+            <span class="n">final_connection</span><span class="o">.</span><span class="n">sourceNode</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+            <span class="ow">or</span> <span class="n">final_connection</span><span class="o">.</span><span class="n">sourceItem</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+        <span class="p">):</span>
+            <span class="n">is_unconnected</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">is_unconnected</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">if</span> <span class="p">(</span>
+            <span class="n">final_connection</span><span class="o">.</span><span class="n">targetNode</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+            <span class="ow">or</span> <span class="n">final_connection</span><span class="o">.</span><span class="n">targetItem</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+        <span class="p">):</span>
+            <span class="n">is_unconnected</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">is_unconnected</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="k">return</span> <span class="n">is_unconnected</span></div>
+
+
+
+<div class="viewcode-block" id="connect_piping_network_segment">
+<a class="viewcode-back" href="../../../pydexpi.toolkits.piping_toolkit.html#pydexpi.toolkits.piping_toolkit.connect_piping_network_segment">[docs]</a>
+<span class="k">def</span> <span class="nf">connect_piping_network_segment</span><span class="p">(</span>
+    <span class="n">piping_segment</span><span class="p">:</span> <span class="n">piping</span><span class="o">.</span><span class="n">PipingNetworkSegment</span><span class="p">,</span>
+    <span class="n">connector_object</span><span class="p">:</span> <span class="n">piping</span><span class="o">.</span><span class="n">PipingNode</span>
+    <span class="o">|</span> <span class="n">piping</span><span class="o">.</span><span class="n">PipingSourceItem</span>
+    <span class="o">|</span> <span class="n">piping</span><span class="o">.</span><span class="n">PipingTargetItem</span><span class="p">,</span>
+    <span class="n">as_source</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">force_reconnect</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+<span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Connects a piping network segment by inferring the pipe to reconnect.</span>
+
+<span class="sd">    This is based on the assumption that a valid piping network segment has at</span>
+<span class="sd">    most one unconnected incoming and at most one unconnected outflowing</span>
+<span class="sd">    connection. Note that a valid piping network segment may end on a segment</span>
+<span class="sd">    item like a valve, in which case there are no outgoing flow connections</span>
+<span class="sd">    (same for input). In this case, a ValueError is raised. An Exception is also</span>
+<span class="sd">    raised if the piping network segment is corrupted (i.e., has more than one</span>
+<span class="sd">    inflowing or outflowing connection).</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    connector_object : Union[PipingNode, PipingSourceItem, PipingTargetItem]</span>
+<span class="sd">        The connector object to which the segment will be connected.</span>
+<span class="sd">        It can be either a PipingNode, PipingSourceItem, or PipingTargetItem.</span>
+<span class="sd">    piping_segment : PipingNetworkSegment</span>
+<span class="sd">        Piping segment to be reconnected.</span>
+<span class="sd">    as_source : bool, optional</span>
+<span class="sd">        If True, the connection is established as source, else as target.</span>
+<span class="sd">        Defaults to False.</span>
+<span class="sd">    force_reconnect : bool, optional</span>
+<span class="sd">        If False, raises an exception if the piping connection is already</span>
+<span class="sd">        connected. Defaults to False.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    None</span>
+<span class="sd">        This function modifies the state of the piping segment and the</span>
+<span class="sd">        connection but does not return any value.</span>
+
+<span class="sd">    Raises</span>
+<span class="sd">    ------</span>
+<span class="sd">    DexpiConnectionException</span>
+<span class="sd">        If the piping connection is already connected, and force_reconnect is</span>
+<span class="sd">        False.</span>
+<span class="sd">    ValueError</span>
+<span class="sd">        If the piping network segment either has no unconnected output</span>
+<span class="sd">        connection (or input connection if as_source) or has more than one such</span>
+<span class="sd">        connections, in which case it is corrupted.</span>
+<span class="sd">    DexpiCorruptPipingSegmentException</span>
+<span class="sd">        If the segment to be connected is found to be corrupt</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Find last connection and item. Last item is None if its None alltogether</span>
+    <span class="c1"># OR if it isnt among the segment items internally</span>
+    <span class="k">if</span> <span class="n">piping_segment</span><span class="o">.</span><span class="n">connections</span><span class="p">:</span>
+        <span class="n">last_connection</span> <span class="o">=</span> <span class="n">find_final_connection</span><span class="p">(</span>
+            <span class="n">piping_segment</span><span class="p">,</span> <span class="n">as_source</span><span class="o">=</span><span class="n">as_source</span>
+        <span class="p">)</span>
+        <span class="n">last_item</span> <span class="o">=</span> <span class="n">find_connection_enpoint</span><span class="p">(</span>
+            <span class="n">last_connection</span><span class="p">,</span> <span class="n">piping_segment</span><span class="o">.</span><span class="n">items</span><span class="p">,</span> <span class="n">as_source</span><span class="o">=</span><span class="n">as_source</span>
+        <span class="p">)</span>
+    <span class="c1"># Manage case segment has no connection (is empty or consists of one item):</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">last_connection</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">piping_segment</span><span class="o">.</span><span class="n">items</span><span class="p">:</span>
+            <span class="n">last_item</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">piping_segment</span><span class="o">.</span><span class="n">items</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">last_item</span> <span class="o">=</span> <span class="n">piping_segment</span><span class="o">.</span><span class="n">items</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;The segment </span><span class="si">{</span><span class="n">piping_segment</span><span class="si">}</span><span class="s2"> has multiple items but no &quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;connections and may be corrupt&quot;</span>
+            <span class="p">)</span>
+            <span class="k">raise</span> <span class="n">DexpiCorruptPipingSegmentException</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+
+    <span class="c1"># Determine if connection references an internal object, in which case a</span>
+    <span class="c1"># a reconnection would be invalid and cause a corrupt segment</span>
+    <span class="k">if</span> <span class="n">last_item</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">msg</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;Piping segment </span><span class="si">{</span><span class="n">piping_segment</span><span class="si">}</span><span class="s2"> references internal &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;object as </span><span class="si">{</span><span class="s1">&#39;source&#39;</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="n">as_source</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="s1">&#39;target&#39;</span><span class="si">}</span><span class="s2">. Reconnect &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;will cause corrupting the segment.&quot;</span>
+        <span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+
+    <span class="n">_connect_piping_connection</span><span class="p">(</span>
+        <span class="n">connector_object</span><span class="p">,</span>
+        <span class="n">last_connection</span><span class="p">,</span>
+        <span class="n">piping_segment</span><span class="p">,</span>
+        <span class="n">as_source</span><span class="p">,</span>
+        <span class="n">force_reconnect</span><span class="p">,</span>
+    <span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="construct_new_segment">
+<a class="viewcode-back" href="../../../pydexpi.toolkits.piping_toolkit.html#pydexpi.toolkits.piping_toolkit.construct_new_segment">[docs]</a>
+<span class="k">def</span> <span class="nf">construct_new_segment</span><span class="p">(</span>
+    <span class="n">segment_items</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">piping</span><span class="o">.</span><span class="n">PipingNetworkSegmentItem</span><span class="p">],</span>
+    <span class="n">segment_connections</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">piping</span><span class="o">.</span><span class="n">PipingConnection</span><span class="p">],</span>
+    <span class="n">source_connector_object</span><span class="p">:</span> <span class="n">piping</span><span class="o">.</span><span class="n">PipingNode</span>
+    <span class="o">|</span> <span class="n">piping</span><span class="o">.</span><span class="n">PipingSourceItem</span>
+    <span class="o">|</span> <span class="n">piping</span><span class="o">.</span><span class="n">PipingTargetItem</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">target_connector_object</span><span class="p">:</span> <span class="n">piping</span><span class="o">.</span><span class="n">PipingNode</span>
+    <span class="o">|</span> <span class="n">piping</span><span class="o">.</span><span class="n">PipingSourceItem</span>
+    <span class="o">|</span> <span class="n">piping</span><span class="o">.</span><span class="n">PipingTargetItem</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">connectivity_convention</span><span class="p">:</span> <span class="n">PipingConnectionConvention</span> <span class="o">=</span> <span class="n">PipingConnectionConvention</span><span class="o">.</span><span class="n">IN_NODE_0_OUT_NODE_1</span><span class="p">,</span>
+    <span class="o">**</span><span class="n">segment_kwargs</span><span class="p">,</span>
+<span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Constructs a new segment from the segment_items and segment_connections</span>
+<span class="sd">    passed.</span>
+
+<span class="sd">    Segment items and connections need to be in the order they occurr in the</span>
+<span class="sd">    segment. The shape at the beginning and end of the segment is inferred by</span>
+<span class="sd">    the source and target object specified. If no Source is given or the source</span>
+<span class="sd">    is external, the segment starts with a pipe. Same pattern for target.</span>
+<span class="sd">    However, in this case, the lengths of the passed objects need to match</span>
+<span class="sd">    accordingly. Warnings printed in case the type of the source and target dont</span>
+<span class="sd">    match the specified convention</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    segment_items : list[PipingNetworkSegmentItem]</span>
+<span class="sd">        The items of the segments that are to be included in order of</span>
+<span class="sd">        occurrence.</span>
+<span class="sd">    segment_connections : list[PipingConnection]</span>
+<span class="sd">        The connections of the segments that are to be included in order of</span>
+<span class="sd">        occurrence.</span>
+<span class="sd">    connectivity_convention : PipingConnectionConvention</span>
+<span class="sd">        The convention to be applied when stringing together the connections and</span>
+<span class="sd">        items.</span>
+<span class="sd">    source_connector_object : Union[PipingNode, PipingSourceItem,</span>
+<span class="sd">                                    PipingTargetItem], optional</span>
+<span class="sd">        The item to be specified as source, can be first element of the</span>
+<span class="sd">        segment, in which case no first connection is assigned, by default None.</span>
+<span class="sd">    target_connector_object : Union[PipingNode, PipingSourceItem,</span>
+<span class="sd">                              PipingTargetItem], optional</span>
+<span class="sd">        The item to be specified as target, can be last element of the</span>
+<span class="sd">        segment, in which case no final connection is assigned, by default None.</span>
+<span class="sd">    **segment_kwargs:</span>
+<span class="sd">        The additional quargs to be passed on to the constructor of the segment.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    PipingNetworkSegment</span>
+<span class="sd">        The new piping network segment created</span>
+
+<span class="sd">    Raises</span>
+<span class="sd">    ------</span>
+<span class="sd">    ValueError</span>
+<span class="sd">        Raised if the arguments are invalid, such as if an internal item is</span>
+<span class="sd">        referenced as source or target or if the lengthes of the items and</span>
+<span class="sd">        connections dont line up with regards to the source and target passed.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># First, screen for invalid sources</span>
+    <span class="n">invalid_sources</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">segment_items</span><span class="p">[</span><span class="mi">1</span><span class="p">:]:</span>
+        <span class="n">invalid_sources</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">item</span><span class="o">.</span><span class="n">nodes</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">invalid_sources</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">item</span><span class="o">.</span><span class="n">nodes</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">source_connector_object</span> <span class="ow">in</span> <span class="n">invalid_sources</span><span class="p">:</span>
+        <span class="n">msg</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;Cant assign source item to member item &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">source_connector_object</span><span class="si">}</span><span class="s2"> except the first one&quot;</span>
+        <span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+    <span class="n">invalid_targets</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">segment_items</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]:</span>
+        <span class="n">invalid_targets</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">item</span><span class="o">.</span><span class="n">nodes</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">invalid_targets</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">item</span><span class="o">.</span><span class="n">nodes</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">target_connector_object</span> <span class="ow">in</span> <span class="n">invalid_targets</span><span class="p">:</span>
+        <span class="n">msg</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;Cant assign target item to member item &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">target_connector_object</span><span class="si">}</span><span class="s2"> except the final one&quot;</span>
+        <span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+
+    <span class="c1"># Examine source and target connector object and append to segment kwargs.</span>
+    <span class="c1"># Warnings issued in case the type of the source and target dont match the</span>
+    <span class="c1"># specified convention</span>
+    <span class="k">for</span> <span class="n">outside_connector</span><span class="p">,</span> <span class="n">type_string</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span>
+        <span class="p">[</span><span class="n">source_connector_object</span><span class="p">,</span> <span class="n">target_connector_object</span><span class="p">],</span> <span class="p">[</span><span class="s2">&quot;source&quot;</span><span class="p">,</span> <span class="s2">&quot;target&quot;</span><span class="p">]</span>
+    <span class="p">):</span>
+        <span class="n">warn</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">outside_connector</span><span class="p">,</span> <span class="n">piping</span><span class="o">.</span><span class="n">PipingNode</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">connectivity_convention</span> <span class="o">==</span> <span class="n">PipingConnectionConvention</span><span class="o">.</span><span class="n">USE_ITEMS</span><span class="p">:</span>
+                <span class="n">warn</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="n">kwargs_key</span> <span class="o">=</span> <span class="n">type_string</span> <span class="o">+</span> <span class="s2">&quot;Node&quot;</span>
+            <span class="n">segment_kwargs</span><span class="p">[</span><span class="n">kwargs_key</span><span class="p">]</span> <span class="o">=</span> <span class="n">outside_connector</span>
+        <span class="k">elif</span> <span class="n">outside_connector</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="p">(</span>
+                <span class="n">connectivity_convention</span>
+                <span class="o">==</span> <span class="n">PipingConnectionConvention</span><span class="o">.</span><span class="n">IN_NODE_0_OUT_NODE_1</span>
+            <span class="p">):</span>
+                <span class="n">warn</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="n">kwargs_key</span> <span class="o">=</span> <span class="n">type_string</span> <span class="o">+</span> <span class="s2">&quot;Item&quot;</span>
+            <span class="n">segment_kwargs</span><span class="p">[</span><span class="n">kwargs_key</span><span class="p">]</span> <span class="o">=</span> <span class="n">outside_connector</span>
+
+        <span class="k">if</span> <span class="n">warn</span><span class="p">:</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;The </span><span class="si">{</span><span class="n">type_string</span><span class="si">}</span><span class="s2"> connector </span><span class="si">{</span><span class="n">outside_connector</span><span class="si">}</span><span class="s2"> &quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;violates the indicated convention &quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">connectivity_convention</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="p">)</span>
+
+    <span class="c1"># Derive segment structure from arguments and perform validity checks.</span>
+    <span class="n">intern_src_candidates</span> <span class="o">=</span> <span class="p">[</span><span class="n">segment_items</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
+    <span class="k">if</span> <span class="n">segment_items</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">nodes</span><span class="p">:</span>
+        <span class="n">intern_src_candidates</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">segment_items</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">nodes</span><span class="p">)</span>
+    <span class="n">intern_trg_candidates</span> <span class="o">=</span> <span class="p">[</span><span class="n">segment_items</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]]</span>
+    <span class="k">if</span> <span class="n">segment_items</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">nodes</span><span class="p">:</span>
+        <span class="n">intern_trg_candidates</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">segment_items</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">nodes</span><span class="p">)</span>
+    <span class="c1"># Check if source and target are externals</span>
+    <span class="n">source_is_none_or_external</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="k">if</span> <span class="n">source_connector_object</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">source_is_none_or_external</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">source_connector_object</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">intern_src_candidates</span><span class="p">:</span>
+            <span class="n">source_is_none_or_external</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="n">target_is_none_or_external</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="k">if</span> <span class="n">target_connector_object</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">target_is_none_or_external</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">target_connector_object</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">intern_trg_candidates</span><span class="p">:</span>
+            <span class="n">target_is_none_or_external</span> <span class="o">=</span> <span class="kc">True</span>
+
+    <span class="k">if</span> <span class="n">source_is_none_or_external</span> <span class="ow">and</span> <span class="n">target_is_none_or_external</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">segment_items</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">segment_connections</span><span class="p">):</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="s2">&quot;With no or external source and target, the number of &quot;</span>
+                <span class="s2">&quot;connections needs to be one more than the items&quot;</span>
+            <span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">source_is_none_or_external</span> <span class="o">^</span> <span class="n">target_is_none_or_external</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">segment_items</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">segment_connections</span><span class="p">):</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="s2">&quot;With either the source or target external or None, the &quot;</span>
+                <span class="s2">&quot;number of connections needs to equal the number of items&quot;</span>
+            <span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="ow">not</span> <span class="p">(</span><span class="n">source_is_none_or_external</span> <span class="ow">and</span> <span class="n">target_is_none_or_external</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">segment_items</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">segment_connections</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="s2">&quot;With both source or target external or None, the number &quot;</span>
+                <span class="s2">&quot;of connections needs to be one less than the items&quot;</span>
+            <span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+
+    <span class="c1"># Connect each connection of the segment</span>
+    <span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">connection</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">segment_connections</span><span class="p">):</span>
+        <span class="n">item_index</span> <span class="o">=</span> <span class="n">index</span> <span class="k">if</span> <span class="n">source_is_none_or_external</span> <span class="k">else</span> <span class="n">index</span> <span class="o">-</span> <span class="mi">1</span>
+        <span class="c1"># Connect source of connection</span>
+        <span class="k">if</span> <span class="n">index</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">source_is_none_or_external</span><span class="p">:</span>
+            <span class="n">_connect_piping_connection</span><span class="p">(</span>
+                <span class="n">source_connector_object</span><span class="p">,</span> <span class="n">connection</span><span class="p">,</span> <span class="n">as_source</span><span class="o">=</span><span class="kc">True</span>
+            <span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">source_item</span> <span class="o">=</span> <span class="n">segment_items</span><span class="p">[</span><span class="n">item_index</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span>
+            <span class="k">if</span> <span class="p">(</span>
+                <span class="n">connectivity_convention</span>
+                <span class="o">==</span> <span class="n">PipingConnectionConvention</span><span class="o">.</span><span class="n">IN_NODE_0_OUT_NODE_1</span>
+            <span class="p">):</span>
+                <span class="n">_connect_piping_connection</span><span class="p">(</span>
+                    <span class="n">source_item</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">connection</span><span class="p">,</span> <span class="n">as_source</span><span class="o">=</span><span class="kc">True</span>
+                <span class="p">)</span>
+            <span class="k">elif</span> <span class="p">(</span>
+                <span class="n">connectivity_convention</span> <span class="o">==</span> <span class="n">PipingConnectionConvention</span><span class="o">.</span><span class="n">USE_ITEMS</span>
+            <span class="p">):</span>
+                <span class="n">_connect_piping_connection</span><span class="p">(</span>
+                    <span class="n">source_item</span><span class="p">,</span> <span class="n">connection</span><span class="p">,</span> <span class="n">as_source</span><span class="o">=</span><span class="kc">True</span>
+                <span class="p">)</span>
+        <span class="c1"># Connect target of connection</span>
+        <span class="k">if</span> <span class="n">index</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">segment_connections</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span> <span class="ow">and</span> <span class="n">target_is_none_or_external</span><span class="p">:</span>
+            <span class="n">_connect_piping_connection</span><span class="p">(</span><span class="n">target_connector_object</span><span class="p">,</span> <span class="n">connection</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">target_item</span> <span class="o">=</span> <span class="n">segment_items</span><span class="p">[</span><span class="n">item_index</span><span class="p">]</span>
+            <span class="k">if</span> <span class="p">(</span>
+                <span class="n">connectivity_convention</span>
+                <span class="o">==</span> <span class="n">PipingConnectionConvention</span><span class="o">.</span><span class="n">IN_NODE_0_OUT_NODE_1</span>
+            <span class="p">):</span>
+                <span class="n">_connect_piping_connection</span><span class="p">(</span><span class="n">target_item</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">connection</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="p">(</span>
+                <span class="n">connectivity_convention</span> <span class="o">==</span> <span class="n">PipingConnectionConvention</span><span class="o">.</span><span class="n">USE_ITEMS</span>
+            <span class="p">):</span>
+                <span class="n">_connect_piping_connection</span><span class="p">(</span><span class="n">target_item</span><span class="p">,</span> <span class="n">connection</span><span class="p">)</span>
+
+    <span class="c1"># Create the piping network segment and returns it</span>
+    <span class="n">new_segment</span> <span class="o">=</span> <span class="n">piping</span><span class="o">.</span><span class="n">PipingNetworkSegment</span><span class="p">(</span>
+        <span class="n">items</span><span class="o">=</span><span class="n">segment_items</span><span class="p">,</span> <span class="n">connections</span><span class="o">=</span><span class="n">segment_connections</span><span class="p">,</span> <span class="o">**</span><span class="n">segment_kwargs</span>
+    <span class="p">)</span>
+    <span class="k">return</span> <span class="n">new_segment</span></div>
+
+
+
+<div class="viewcode-block" id="insert_item_to_segment">
+<a class="viewcode-back" href="../../../pydexpi.toolkits.piping_toolkit.html#pydexpi.toolkits.piping_toolkit.insert_item_to_segment">[docs]</a>
+<span class="k">def</span> <span class="nf">insert_item_to_segment</span><span class="p">(</span>
+    <span class="n">the_segment</span><span class="p">:</span> <span class="n">piping</span><span class="o">.</span><span class="n">pipingNetworkSegment</span><span class="p">,</span>
+    <span class="n">position</span><span class="p">:</span> <span class="nb">int</span> <span class="o">|</span> <span class="n">piping</span><span class="o">.</span><span class="n">PipingNetworkSegmentItem</span><span class="p">,</span>
+    <span class="n">the_item</span><span class="p">:</span> <span class="n">piping</span><span class="o">.</span><span class="n">PipingNetworkSegmentItem</span><span class="p">,</span>
+    <span class="n">the_connection</span><span class="p">:</span> <span class="n">piping</span><span class="o">.</span><span class="n">PipingConnection</span><span class="p">,</span>
+    <span class="n">item_target_node_index</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">item_source_node_index</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">insert_before</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+<span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Inserts a piping item and a piping connection into a piping segment</span>
+<span class="sd">    before or after a member connection. Intended for segments that are fully</span>
+<span class="sd">    connected.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    the_segment : pipingNetworkSegment</span>
+<span class="sd">        The segment into which an item and a connection are to be inserted.</span>
+<span class="sd">    position : Union[int, PipingNetworkSegmentItem]</span>
+<span class="sd">        Position before or after whicht the insertion happens. Can either be the</span>
+<span class="sd">        existing item object or the integer index of the item.</span>
+<span class="sd">    the_connection : PipingConnection</span>
+<span class="sd">        The connection to be inserted.</span>
+<span class="sd">    the_item : PipingNetworkSegmentItem</span>
+<span class="sd">        The item to be inserted</span>
+<span class="sd">    item_target_node_index : int, optional</span>
+<span class="sd">        The target node index of the_item to be used for target connection. If none,</span>
+<span class="sd">        the item is assigned as target via targetItem. By default None.</span>
+<span class="sd">    item_source_node_index : int, optional</span>
+<span class="sd">        The source node index of the_item to be used for source connection. If none,</span>
+<span class="sd">        the item is assigned as source via sourceItem. By default None.</span>
+<span class="sd">    insert_before : bool, optional</span>
+<span class="sd">        If the objects are inserted before the item object, else after.</span>
+<span class="sd">        By default False.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    None: the_segment is manipulated in place.</span>
+
+<span class="sd">    Raises</span>
+<span class="sd">    ------</span>
+<span class="sd">    ValueError</span>
+<span class="sd">        If the arguments passed are not appropriately associated, e.g. if the</span>
+<span class="sd">        source and target nodes are out of bounds or the position</span>
+<span class="sd">        object isnt associated to the segment.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Some consistency checks on passed arguments</span>
+    <span class="c1"># Validity check if item not already in the segment</span>
+    <span class="k">if</span> <span class="n">the_item</span> <span class="ow">in</span> <span class="n">the_segment</span><span class="o">.</span><span class="n">items</span><span class="p">:</span>
+        <span class="n">msg</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;Item </span><span class="si">{</span><span class="n">the_item</span><span class="si">}</span><span class="s2"> is already member of </span><span class="si">{</span><span class="n">the_segment</span><span class="si">}</span><span class="s2">.&quot;</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+    <span class="c1"># Validity check if connection not already in the segment</span>
+    <span class="k">if</span> <span class="n">the_connection</span> <span class="ow">in</span> <span class="n">the_segment</span><span class="o">.</span><span class="n">items</span><span class="p">:</span>
+        <span class="n">msg</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;Connection </span><span class="si">{</span><span class="n">the_connection</span><span class="si">}</span><span class="s2"> is already member of </span><span class="si">{</span><span class="n">the_segment</span><span class="si">}</span><span class="s2">.&quot;</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">node_index</span> <span class="ow">in</span> <span class="p">[</span><span class="n">item_source_node_index</span><span class="p">,</span> <span class="n">item_target_node_index</span><span class="p">]:</span>
+        <span class="k">if</span> <span class="n">node_index</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">node_index</span> <span class="o">&gt;=</span> <span class="nb">len</span><span class="p">(</span><span class="n">the_item</span><span class="o">.</span><span class="n">nodes</span><span class="p">):</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Index </span><span class="si">{</span><span class="n">node_index</span><span class="si">}</span><span class="s2"> out of bounds for nodes of item </span><span class="si">{</span><span class="n">the_item</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+    <span class="k">if</span> <span class="p">(</span>
+        <span class="nb">isinstance</span><span class="p">(</span><span class="n">position</span><span class="p">,</span> <span class="n">piping</span><span class="o">.</span><span class="n">PipingNetworkSegmentItem</span><span class="p">)</span>
+        <span class="ow">and</span> <span class="n">position</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">the_segment</span><span class="o">.</span><span class="n">items</span>
+    <span class="p">):</span>
+        <span class="n">msg</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;Piping item </span><span class="si">{</span><span class="n">position</span><span class="si">}</span><span class="s2"> not associated to segment &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot; </span><span class="si">{</span><span class="n">the_segment</span><span class="si">}</span><span class="s2">.&quot;</span>
+        <span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">position</span><span class="p">,</span> <span class="n">piping</span><span class="o">.</span><span class="n">PipingNetworkSegmentItem</span><span class="p">):</span>
+        <span class="n">item_at_position</span> <span class="o">=</span> <span class="n">position</span>
+        <span class="n">item_index</span> <span class="o">=</span> <span class="n">the_segment</span><span class="o">.</span><span class="n">items</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">position</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">the_segment</span><span class="o">.</span><span class="n">items</span><span class="p">:</span>
+            <span class="n">item_at_position</span> <span class="o">=</span> <span class="n">the_segment</span><span class="o">.</span><span class="n">items</span><span class="p">[</span><span class="n">position</span><span class="p">]</span>
+        <span class="k">elif</span> <span class="n">position</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">item_at_position</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;Segment </span><span class="si">{</span><span class="n">the_segment</span><span class="si">}</span><span class="s2"> has no items, so position index </span><span class="si">{</span><span class="n">position</span><span class="si">}</span><span class="s2"> is invalid.&quot;</span>
+        <span class="n">item_index</span> <span class="o">=</span> <span class="n">position</span>
+
+    <span class="c1"># Find connection at position</span>
+    <span class="n">connection_at_position</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">insertion_at_segment_end</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="c1"># Manage case of a single pipe segment:</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">the_segment</span><span class="o">.</span><span class="n">items</span> <span class="ow">and</span> <span class="n">the_segment</span><span class="o">.</span><span class="n">connections</span><span class="p">:</span>
+        <span class="n">connection_at_position</span> <span class="o">=</span> <span class="n">the_segment</span><span class="o">.</span><span class="n">connections</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="c1"># Otherwise, find connection that currently connects to item at position for later reconnection</span>
+    <span class="k">elif</span> <span class="n">the_segment</span><span class="o">.</span><span class="n">items</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">connection</span> <span class="ow">in</span> <span class="n">the_segment</span><span class="o">.</span><span class="n">connections</span><span class="p">:</span>
+            <span class="k">if</span> <span class="p">(</span>
+                <span class="n">find_connection_enpoint</span><span class="p">(</span>
+                    <span class="n">connection</span><span class="p">,</span> <span class="p">[</span><span class="n">item_at_position</span><span class="p">],</span> <span class="n">as_source</span><span class="o">=</span><span class="ow">not</span> <span class="n">insert_before</span>
+                <span class="p">)</span>
+                <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+            <span class="p">):</span>
+                <span class="n">connection_at_position</span> <span class="o">=</span> <span class="n">connection</span>
+                <span class="k">break</span>
+    <span class="c1"># Case of a segment without items or connections</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">connection_at_position</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="c1"># If none is found, this means we are inserting at segment end or the segment is corrpt</span>
+    <span class="k">if</span> <span class="n">connection_at_position</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">insert_before</span> <span class="ow">and</span> <span class="n">item_index</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span>
+            <span class="ow">not</span> <span class="n">insert_before</span> <span class="ow">and</span> <span class="n">item_index</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">the_segment</span><span class="o">.</span><span class="n">items</span><span class="p">)</span>
+        <span class="p">):</span>
+            <span class="n">insertion_at_segment_end</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;No connection found connecting to the item </span><span class="si">{</span><span class="n">item_at_position</span><span class="si">}</span><span class="s2"> at given position &quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;and item is not at the end. Segment </span><span class="si">{</span><span class="n">the_segment</span><span class="si">}</span><span class="s2"> may be corrupt.&quot;</span>
+            <span class="p">)</span>
+            <span class="k">raise</span> <span class="n">DexpiCorruptPipingSegmentException</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">insert_before</span><span class="p">:</span>
+        <span class="c1"># Connect the_item with the_connection</span>
+        <span class="k">if</span> <span class="n">item_source_node_index</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">the_connection</span><span class="o">.</span><span class="n">sourceNode</span> <span class="o">=</span> <span class="n">the_item</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">item_source_node_index</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">the_connection</span><span class="o">.</span><span class="n">sourceItem</span> <span class="o">=</span> <span class="n">the_item</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">insertion_at_segment_end</span><span class="p">:</span>
+            <span class="c1"># Connect piping target to the original target of the obj_at_position</span>
+            <span class="n">the_connection</span><span class="o">.</span><span class="n">targetNode</span> <span class="o">=</span> <span class="n">connection_at_position</span><span class="o">.</span><span class="n">targetNode</span>
+            <span class="n">the_connection</span><span class="o">.</span><span class="n">targetItem</span> <span class="o">=</span> <span class="n">connection_at_position</span><span class="o">.</span><span class="n">targetItem</span>
+            <span class="c1"># Reconnect the connection_at_position target</span>
+            <span class="k">if</span> <span class="n">item_target_node_index</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">connection_at_position</span><span class="o">.</span><span class="n">targetNode</span> <span class="o">=</span> <span class="n">the_item</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span>
+                    <span class="n">item_target_node_index</span>
+                <span class="p">]</span>
+                <span class="n">connection_at_position</span><span class="o">.</span><span class="n">targetItem</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">connection_at_position</span><span class="o">.</span><span class="n">targetNode</span> <span class="o">=</span> <span class="kc">None</span>
+                <span class="n">connection_at_position</span><span class="o">.</span><span class="n">targetItem</span> <span class="o">=</span> <span class="n">the_item</span>
+            <span class="c1"># Define connection index for insertion of new objects</span>
+            <span class="n">connection_index</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="n">the_segment</span><span class="o">.</span><span class="n">connections</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">connection_at_position</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span>
+            <span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># Connect piping target to the previous source of the segment</span>
+            <span class="n">the_connection</span><span class="o">.</span><span class="n">targetNode</span> <span class="o">=</span> <span class="n">the_segment</span><span class="o">.</span><span class="n">sourceNode</span>
+            <span class="n">the_connection</span><span class="o">.</span><span class="n">targetItem</span> <span class="o">=</span> <span class="n">the_segment</span><span class="o">.</span><span class="n">sourceItem</span>
+            <span class="c1"># Reconnect the segment source (=target of the item as per Dexpi convention)</span>
+            <span class="k">if</span> <span class="n">item_target_node_index</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">the_segment</span><span class="o">.</span><span class="n">sourceNode</span> <span class="o">=</span> <span class="n">the_item</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">item_target_node_index</span><span class="p">]</span>
+                <span class="n">the_segment</span><span class="o">.</span><span class="n">sourceItem</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">the_segment</span><span class="o">.</span><span class="n">sourceNode</span> <span class="o">=</span> <span class="kc">None</span>
+                <span class="n">the_segment</span><span class="o">.</span><span class="n">sourceItem</span> <span class="o">=</span> <span class="n">the_item</span>
+            <span class="n">connection_index</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="c1"># Connect the_item with the_connection</span>
+        <span class="k">if</span> <span class="n">item_target_node_index</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">the_connection</span><span class="o">.</span><span class="n">targetNode</span> <span class="o">=</span> <span class="n">the_item</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">item_target_node_index</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">the_connection</span><span class="o">.</span><span class="n">targetItem</span> <span class="o">=</span> <span class="n">the_item</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">insertion_at_segment_end</span><span class="p">:</span>
+            <span class="c1"># Connect piping source to the original source of the obj_at_position</span>
+            <span class="n">the_connection</span><span class="o">.</span><span class="n">sourceNode</span> <span class="o">=</span> <span class="n">connection_at_position</span><span class="o">.</span><span class="n">sourceNode</span>
+            <span class="n">the_connection</span><span class="o">.</span><span class="n">sourceItem</span> <span class="o">=</span> <span class="n">connection_at_position</span><span class="o">.</span><span class="n">sourceItem</span>
+            <span class="c1"># Reconnect the piping_obj source</span>
+            <span class="k">if</span> <span class="n">item_source_node_index</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">connection_at_position</span><span class="o">.</span><span class="n">sourceNode</span> <span class="o">=</span> <span class="n">the_item</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span>
+                    <span class="n">item_source_node_index</span>
+                <span class="p">]</span>
+                <span class="n">connection_at_position</span><span class="o">.</span><span class="n">sourceItem</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">connection_at_position</span><span class="o">.</span><span class="n">sourceNode</span> <span class="o">=</span> <span class="kc">None</span>
+                <span class="n">connection_at_position</span><span class="o">.</span><span class="n">sourceItem</span> <span class="o">=</span> <span class="n">the_item</span>
+            <span class="c1"># Define connection index for insertion of new objects</span>
+            <span class="n">connection_index</span> <span class="o">=</span> <span class="n">the_segment</span><span class="o">.</span><span class="n">connections</span><span class="o">.</span><span class="n">index</span><span class="p">(</span>
+                <span class="n">connection_at_position</span>
+            <span class="p">)</span>
+            <span class="n">item_index</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># Connect piping source to the previous target of the segment</span>
+            <span class="n">the_connection</span><span class="o">.</span><span class="n">sourceNode</span> <span class="o">=</span> <span class="n">the_segment</span><span class="o">.</span><span class="n">targetNode</span>
+            <span class="n">the_connection</span><span class="o">.</span><span class="n">sourceItem</span> <span class="o">=</span> <span class="n">the_segment</span><span class="o">.</span><span class="n">targetItem</span>
+            <span class="c1"># Reconnect the segment target (=source of the item as per Dexpi convention)</span>
+            <span class="k">if</span> <span class="n">item_source_node_index</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">the_segment</span><span class="o">.</span><span class="n">targetNode</span> <span class="o">=</span> <span class="n">the_item</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">item_source_node_index</span><span class="p">]</span>
+                <span class="n">the_segment</span><span class="o">.</span><span class="n">targetItem</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">the_segment</span><span class="o">.</span><span class="n">targetNode</span> <span class="o">=</span> <span class="kc">None</span>
+                <span class="n">the_segment</span><span class="o">.</span><span class="n">targetItem</span> <span class="o">=</span> <span class="n">the_item</span>
+            <span class="n">connection_index</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">the_segment</span><span class="o">.</span><span class="n">connections</span><span class="p">)</span>
+
+    <span class="c1"># Insert the objects</span>
+    <span class="n">the_segment</span><span class="o">.</span><span class="n">connections</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="n">connection_index</span><span class="p">,</span> <span class="n">the_connection</span><span class="p">)</span>
+    <span class="n">the_segment</span><span class="o">.</span><span class="n">items</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="n">item_index</span><span class="p">,</span> <span class="n">the_item</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="append_item_to_unconnected_segment">
+<a class="viewcode-back" href="../../../pydexpi.toolkits.piping_toolkit.html#pydexpi.toolkits.piping_toolkit.append_item_to_unconnected_segment">[docs]</a>
+<span class="k">def</span> <span class="nf">append_item_to_unconnected_segment</span><span class="p">(</span>
+    <span class="n">the_segment</span><span class="p">:</span> <span class="n">piping</span><span class="o">.</span><span class="n">PipingNetworkSegment</span><span class="p">,</span>
+    <span class="n">the_item</span><span class="p">:</span> <span class="n">piping</span><span class="o">.</span><span class="n">PipingNetworkSegmentItem</span><span class="p">,</span>
+    <span class="n">node_index_for_connection</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">node_index_segment_end</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">insert_before</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+<span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Appends a piping network segment item to a free piping network segment.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    the_segment : PipingNetworkSegment</span>
+<span class="sd">        The segment to be appended to.</span>
+<span class="sd">    the_item : PipingNetworkSegmentItem</span>
+<span class="sd">        The item to be appended.</span>
+<span class="sd">    node_index_for_connection : int, optional</span>
+<span class="sd">        The node of the item that should be used for connection. If segment is</span>
+<span class="sd">        empty, this node becomes the opposite segment end to</span>
+<span class="sd">        node_index_segment_end</span>
+<span class="sd">        If none, item is used as reference directly, by default None.</span>
+<span class="sd">    node_index_segment_end : int, optional</span>
+<span class="sd">        The node of the item that is used as the new segment end.</span>
+<span class="sd">        If none, item is used as reference directly, by default None.</span>
+<span class="sd">    insert_before : bool, optional</span>
+<span class="sd">        If the item should be appended at the beginning of the segment,</span>
+<span class="sd">        otherwise the end, by default False. (If segment is empty,</span>
+<span class="sd">        insert_before=True switches the role of the node indexes)</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    None: the_segment is manipulated in place.</span>
+
+<span class="sd">    Raises</span>
+<span class="sd">    ------</span>
+<span class="sd">    ValueError:</span>
+<span class="sd">        If connection already in the segment</span>
+
+<span class="sd">    ValueError:</span>
+<span class="sd">        If segment isnt unconnected or not suitable to append an item in that</span>
+<span class="sd">        position, or if the node is not associated th the object.</span>
+
+<span class="sd">    ValueError:</span>
+<span class="sd">        If a second_node_single_item is passed for segments with items already</span>
+<span class="sd">        in them</span>
+
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Validity check if item not already in the segment</span>
+    <span class="k">if</span> <span class="n">the_item</span> <span class="ow">in</span> <span class="n">the_segment</span><span class="o">.</span><span class="n">items</span><span class="p">:</span>
+        <span class="n">msg</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;Item </span><span class="si">{</span><span class="n">the_item</span><span class="si">}</span><span class="s2"> is already member of </span><span class="si">{</span><span class="n">the_segment</span><span class="si">}</span><span class="s2">.&quot;</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+
+    <span class="c1"># Validity check if the segment is unconnected</span>
+    <span class="k">if</span> <span class="n">insert_before</span><span class="p">:</span>
+        <span class="k">if</span> <span class="p">(</span>
+            <span class="n">the_segment</span><span class="o">.</span><span class="n">sourceNode</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+            <span class="ow">or</span> <span class="n">the_segment</span><span class="o">.</span><span class="n">sourceItem</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+        <span class="p">):</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Segment </span><span class="si">{</span><span class="n">the_segment</span><span class="si">}</span><span class="s2"> has a source and isn&#39;t unconnected. &quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;Consider using insert_item_to_segment instead&quot;</span>
+            <span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">if</span> <span class="p">(</span>
+            <span class="n">the_segment</span><span class="o">.</span><span class="n">targetNode</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+            <span class="ow">or</span> <span class="n">the_segment</span><span class="o">.</span><span class="n">targetItem</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+        <span class="p">):</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Segment </span><span class="si">{</span><span class="n">the_segment</span><span class="si">}</span><span class="s2"> has a target and isn&#39;t unconnected. &quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;Consider using insert_item_to_segment instead&quot;</span>
+            <span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+
+    <span class="c1"># Find last connection and item. Last item is found as the segment endpoint</span>
+    <span class="c1"># with segment items as candidates, which returns None if its None</span>
+    <span class="c1"># alltogether OR if it isnt among the segment items internally</span>
+    <span class="c1"># (the latter requires the segment connection check above)</span>
+    <span class="k">if</span> <span class="n">the_segment</span><span class="o">.</span><span class="n">connections</span><span class="p">:</span>
+        <span class="n">last_connection</span> <span class="o">=</span> <span class="n">find_final_connection</span><span class="p">(</span>
+            <span class="n">the_segment</span><span class="p">,</span> <span class="n">as_source</span><span class="o">=</span><span class="n">insert_before</span>
+        <span class="p">)</span>
+        <span class="n">last_item</span> <span class="o">=</span> <span class="n">find_connection_enpoint</span><span class="p">(</span>
+            <span class="n">last_connection</span><span class="p">,</span> <span class="n">the_segment</span><span class="o">.</span><span class="n">items</span><span class="p">,</span> <span class="n">as_source</span><span class="o">=</span><span class="n">insert_before</span>
+        <span class="p">)</span>
+    <span class="c1"># Manage case segment has no connection (is empty or consists of one item):</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">last_connection</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">the_segment</span><span class="o">.</span><span class="n">items</span><span class="p">:</span>
+            <span class="n">last_item</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">the_segment</span><span class="o">.</span><span class="n">items</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">last_item</span> <span class="o">=</span> <span class="n">the_segment</span><span class="o">.</span><span class="n">items</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;The segment </span><span class="si">{</span><span class="n">the_segment</span><span class="si">}</span><span class="s2"> has multiple items but no &quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;connections and may be corrupt&quot;</span>
+            <span class="p">)</span>
+            <span class="k">raise</span> <span class="n">DexpiCorruptPipingSegmentException</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+
+    <span class="c1"># Validity check if final object is a connection and can be appended</span>
+    <span class="k">if</span> <span class="n">last_item</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;Final object in segment </span><span class="si">{</span><span class="n">the_segment</span><span class="si">}</span><span class="s2"> is an item. &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;Cannot add new item </span><span class="si">{</span><span class="n">the_item</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="p">)</span>
+
+    <span class="c1"># Determine connectors</span>
+    <span class="k">if</span> <span class="n">node_index_for_connection</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">internal_connector</span> <span class="o">=</span> <span class="n">the_item</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">node_index_for_connection</span><span class="p">]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">internal_connector</span> <span class="o">=</span> <span class="n">the_item</span>
+    <span class="k">if</span> <span class="n">node_index_segment_end</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">segment_connector</span> <span class="o">=</span> <span class="n">the_item</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">node_index_segment_end</span><span class="p">]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">segment_connector</span> <span class="o">=</span> <span class="n">the_item</span>
+
+    <span class="k">if</span> <span class="n">last_connection</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">_connect_piping_connection</span><span class="p">(</span>
+            <span class="n">internal_connector</span><span class="p">,</span>
+            <span class="n">piping_connection</span><span class="o">=</span><span class="n">last_connection</span><span class="p">,</span>
+            <span class="n">as_source</span><span class="o">=</span><span class="n">insert_before</span><span class="p">,</span>
+        <span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">_connect_piping_connection</span><span class="p">(</span>
+            <span class="n">segment_connector</span><span class="p">,</span>
+            <span class="n">piping_segment</span><span class="o">=</span><span class="n">the_segment</span><span class="p">,</span>
+            <span class="n">as_source</span><span class="o">=</span><span class="ow">not</span> <span class="n">insert_before</span><span class="p">,</span>
+        <span class="p">)</span>
+
+    <span class="n">_connect_piping_connection</span><span class="p">(</span>
+        <span class="n">segment_connector</span><span class="p">,</span> <span class="n">piping_segment</span><span class="o">=</span><span class="n">the_segment</span><span class="p">,</span> <span class="n">as_source</span><span class="o">=</span><span class="n">insert_before</span>
+    <span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">insert_before</span><span class="p">:</span>
+        <span class="n">the_segment</span><span class="o">.</span><span class="n">items</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">the_item</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">the_segment</span><span class="o">.</span><span class="n">items</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">the_item</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="append_connection_to_unconnected_segment">
+<a class="viewcode-back" href="../../../pydexpi.toolkits.piping_toolkit.html#pydexpi.toolkits.piping_toolkit.append_connection_to_unconnected_segment">[docs]</a>
+<span class="k">def</span> <span class="nf">append_connection_to_unconnected_segment</span><span class="p">(</span>
+    <span class="n">the_segment</span><span class="p">:</span> <span class="n">piping</span><span class="o">.</span><span class="n">PipingNetworkSegment</span><span class="p">,</span>
+    <span class="n">the_connection</span><span class="p">:</span> <span class="n">piping</span><span class="o">.</span><span class="n">PipingConnection</span><span class="p">,</span>
+    <span class="n">node_index_for_connection</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">insert_before</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+<span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Appends a connection object to a free piping network segment.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    the_segment : PipingNetworkSegment</span>
+<span class="sd">        The segment to be appended to.</span>
+<span class="sd">    the_connection : PipingConnection</span>
+<span class="sd">        The connection to be appended.</span>
+<span class="sd">    node_index_for_connection : int, optional</span>
+<span class="sd">        The node index of the final item in the segment that should be used for</span>
+<span class="sd">        connection. If none, item is used as reference directly,</span>
+<span class="sd">        by default None.</span>
+<span class="sd">    insert_before : bool, optional</span>
+<span class="sd">        If the connection should be appended at the beginning of the segment,</span>
+<span class="sd">        otherwise the end, by default False.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    None: the_segment is manipulated in place.</span>
+
+<span class="sd">    Raises</span>
+<span class="sd">    ------</span>
+<span class="sd">    ValueError:</span>
+<span class="sd">        If connection already in the segment</span>
+
+<span class="sd">    ValueError:</span>
+<span class="sd">        If segment isnt unconnected or not suitable to append a connection in</span>
+<span class="sd">        that position, or if the node is not associated th the object.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Validity check if connection not already in the segment</span>
+    <span class="k">if</span> <span class="n">the_connection</span> <span class="ow">in</span> <span class="n">the_segment</span><span class="o">.</span><span class="n">connections</span><span class="p">:</span>
+        <span class="n">msg</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;Connection </span><span class="si">{</span><span class="n">the_connection</span><span class="si">}</span><span class="s2"> is already member of </span><span class="si">{</span><span class="n">the_segment</span><span class="si">}</span><span class="s2">.&quot;</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+    <span class="c1"># Find last connection and item. Last item is found as the segment endpoint</span>
+    <span class="c1"># with segment items as candidates, which returns None if its None</span>
+    <span class="c1"># alltogether OR if it isnt among the segment items internally</span>
+    <span class="k">if</span> <span class="n">the_segment</span><span class="o">.</span><span class="n">connections</span><span class="p">:</span>
+        <span class="n">last_connection</span> <span class="o">=</span> <span class="n">find_final_connection</span><span class="p">(</span>
+            <span class="n">the_segment</span><span class="p">,</span> <span class="n">as_source</span><span class="o">=</span><span class="n">insert_before</span>
+        <span class="p">)</span>
+        <span class="n">last_item</span> <span class="o">=</span> <span class="n">find_connection_enpoint</span><span class="p">(</span>
+            <span class="n">last_connection</span><span class="p">,</span> <span class="n">the_segment</span><span class="o">.</span><span class="n">items</span><span class="p">,</span> <span class="n">as_source</span><span class="o">=</span><span class="n">insert_before</span>
+        <span class="p">)</span>
+    <span class="c1"># Manage case segment has no connection (is empty or consists of one item):</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">last_connection</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">the_segment</span><span class="o">.</span><span class="n">items</span><span class="p">:</span>
+            <span class="n">last_item</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">the_segment</span><span class="o">.</span><span class="n">items</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">last_item</span> <span class="o">=</span> <span class="n">the_segment</span><span class="o">.</span><span class="n">items</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;The segment </span><span class="si">{</span><span class="n">the_segment</span><span class="si">}</span><span class="s2"> has multiple items but no &quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;connections and may be corrupt&quot;</span>
+            <span class="p">)</span>
+            <span class="k">raise</span> <span class="n">DexpiCorruptPipingSegmentException</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+
+    <span class="c1"># Validity check if the segment is unconnected and ends in an item</span>
+    <span class="k">if</span> <span class="n">last_item</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">the_segment</span><span class="o">.</span><span class="n">items</span><span class="p">:</span>
+        <span class="n">msg</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;Final object in segment </span><span class="si">{</span><span class="n">the_segment</span><span class="si">}</span><span class="s2"> is a connection or &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;outside of the segment (meaning it&#39;s already connected).&quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;In both cases: Can&#39;t add connection </span><span class="si">{</span><span class="n">the_connection</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">node_index_for_connection</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">last_item</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">connector</span> <span class="o">=</span> <span class="n">last_item</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">node_index_for_connection</span><span class="p">]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">connector</span> <span class="o">=</span> <span class="n">last_item</span>
+
+    <span class="c1"># Connect</span>
+    <span class="k">if</span> <span class="n">insert_before</span><span class="p">:</span>
+        <span class="n">_connect_piping_connection</span><span class="p">(</span>
+            <span class="n">connector</span><span class="p">,</span> <span class="n">the_connection</span><span class="p">,</span> <span class="n">as_source</span><span class="o">=</span><span class="ow">not</span> <span class="n">insert_before</span>
+        <span class="p">)</span>
+        <span class="n">the_segment</span><span class="o">.</span><span class="n">connections</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">the_connection</span><span class="p">)</span>
+        <span class="n">the_segment</span><span class="o">.</span><span class="n">sourceNode</span> <span class="o">=</span> <span class="n">the_connection</span><span class="o">.</span><span class="n">sourceNode</span>
+        <span class="n">the_segment</span><span class="o">.</span><span class="n">sourceItem</span> <span class="o">=</span> <span class="n">the_connection</span><span class="o">.</span><span class="n">sourceItem</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">_connect_piping_connection</span><span class="p">(</span>
+            <span class="n">connector</span><span class="p">,</span> <span class="n">the_connection</span><span class="p">,</span> <span class="n">as_source</span><span class="o">=</span><span class="ow">not</span> <span class="n">insert_before</span>
+        <span class="p">)</span>
+        <span class="n">the_segment</span><span class="o">.</span><span class="n">connections</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">the_connection</span><span class="p">)</span>
+        <span class="n">the_segment</span><span class="o">.</span><span class="n">targetNode</span> <span class="o">=</span> <span class="n">the_connection</span><span class="o">.</span><span class="n">targetNode</span>
+        <span class="n">the_segment</span><span class="o">.</span><span class="n">targetItem</span> <span class="o">=</span> <span class="n">the_connection</span><span class="o">.</span><span class="n">targetItem</span></div>
+
+
+
+<div class="viewcode-block" id="find_final_connection">
+<a class="viewcode-back" href="../../../pydexpi.toolkits.piping_toolkit.html#pydexpi.toolkits.piping_toolkit.find_final_connection">[docs]</a>
+<span class="k">def</span> <span class="nf">find_final_connection</span><span class="p">(</span>
+    <span class="n">the_segment</span><span class="p">:</span> <span class="n">piping</span><span class="o">.</span><span class="n">pipingNetworkSegment</span><span class="p">,</span> <span class="n">as_source</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+<span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Finds the first or last connection object in the_segment. It does so by</span>
+<span class="sd">    comparing the source and target objects of the segment and the connections.</span>
+<span class="sd">    Note that in a valid segment, these should be the first or final connection.</span>
+<span class="sd">    However, this method includes some validity checks, so it is recommended to</span>
+<span class="sd">    use this instead</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    the_segment : pipingNetworkSegment</span>
+<span class="sd">        The segment whose final connection is to befound.</span>
+<span class="sd">    as_source : bool, optional</span>
+<span class="sd">        If the first connection should be found, else last, by default False.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    pipingConnection</span>
+<span class="sd">        The first or last connection.</span>
+
+<span class="sd">    Raises</span>
+<span class="sd">    ------</span>
+<span class="sd">    DexpiCorruptPipingSegmentException</span>
+<span class="sd">        If no connection with the same source and target info as the segment is</span>
+<span class="sd">        found.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">the_segment</span><span class="o">.</span><span class="n">connections</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Segment </span><span class="si">{</span><span class="n">the_segment</span><span class="si">}</span><span class="s2"> doesn&#39;t have any connections&quot;</span><span class="p">)</span>
+    <span class="n">final_connection</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="c1"># Find the connection with the same source/target info as segment</span>
+    <span class="k">for</span> <span class="n">connection</span> <span class="ow">in</span> <span class="n">the_segment</span><span class="o">.</span><span class="n">connections</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">as_source</span><span class="p">:</span>
+            <span class="c1"># If source is internal</span>
+            <span class="k">if</span> <span class="n">find_connection_enpoint</span><span class="p">(</span>
+                <span class="n">connection</span><span class="p">,</span> <span class="n">the_segment</span><span class="o">.</span><span class="n">items</span><span class="p">,</span> <span class="n">as_source</span><span class="o">=</span><span class="n">as_source</span>
+            <span class="p">)</span> <span class="o">==</span> <span class="n">find_connection_enpoint</span><span class="p">(</span>
+                <span class="n">the_segment</span><span class="p">,</span> <span class="n">the_segment</span><span class="o">.</span><span class="n">items</span><span class="p">,</span> <span class="n">as_source</span><span class="o">=</span><span class="n">as_source</span>
+            <span class="p">):</span>
+                <span class="n">final_connection</span> <span class="o">=</span> <span class="n">connection</span>
+            <span class="c1"># If source is external</span>
+            <span class="k">elif</span> <span class="p">(</span>
+                <span class="n">connection</span><span class="o">.</span><span class="n">sourceNode</span> <span class="o">==</span> <span class="n">the_segment</span><span class="o">.</span><span class="n">sourceNode</span>
+                <span class="ow">and</span> <span class="n">connection</span><span class="o">.</span><span class="n">sourceItem</span> <span class="ow">is</span> <span class="n">the_segment</span><span class="o">.</span><span class="n">sourceItem</span>
+            <span class="p">):</span>
+                <span class="n">final_connection</span> <span class="o">=</span> <span class="n">connection</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># If target is internal</span>
+            <span class="k">if</span> <span class="n">find_connection_enpoint</span><span class="p">(</span>
+                <span class="n">connection</span><span class="p">,</span> <span class="n">the_segment</span><span class="o">.</span><span class="n">items</span><span class="p">,</span> <span class="n">as_source</span><span class="o">=</span><span class="n">as_source</span>
+            <span class="p">)</span> <span class="o">==</span> <span class="n">find_connection_enpoint</span><span class="p">(</span>
+                <span class="n">the_segment</span><span class="p">,</span> <span class="n">the_segment</span><span class="o">.</span><span class="n">items</span><span class="p">,</span> <span class="n">as_source</span><span class="o">=</span><span class="n">as_source</span>
+            <span class="p">):</span>
+                <span class="n">final_connection</span> <span class="o">=</span> <span class="n">connection</span>
+            <span class="c1"># If target is external</span>
+            <span class="k">if</span> <span class="p">(</span>
+                <span class="n">connection</span><span class="o">.</span><span class="n">targetNode</span> <span class="o">==</span> <span class="n">the_segment</span><span class="o">.</span><span class="n">targetNode</span>
+                <span class="ow">and</span> <span class="n">connection</span><span class="o">.</span><span class="n">targetItem</span> <span class="ow">is</span> <span class="n">the_segment</span><span class="o">.</span><span class="n">targetItem</span>
+            <span class="p">):</span>
+                <span class="n">final_connection</span> <span class="o">=</span> <span class="n">connection</span>
+    <span class="c1"># Raise exception if None was found</span>
+    <span class="k">if</span> <span class="n">final_connection</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">msg</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;Piping segment </span><span class="si">{</span><span class="n">the_segment</span><span class="si">}</span><span class="s2"> has no connections with the same &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="s1">&#39;source&#39;</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="n">as_source</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="s1">&#39;target&#39;</span><span class="si">}</span><span class="s2"> and may be corrupt.&quot;</span>
+        <span class="p">)</span>
+        <span class="k">raise</span> <span class="n">DexpiCorruptPipingSegmentException</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+
+    <span class="n">final_connection_index</span> <span class="o">=</span> <span class="n">the_segment</span><span class="o">.</span><span class="n">connections</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">final_connection</span><span class="p">)</span>
+    <span class="n">what_index_should_be</span> <span class="o">=</span> <span class="mi">0</span> <span class="k">if</span> <span class="n">as_source</span> <span class="k">else</span> <span class="nb">len</span><span class="p">(</span><span class="n">the_segment</span><span class="o">.</span><span class="n">connections</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span>
+    <span class="k">if</span> <span class="n">final_connection_index</span> <span class="o">!=</span> <span class="n">what_index_should_be</span><span class="p">:</span>
+        <span class="n">msg</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;The final connection found in segment </span><span class="si">{</span><span class="n">the_segment</span><span class="si">}</span><span class="s2"> is not in the&quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;correct position </span><span class="si">{</span><span class="s1">&#39;0&#39;</span><span class="w"> </span><span class="k">if</span><span class="w"> </span><span class="n">as_source</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="s1">&#39;-1&#39;</span><span class="si">}</span><span class="s2">.&quot;</span>
+        <span class="p">)</span>
+        <span class="k">raise</span> <span class="n">DexpiCorruptPipingSegmentException</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">final_connection</span></div>
+
+
+
+<div class="viewcode-block" id="find_connection_enpoint">
+<a class="viewcode-back" href="../../../pydexpi.toolkits.piping_toolkit.html#pydexpi.toolkits.piping_toolkit.find_connection_enpoint">[docs]</a>
+<span class="k">def</span> <span class="nf">find_connection_enpoint</span><span class="p">(</span>
+    <span class="n">connection</span><span class="p">:</span> <span class="n">piping</span><span class="o">.</span><span class="n">PipingNetworkSegment</span> <span class="o">|</span> <span class="n">piping</span><span class="o">.</span><span class="n">PipingConnection</span><span class="p">,</span>
+    <span class="n">endpoint_candidates</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span>
+        <span class="n">piping</span><span class="o">.</span><span class="n">PipingNodeOwner</span>
+        <span class="o">|</span> <span class="n">piping</span><span class="o">.</span><span class="n">PipingSourceItem</span>
+        <span class="o">|</span> <span class="n">piping</span><span class="o">.</span><span class="n">PipingTargetItem</span>
+    <span class="p">],</span>
+    <span class="n">as_source</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+<span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Finds and returns the source or the target of a connection or a</span>
+<span class="sd">    piping network segment from a list of endpoint candidates.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    connection : Union[PipingNetworkSegment, piping.PipingConnection]</span>
+<span class="sd">        the object whose source or destination is to be determined.</span>
+<span class="sd">    endpoint_candidates : Union[PipingNodeOwner,</span>
+<span class="sd">                                PipingSourceItem,</span>
+<span class="sd">                                PipingTargetItem]</span>
+<span class="sd">        the list of candidates for endpoints.</span>
+<span class="sd">    as_source : bool, optional</span>
+<span class="sd">        Whether to look for the source rather than destination,</span>
+<span class="sd">        by default False.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    Union[PipingNodeOwner, PipingSourceItem, PipingTargetItem, None]</span>
+<span class="sd">        The object source or destination in question. None if not found among</span>
+<span class="sd">        candidates.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">endpoint_item</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">connection</span><span class="o">.</span><span class="n">sourceItem</span> <span class="k">if</span> <span class="n">as_source</span> <span class="k">else</span> <span class="n">connection</span><span class="o">.</span><span class="n">targetItem</span>
+    <span class="p">)</span>
+    <span class="n">enpoint_node</span> <span class="o">=</span> <span class="n">connection</span><span class="o">.</span><span class="n">sourceNode</span> <span class="k">if</span> <span class="n">as_source</span> <span class="k">else</span> <span class="n">connection</span><span class="o">.</span><span class="n">targetNode</span>
+    <span class="c1"># Iterate over candidates</span>
+    <span class="k">for</span> <span class="n">endpoint_candidate</span> <span class="ow">in</span> <span class="n">endpoint_candidates</span><span class="p">:</span>
+        <span class="c1"># Skip if candidate is None to avoid exception</span>
+        <span class="k">if</span> <span class="n">endpoint_candidate</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">continue</span>
+        <span class="k">if</span> <span class="p">(</span>
+            <span class="n">endpoint_item</span> <span class="o">==</span> <span class="n">endpoint_candidate</span>
+            <span class="ow">or</span> <span class="n">enpoint_node</span> <span class="ow">in</span> <span class="n">endpoint_candidate</span><span class="o">.</span><span class="n">nodes</span>
+        <span class="p">):</span>
+            <span class="k">return</span> <span class="n">endpoint_candidate</span>
+    <span class="k">return</span> <span class="kc">None</span></div>
+
+
+
+<div class="viewcode-block" id="get_unconnected_piping_segments">
+<a class="viewcode-back" href="../../../pydexpi.toolkits.piping_toolkit.html#pydexpi.toolkits.piping_toolkit.get_unconnected_piping_segments">[docs]</a>
+<span class="k">def</span> <span class="nf">get_unconnected_piping_segments</span><span class="p">(</span>
+    <span class="n">conceptual_model</span><span class="p">:</span> <span class="n">dexpiModel</span><span class="o">.</span><span class="n">ConceptualModel</span><span class="p">,</span> <span class="n">as_source</span><span class="o">=</span><span class="kc">False</span>
+<span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Returns a list of all unconnected piping segments ending in a connection</span>
+<span class="sd">    in the conceptual model passed.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    conceptual_model : ConceptualModel</span>
+<span class="sd">        The model to be analyzed.</span>
+<span class="sd">    as_source : bool, optional</span>
+<span class="sd">        Whether to look for unconnected sources or targets in piping segments.</span>
+<span class="sd">        Defaults to False.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    list of PipingConnection</span>
+<span class="sd">        The list of identified unconnected connections.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">unconnected_segments</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">piping_network_system</span> <span class="ow">in</span> <span class="n">conceptual_model</span><span class="o">.</span><span class="n">pipingNetworkSystems</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">piping_network_segment</span> <span class="ow">in</span> <span class="n">piping_network_system</span><span class="o">.</span><span class="n">segments</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">as_source</span><span class="p">:</span>
+                <span class="k">if</span> <span class="p">(</span>
+                    <span class="n">piping_network_segment</span><span class="o">.</span><span class="n">sourceNode</span> <span class="ow">is</span> <span class="kc">None</span>
+                    <span class="ow">and</span> <span class="n">piping_network_segment</span><span class="o">.</span><span class="n">sourceItem</span> <span class="ow">is</span> <span class="kc">None</span>
+                <span class="p">):</span>
+                    <span class="n">unconnected_segments</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">piping_network_segment</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">if</span> <span class="p">(</span>
+                    <span class="n">piping_network_segment</span><span class="o">.</span><span class="n">targetNode</span> <span class="ow">is</span> <span class="kc">None</span>
+                    <span class="ow">and</span> <span class="n">piping_network_segment</span><span class="o">.</span><span class="n">targetItem</span> <span class="ow">is</span> <span class="kc">None</span>
+                <span class="p">):</span>
+                    <span class="n">unconnected_segments</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">piping_network_segment</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">unconnected_segments</span></div>
+
+
+
+<div class="viewcode-block" id="piping_network_segment_validity_check">
+<a class="viewcode-back" href="../../../pydexpi.toolkits.piping_toolkit.html#pydexpi.toolkits.piping_toolkit.piping_network_segment_validity_check">[docs]</a>
+<span class="k">def</span> <span class="nf">piping_network_segment_validity_check</span><span class="p">(</span>
+    <span class="n">the_segment</span><span class="p">:</span> <span class="n">piping</span><span class="o">.</span><span class="n">pipingNetworkSegment</span><span class="p">,</span>
+<span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Performs a consistency check on the pipingNetworkSegment and returns an</span>
+<span class="sd">    appropriate PipingValidityCode Enum type. Internally, this is done by going</span>
+<span class="sd">    along all items and connections to see if they form a valid chain.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    the_system : pipingNetworkSegment</span>
+<span class="sd">        The piping network segment to be checked for consistency.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    (PipingValidityCode, msg)</span>
+<span class="sd">        An Enum type indicating the validity status of the piping network</span>
+<span class="sd">        segment. msg contains the corresponding error message.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">visited_items</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">visited_connections</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="c1"># First, go through connections to find the first connection of the segment.</span>
+    <span class="c1"># This should have the same source spec as the PNS (at least, this is our</span>
+    <span class="c1"># interpretation of the proteus spec. Adjust in future if otherwise)</span>
+    <span class="n">first_connection</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">first_is_found</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="k">for</span> <span class="n">connection</span> <span class="ow">in</span> <span class="n">the_segment</span><span class="o">.</span><span class="n">connections</span><span class="p">:</span>
+        <span class="c1"># If connection is internal, then the source nodes of the first connection and the segment may not coincide,</span>
+        <span class="c1"># But need to be associated to the same item</span>
+        <span class="n">internal_endpoint_match</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">find_connection_enpoint</span><span class="p">(</span>
+                <span class="n">the_segment</span><span class="p">,</span> <span class="n">the_segment</span><span class="o">.</span><span class="n">items</span><span class="p">,</span> <span class="n">as_source</span><span class="o">=</span><span class="kc">True</span>
+            <span class="p">)</span>
+            <span class="o">==</span> <span class="n">find_connection_enpoint</span><span class="p">(</span>
+                <span class="n">connection</span><span class="p">,</span> <span class="n">the_segment</span><span class="o">.</span><span class="n">items</span><span class="p">,</span> <span class="n">as_source</span><span class="o">=</span><span class="kc">True</span>
+            <span class="p">)</span>
+            <span class="ow">and</span> <span class="n">the_segment</span><span class="o">.</span><span class="n">sourceItem</span> <span class="o">==</span> <span class="n">connection</span><span class="o">.</span><span class="n">sourceItem</span>
+        <span class="p">)</span>
+        <span class="n">external_endpoint_match</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">connection</span><span class="o">.</span><span class="n">sourceItem</span> <span class="o">==</span> <span class="n">the_segment</span><span class="o">.</span><span class="n">sourceItem</span>
+            <span class="ow">and</span> <span class="n">connection</span><span class="o">.</span><span class="n">sourceNode</span> <span class="o">==</span> <span class="n">the_segment</span><span class="o">.</span><span class="n">sourceNode</span>
+        <span class="p">)</span>
+        <span class="k">if</span> <span class="n">internal_endpoint_match</span> <span class="ow">or</span> <span class="n">external_endpoint_match</span><span class="p">:</span>
+            <span class="n">first_connection</span> <span class="o">=</span> <span class="n">connection</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">first_is_found</span><span class="p">:</span>
+                <span class="n">first_is_found</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">msg</span> <span class="o">=</span> <span class="p">(</span>
+                    <span class="s2">&quot;At least two pipes in this segment have the same &quot;</span>
+                    <span class="s2">&quot;piping input as the parent segment, should be one.&quot;</span>
+                <span class="p">)</span>
+                <span class="k">return</span> <span class="p">(</span><span class="n">PipingValidityCode</span><span class="o">.</span><span class="n">INTERNAL_VIOLATION</span><span class="p">,</span> <span class="n">msg</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">first_connection</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;No piping connection found with the same piping input as the parent segment&quot;</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">PipingValidityCode</span><span class="o">.</span><span class="n">CONNECTION_CONVENTION_VIOLATION</span><span class="p">,</span> <span class="n">msg</span><span class="p">)</span>
+    <span class="n">current_connection</span> <span class="o">=</span> <span class="n">first_connection</span>
+    <span class="n">visited_connections</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">current_connection</span><span class="p">)</span>
+    <span class="c1"># Find the first item as source of the first pipe. Is none if the source</span>
+    <span class="c1"># is outside the segment</span>
+    <span class="n">first_item</span> <span class="o">=</span> <span class="n">find_connection_enpoint</span><span class="p">(</span>
+        <span class="n">current_connection</span><span class="p">,</span> <span class="n">the_segment</span><span class="o">.</span><span class="n">items</span><span class="p">,</span> <span class="n">as_source</span><span class="o">=</span><span class="kc">True</span>
+    <span class="p">)</span>
+    <span class="k">if</span> <span class="n">first_item</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">visited_items</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">first_item</span><span class="p">)</span>
+        <span class="n">current_item</span> <span class="o">=</span> <span class="n">first_item</span>
+
+    <span class="c1"># Iterate along the pns one connection and item at a time to find all</span>
+    <span class="c1"># connected segment members</span>
+    <span class="n">segment_destination</span> <span class="o">=</span> <span class="n">find_connection_enpoint</span><span class="p">(</span>
+        <span class="n">the_segment</span><span class="p">,</span> <span class="n">the_segment</span><span class="o">.</span><span class="n">items</span>
+    <span class="p">)</span>
+    <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+        <span class="c1"># Find current connections destination</span>
+        <span class="n">current_item</span> <span class="o">=</span> <span class="n">find_connection_enpoint</span><span class="p">(</span>
+            <span class="n">current_connection</span><span class="p">,</span> <span class="n">the_segment</span><span class="o">.</span><span class="n">items</span>
+        <span class="p">)</span>
+        <span class="c1"># Check if the end of the segment is reached, and finish. The</span>
+        <span class="c1"># destination could be none, which is a valid case only at the end of</span>
+        <span class="c1"># the segment</span>
+        <span class="k">if</span> <span class="n">current_item</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">segment_destination</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;No destination to pipe </span><span class="si">{</span><span class="n">current_connection</span><span class="si">}</span><span class="s2"> referenced &quot;</span>
+            <span class="k">return</span> <span class="p">(</span><span class="n">PipingValidityCode</span><span class="o">.</span><span class="n">INTERNAL_VIOLATION</span><span class="p">,</span> <span class="n">msg</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">current_item</span> <span class="ow">in</span> <span class="n">visited_items</span><span class="p">:</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Item </span><span class="si">{</span><span class="n">current_item</span><span class="si">}</span><span class="s2"> referenced as destination twice in&quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;one segment&quot;</span>
+            <span class="p">)</span>
+            <span class="k">return</span> <span class="p">(</span><span class="n">PipingValidityCode</span><span class="o">.</span><span class="n">INTERNAL_VIOLATION</span><span class="p">,</span> <span class="n">msg</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">current_item</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">visited_items</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">current_item</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">segment_destination</span> <span class="o">==</span> <span class="n">current_item</span><span class="p">:</span>
+            <span class="k">break</span>
+        <span class="c1"># Otherwise, find the next connection. Return internal violation if none</span>
+        <span class="c1"># found</span>
+        <span class="k">for</span> <span class="n">connection</span> <span class="ow">in</span> <span class="n">the_segment</span><span class="o">.</span><span class="n">connections</span><span class="p">:</span>
+            <span class="n">connection_found</span> <span class="o">=</span> <span class="kc">False</span>
+            <span class="k">if</span> <span class="p">(</span>
+                <span class="n">find_connection_enpoint</span><span class="p">(</span>
+                    <span class="n">connection</span><span class="p">,</span> <span class="p">[</span><span class="n">current_item</span><span class="p">],</span> <span class="n">as_source</span><span class="o">=</span><span class="kc">True</span>
+                <span class="p">)</span>
+                <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+            <span class="p">):</span>
+                <span class="n">current_connection</span> <span class="o">=</span> <span class="n">connection</span>
+                <span class="n">visited_connections</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">current_connection</span><span class="p">)</span>
+                <span class="n">connection_found</span> <span class="o">=</span> <span class="kc">True</span>
+                <span class="k">break</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">connection_found</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">visited_connections</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">the_segment</span><span class="o">.</span><span class="n">connections</span><span class="p">):</span>
+                <span class="n">msg</span> <span class="o">=</span> <span class="p">(</span>
+                    <span class="s2">&quot;Piping network segment is interrupted, final pipe does &quot;</span>
+                    <span class="s2">&quot;not share the same destination as the segment&quot;</span>
+                <span class="p">)</span>
+                <span class="k">return</span> <span class="p">(</span><span class="n">PipingValidityCode</span><span class="o">.</span><span class="n">INTERNAL_VIOLATION</span><span class="p">,</span> <span class="n">msg</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;Final pipe does not share its destination with the piping network segment&quot;</span>
+                <span class="k">return</span> <span class="p">(</span><span class="n">PipingValidityCode</span><span class="o">.</span><span class="n">CONNECTION_CONVENTION_VIOLATION</span><span class="p">,</span> <span class="n">msg</span><span class="p">)</span>
+
+    <span class="c1"># Check if there are connections or pipes in the segment that werent</span>
+    <span class="c1"># visited, in which case it is corrupt</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">visited_connections</span><span class="p">)</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">the_segment</span><span class="o">.</span><span class="n">connections</span><span class="p">):</span>
+        <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;Not all connections in the segment were visited&quot;</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">PipingValidityCode</span><span class="o">.</span><span class="n">INTERNAL_VIOLATION</span><span class="p">,</span> <span class="n">msg</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">visited_items</span><span class="p">)</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">the_segment</span><span class="o">.</span><span class="n">items</span><span class="p">):</span>
+        <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;Not all items in the segment were visited&quot;</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">PipingValidityCode</span><span class="o">.</span><span class="n">INTERNAL_VIOLATION</span><span class="p">,</span> <span class="n">msg</span><span class="p">)</span>
+
+    <span class="c1"># Check if the order of the connections and items is the order of occurrence</span>
+    <span class="k">for</span> <span class="n">segment_connection</span><span class="p">,</span> <span class="n">visited_connection</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span>
+        <span class="n">the_segment</span><span class="o">.</span><span class="n">connections</span><span class="p">,</span> <span class="n">visited_connections</span>
+    <span class="p">):</span>
+        <span class="k">if</span> <span class="n">segment_connection</span> <span class="o">!=</span> <span class="n">visited_connection</span><span class="p">:</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;Segment connections not in right order&quot;</span>
+            <span class="k">return</span> <span class="p">(</span><span class="n">PipingValidityCode</span><span class="o">.</span><span class="n">INTERNAL_VIOLATION</span><span class="p">,</span> <span class="n">msg</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">segment_item</span><span class="p">,</span> <span class="n">visited_item</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">the_segment</span><span class="o">.</span><span class="n">items</span><span class="p">,</span> <span class="n">visited_items</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">segment_item</span> <span class="o">!=</span> <span class="n">visited_item</span><span class="p">:</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;Segment item not in right order&quot;</span>
+            <span class="k">return</span> <span class="p">(</span><span class="n">PipingValidityCode</span><span class="o">.</span><span class="n">INTERNAL_VIOLATION</span><span class="p">,</span> <span class="n">msg</span><span class="p">)</span>
+
+    <span class="c1"># If no violation was encountered above, the segment is valid</span>
+    <span class="k">return</span> <span class="p">(</span><span class="n">PipingValidityCode</span><span class="o">.</span><span class="n">VALID</span><span class="p">,</span> <span class="s2">&quot;Segment valid&quot;</span><span class="p">)</span></div>
+
+
+
+<span class="k">def</span> <span class="nf">_connect_piping_connection</span><span class="p">(</span>
+    <span class="n">connector_object</span><span class="p">:</span> <span class="n">piping</span><span class="o">.</span><span class="n">PipingNode</span>
+    <span class="o">|</span> <span class="n">piping</span><span class="o">.</span><span class="n">PipingSourceItem</span>
+    <span class="o">|</span> <span class="n">piping</span><span class="o">.</span><span class="n">PipingTargetItem</span><span class="p">,</span>
+    <span class="n">piping_connection</span><span class="p">:</span> <span class="n">piping</span><span class="o">.</span><span class="n">PipingConnection</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">piping_segment</span><span class="p">:</span> <span class="n">piping</span><span class="o">.</span><span class="n">PipingNetworkSegment</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">as_source</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">force_reconnect</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+<span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Connects the pipe to the target connector object.</span>
+
+<span class="sd">    If the connector object is a PipingNode, the connection is implemented via</span>
+<span class="sd">    node connection. Otherwise, a connection via Source or TargetItem is</span>
+<span class="sd">    attempted. Raises an error if the piping connection is already connected</span>
+<span class="sd">    unless `force_reconnect` is True.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    connector_object : Union[PipingNode, PipingSourceItem, PipingTargetItem]</span>
+<span class="sd">        The connector object to which the pipe will be connected.</span>
+<span class="sd">        It can be either a PipingNode, PipingSourceItem, or PipingTargetItem.</span>
+<span class="sd">    piping_connection : PipingConnection, optional</span>
+<span class="sd">        The piping connection to be reconnected. If not passed, then</span>
+<span class="sd">        reconnection only performed on the segment</span>
+<span class="sd">    piping_segment : PipingNetworkSegment, optional</span>
+<span class="sd">        Applies the reconnection to the piping segment too if passed along.</span>
+<span class="sd">    as_source : bool, optional</span>
+<span class="sd">        If True, the connection is established as source, else as target.</span>
+<span class="sd">        Defaults to False.</span>
+<span class="sd">    force_reconnect : bool, optional</span>
+<span class="sd">        If False, raises an exception if the piping connection is already</span>
+<span class="sd">        connected. Defaults to False.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    None</span>
+<span class="sd">        This function modifies the state of the piping connection but does</span>
+<span class="sd">        not return any value.</span>
+
+<span class="sd">    Raises</span>
+<span class="sd">    ------</span>
+<span class="sd">    ConnectionException</span>
+<span class="sd">        If the piping connection is already connected, and `force_reconnect`</span>
+<span class="sd">        is False.</span>
+<span class="sd">    ValueError</span>
+<span class="sd">        If the piping_connection and piping_segment are found to be faulty or</span>
+<span class="sd">        do not fit together</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">raise_exception_if_connection_conflict</span><span class="p">(</span><span class="n">connection_object</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">as_source</span> <span class="ow">and</span> <span class="p">(</span>
+            <span class="n">connection_object</span><span class="o">.</span><span class="n">sourceNode</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+            <span class="ow">or</span> <span class="n">connection_object</span><span class="o">.</span><span class="n">sourceItem</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+        <span class="p">):</span>
+            <span class="k">raise</span> <span class="n">DexpiConnectionException</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">connection_object</span><span class="p">)</span><span class="si">}</span><span class="s2"> object: </span><span class="si">{</span><span class="n">connection_object</span><span class="si">}</span><span class="s2"> &quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;already has a source.&quot;</span>
+            <span class="p">)</span>
+        <span class="k">elif</span> <span class="ow">not</span> <span class="n">as_source</span> <span class="ow">and</span> <span class="p">(</span>
+            <span class="n">connection_object</span><span class="o">.</span><span class="n">targetNode</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+            <span class="ow">or</span> <span class="n">connection_object</span><span class="o">.</span><span class="n">targetItem</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+        <span class="p">):</span>
+            <span class="k">raise</span> <span class="n">DexpiConnectionException</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">connection_object</span><span class="p">)</span><span class="si">}</span><span class="s2"> object: </span><span class="si">{</span><span class="n">connection_object</span><span class="si">}</span><span class="s2"> &quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;already has a target.&quot;</span>
+            <span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">reconnect_connection_object</span><span class="p">(</span><span class="n">conntection_object</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">as_source</span><span class="p">:</span>
+            <span class="n">conntection_object</span><span class="o">.</span><span class="n">sourceNode</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="n">conntection_object</span><span class="o">.</span><span class="n">sourceItem</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">connector_object</span><span class="p">,</span> <span class="n">piping</span><span class="o">.</span><span class="n">PipingNode</span><span class="p">):</span>
+                <span class="n">conntection_object</span><span class="o">.</span><span class="n">sourceNode</span> <span class="o">=</span> <span class="n">connector_object</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">conntection_object</span><span class="o">.</span><span class="n">sourceItem</span> <span class="o">=</span> <span class="n">connector_object</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">conntection_object</span><span class="o">.</span><span class="n">targetNode</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="n">conntection_object</span><span class="o">.</span><span class="n">targetItem</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">connector_object</span><span class="p">,</span> <span class="n">piping</span><span class="o">.</span><span class="n">PipingNode</span><span class="p">):</span>
+                <span class="n">conntection_object</span><span class="o">.</span><span class="n">targetNode</span> <span class="o">=</span> <span class="n">connector_object</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">conntection_object</span><span class="o">.</span><span class="n">targetItem</span> <span class="o">=</span> <span class="n">connector_object</span>
+
+    <span class="k">if</span> <span class="n">piping_segment</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">piping_connection</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">final_segment_connection</span> <span class="o">=</span> <span class="n">find_final_connection</span><span class="p">(</span>
+            <span class="n">piping_segment</span><span class="p">,</span> <span class="n">as_source</span><span class="o">=</span><span class="n">as_source</span>
+        <span class="p">)</span>
+        <span class="k">if</span> <span class="n">final_segment_connection</span> <span class="o">!=</span> <span class="n">piping_connection</span><span class="p">:</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">piping_connection</span><span class="si">}</span><span class="s2"> is not the final connection of &quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">piping_segment</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+
+    <span class="c1"># check if connection already exists.</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">force_reconnect</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">piping_connection</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">raise_exception_if_connection_conflict</span><span class="p">(</span><span class="n">piping_connection</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">piping_segment</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">raise_exception_if_connection_conflict</span><span class="p">(</span><span class="n">piping_segment</span><span class="p">)</span>
+
+    <span class="c1"># Perform reconnection</span>
+    <span class="k">if</span> <span class="n">piping_connection</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">reconnect_connection_object</span><span class="p">(</span><span class="n">piping_connection</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">piping_segment</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">reconnect_connection_object</span><span class="p">(</span><span class="n">piping_segment</span><span class="p">)</span>
+
+
+<span class="c1"># TODO:</span>
+<span class="c1"># - Implement piping consistency check for a full conceptual model, by</span>
+<span class="c1">#   - Going through all segments and call consistency check</span>
+<span class="c1">#   - Checking if all piping nodes only have one ref</span>
+<span class="c1"># - Implement methods to remove items or connections from segments same as the</span>
+<span class="c1">#   ones in place now for appending</span>
+<span class="c1"># - Consider implementing a wrapper class that implements the connection</span>
+<span class="c1">#   convention more closely for some of the methods in the toolkit if wanted.</span>
+<span class="c1">#   Wrapper class ensures backward compatibility. Consider also adding a switch</span>
+<span class="c1">#   that calls a validity check before (and after) each action</span>
+<span class="c1">#</span>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Domink Goldstein, Lukas Schulze Balhorn, Artur Schweidtmann.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

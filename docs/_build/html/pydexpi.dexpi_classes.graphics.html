@@ -21,8 +21,8 @@
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="pydexpi.dexpi_classes.instrumentation package" href="pydexpi.dexpi_classes.instrumentation.html" />
-    <link rel="prev" title="pydexpi.dexpi_classes.equipment package" href="pydexpi.dexpi_classes.equipment.html" /> 
+    <link rel="next" title="pydexpi.dexpi_classes.graphics.circle module" href="pydexpi.dexpi_classes.graphics.circle.html" />
+    <link rel="prev" title="pydexpi.dexpi_classes.equipment.wetCoolingTower module" href="pydexpi.dexpi_classes.equipment.wetCoolingTower.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -94,561 +94,169 @@
 <h1>pydexpi.dexpi_classes.graphics package<a class="headerlink" href="#pydexpi-dexpi-classes-graphics-package" title="Link to this heading"></a></h1>
 <section id="submodules">
 <h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading"></a></h2>
-</section>
-<section id="module-pydexpi.dexpi_classes.graphics.circle">
-<span id="pydexpi-dexpi-classes-graphics-circle-module"></span><h2>pydexpi.dexpi_classes.graphics.circle module<a class="headerlink" href="#module-pydexpi.dexpi_classes.graphics.circle" title="Link to this heading"></a></h2>
-<p>This module contains a pydantic class for the DEXPI Circle class</p>
-<dl class="py class">
-<dt class="sig sig-object py" id="pydexpi.dexpi_classes.graphics.circle.Circle">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pydexpi.dexpi_classes.graphics.circle.</span></span><span class="sig-name descname"><span class="pre">Circle</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stroke</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#pydexpi.dexpi_classes.graphics.stroke.Stroke" title="pydexpi.dexpi_classes.graphics.stroke.Stroke"><span class="pre">Stroke</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">center</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#pydexpi.dexpi_classes.graphics.point.Point" title="pydexpi.dexpi_classes.graphics.point.Point"><span class="pre">Point</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">fillStyle</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#pydexpi.dexpi_classes.graphics.fillStyle.FillStyle" title="pydexpi.dexpi_classes.graphics.fillStyle.FillStyle"><span class="pre">FillStyle</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">radius</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Decimal</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pydexpi.dexpi_classes.graphics.circle.Circle" title="Link to this definition"></a></dt>
-<dd><p>Bases: <a class="reference internal" href="#pydexpi.dexpi_classes.graphics.graphicalPrimitive.GraphicalPrimitive" title="pydexpi.dexpi_classes.graphics.graphicalPrimitive.GraphicalPrimitive"><code class="xref py py-class docutils literal notranslate"><span class="pre">GraphicalPrimitive</span></code></a></p>
-<p>A circle.</p>
-<dl class="py attribute">
-<dt class="sig sig-object py" id="pydexpi.dexpi_classes.graphics.circle.Circle.center">
-<span class="sig-name descname"><span class="pre">center</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#pydexpi.dexpi_classes.graphics.point.Point" title="pydexpi.dexpi_classes.graphics.point.Point"><span class="pre">Point</span></a></em><a class="headerlink" href="#pydexpi.dexpi_classes.graphics.circle.Circle.center" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="pydexpi.dexpi_classes.graphics.circle.Circle.fillStyle">
-<span class="sig-name descname"><span class="pre">fillStyle</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#pydexpi.dexpi_classes.graphics.fillStyle.FillStyle" title="pydexpi.dexpi_classes.graphics.fillStyle.FillStyle"><span class="pre">FillStyle</span></a></em><a class="headerlink" href="#pydexpi.dexpi_classes.graphics.circle.Circle.fillStyle" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="pydexpi.dexpi_classes.graphics.circle.Circle.model_config">
-<span class="sig-name descname"><span class="pre">model_config</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar</span><span class="p"><span class="pre">[</span></span><span class="pre">ConfigDict</span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'validate_assignment':</span> <span class="pre">True}</span></em><a class="headerlink" href="#pydexpi.dexpi_classes.graphics.circle.Circle.model_config" title="Link to this definition"></a></dt>
-<dd><p>Configuration for the model, should be a dictionary conforming to [<cite>ConfigDict</cite>][pydantic.config.ConfigDict].</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="pydexpi.dexpi_classes.graphics.circle.Circle.model_fields">
-<span class="sig-name descname"><span class="pre">model_fields</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar</span><span class="p"><span class="pre">[</span></span><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">FieldInfo</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'center':</span> <span class="pre">FieldInfo(annotation=Point,</span> <span class="pre">required=True),</span> <span class="pre">'fillStyle':</span> <span class="pre">FieldInfo(annotation=FillStyle,</span> <span class="pre">required=True),</span> <span class="pre">'id':</span> <span class="pre">FieldInfo(annotation=str,</span> <span class="pre">required=False,</span> <span class="pre">default_factory=&lt;lambda&gt;),</span> <span class="pre">'radius':</span> <span class="pre">FieldInfo(annotation=Decimal,</span> <span class="pre">required=True),</span> <span class="pre">'stroke':</span> <span class="pre">FieldInfo(annotation=Stroke,</span> <span class="pre">required=True)}</span></em><a class="headerlink" href="#pydexpi.dexpi_classes.graphics.circle.Circle.model_fields" title="Link to this definition"></a></dt>
-<dd><p>Metadata about the fields defined on the model,
-mapping of field names to [<cite>FieldInfo</cite>][pydantic.fields.FieldInfo].</p>
-<p>This replaces <cite>Model.__fields__</cite> from Pydantic V1.</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="pydexpi.dexpi_classes.graphics.circle.Circle.radius">
-<span class="sig-name descname"><span class="pre">radius</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Decimal</span></em><a class="headerlink" href="#pydexpi.dexpi_classes.graphics.circle.Circle.radius" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-</section>
-<section id="module-pydexpi.dexpi_classes.graphics.circleArc">
-<span id="pydexpi-dexpi-classes-graphics-circlearc-module"></span><h2>pydexpi.dexpi_classes.graphics.circleArc module<a class="headerlink" href="#module-pydexpi.dexpi_classes.graphics.circleArc" title="Link to this heading"></a></h2>
-<p>This module contains a pydantic class for the DEXPI CircleArc class</p>
-<dl class="py class">
-<dt class="sig sig-object py" id="pydexpi.dexpi_classes.graphics.circleArc.CircleArc">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pydexpi.dexpi_classes.graphics.circleArc.</span></span><span class="sig-name descname"><span class="pre">CircleArc</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stroke</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#pydexpi.dexpi_classes.graphics.stroke.Stroke" title="pydexpi.dexpi_classes.graphics.stroke.Stroke"><span class="pre">Stroke</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">center</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#pydexpi.dexpi_classes.graphics.point.Point" title="pydexpi.dexpi_classes.graphics.point.Point"><span class="pre">Point</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">endAngle</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Decimal</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">radius</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Decimal</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">startAngle</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Decimal</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pydexpi.dexpi_classes.graphics.circleArc.CircleArc" title="Link to this definition"></a></dt>
-<dd><p>Bases: <a class="reference internal" href="#pydexpi.dexpi_classes.graphics.graphicalPrimitive.GraphicalPrimitive" title="pydexpi.dexpi_classes.graphics.graphicalPrimitive.GraphicalPrimitive"><code class="xref py py-class docutils literal notranslate"><span class="pre">GraphicalPrimitive</span></code></a></p>
-<p>A circle arc.</p>
-<dl class="py attribute">
-<dt class="sig sig-object py" id="pydexpi.dexpi_classes.graphics.circleArc.CircleArc.center">
-<span class="sig-name descname"><span class="pre">center</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#pydexpi.dexpi_classes.graphics.point.Point" title="pydexpi.dexpi_classes.graphics.point.Point"><span class="pre">Point</span></a></em><a class="headerlink" href="#pydexpi.dexpi_classes.graphics.circleArc.CircleArc.center" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="pydexpi.dexpi_classes.graphics.circleArc.CircleArc.endAngle">
-<span class="sig-name descname"><span class="pre">endAngle</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Decimal</span></em><a class="headerlink" href="#pydexpi.dexpi_classes.graphics.circleArc.CircleArc.endAngle" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="pydexpi.dexpi_classes.graphics.circleArc.CircleArc.model_config">
-<span class="sig-name descname"><span class="pre">model_config</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar</span><span class="p"><span class="pre">[</span></span><span class="pre">ConfigDict</span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'validate_assignment':</span> <span class="pre">True}</span></em><a class="headerlink" href="#pydexpi.dexpi_classes.graphics.circleArc.CircleArc.model_config" title="Link to this definition"></a></dt>
-<dd><p>Configuration for the model, should be a dictionary conforming to [<cite>ConfigDict</cite>][pydantic.config.ConfigDict].</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="pydexpi.dexpi_classes.graphics.circleArc.CircleArc.model_fields">
-<span class="sig-name descname"><span class="pre">model_fields</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar</span><span class="p"><span class="pre">[</span></span><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">FieldInfo</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'center':</span> <span class="pre">FieldInfo(annotation=Point,</span> <span class="pre">required=True),</span> <span class="pre">'endAngle':</span> <span class="pre">FieldInfo(annotation=Decimal,</span> <span class="pre">required=True),</span> <span class="pre">'id':</span> <span class="pre">FieldInfo(annotation=str,</span> <span class="pre">required=False,</span> <span class="pre">default_factory=&lt;lambda&gt;),</span> <span class="pre">'radius':</span> <span class="pre">FieldInfo(annotation=Decimal,</span> <span class="pre">required=True),</span> <span class="pre">'startAngle':</span> <span class="pre">FieldInfo(annotation=Decimal,</span> <span class="pre">required=True),</span> <span class="pre">'stroke':</span> <span class="pre">FieldInfo(annotation=Stroke,</span> <span class="pre">required=True)}</span></em><a class="headerlink" href="#pydexpi.dexpi_classes.graphics.circleArc.CircleArc.model_fields" title="Link to this definition"></a></dt>
-<dd><p>Metadata about the fields defined on the model,
-mapping of field names to [<cite>FieldInfo</cite>][pydantic.fields.FieldInfo].</p>
-<p>This replaces <cite>Model.__fields__</cite> from Pydantic V1.</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="pydexpi.dexpi_classes.graphics.circleArc.CircleArc.radius">
-<span class="sig-name descname"><span class="pre">radius</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Decimal</span></em><a class="headerlink" href="#pydexpi.dexpi_classes.graphics.circleArc.CircleArc.radius" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="pydexpi.dexpi_classes.graphics.circleArc.CircleArc.startAngle">
-<span class="sig-name descname"><span class="pre">startAngle</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Decimal</span></em><a class="headerlink" href="#pydexpi.dexpi_classes.graphics.circleArc.CircleArc.startAngle" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-</section>
-<section id="module-pydexpi.dexpi_classes.graphics.color">
-<span id="pydexpi-dexpi-classes-graphics-color-module"></span><h2>pydexpi.dexpi_classes.graphics.color module<a class="headerlink" href="#module-pydexpi.dexpi_classes.graphics.color" title="Link to this heading"></a></h2>
-<p>This module contains a pydantic class for the DEXPI Color class</p>
-<dl class="py class">
-<dt class="sig sig-object py" id="pydexpi.dexpi_classes.graphics.color.Color">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pydexpi.dexpi_classes.graphics.color.</span></span><span class="sig-name descname"><span class="pre">Color</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">b</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">g</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">r</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pydexpi.dexpi_classes.graphics.color.Color" title="Link to this definition"></a></dt>
-<dd><p>Bases: <a class="reference internal" href="pydexpi.dexpi_classes.html#pydexpi.dexpi_classes.dexpiDataTypeBaseModel.DexpiDataTypeBaseModel" title="pydexpi.dexpi_classes.dexpiDataTypeBaseModel.DexpiDataTypeBaseModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">DexpiDataTypeBaseModel</span></code></a></p>
-<p>A color. It is defined using the RDF color model.</p>
-<dl class="py attribute">
-<dt class="sig sig-object py" id="pydexpi.dexpi_classes.graphics.color.Color.b">
-<span class="sig-name descname"><span class="pre">b</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#pydexpi.dexpi_classes.graphics.color.Color.b" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="pydexpi.dexpi_classes.graphics.color.Color.g">
-<span class="sig-name descname"><span class="pre">g</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#pydexpi.dexpi_classes.graphics.color.Color.g" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="pydexpi.dexpi_classes.graphics.color.Color.model_config">
-<span class="sig-name descname"><span class="pre">model_config</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar</span><span class="p"><span class="pre">[</span></span><span class="pre">ConfigDict</span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'validate_assignment':</span> <span class="pre">True}</span></em><a class="headerlink" href="#pydexpi.dexpi_classes.graphics.color.Color.model_config" title="Link to this definition"></a></dt>
-<dd><p>Configuration for the model, should be a dictionary conforming to [<cite>ConfigDict</cite>][pydantic.config.ConfigDict].</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="pydexpi.dexpi_classes.graphics.color.Color.model_fields">
-<span class="sig-name descname"><span class="pre">model_fields</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar</span><span class="p"><span class="pre">[</span></span><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">FieldInfo</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'b':</span> <span class="pre">FieldInfo(annotation=int,</span> <span class="pre">required=True),</span> <span class="pre">'g':</span> <span class="pre">FieldInfo(annotation=int,</span> <span class="pre">required=True),</span> <span class="pre">'id':</span> <span class="pre">FieldInfo(annotation=str,</span> <span class="pre">required=False,</span> <span class="pre">default_factory=&lt;lambda&gt;),</span> <span class="pre">'r':</span> <span class="pre">FieldInfo(annotation=int,</span> <span class="pre">required=True)}</span></em><a class="headerlink" href="#pydexpi.dexpi_classes.graphics.color.Color.model_fields" title="Link to this definition"></a></dt>
-<dd><p>Metadata about the fields defined on the model,
-mapping of field names to [<cite>FieldInfo</cite>][pydantic.fields.FieldInfo].</p>
-<p>This replaces <cite>Model.__fields__</cite> from Pydantic V1.</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="pydexpi.dexpi_classes.graphics.color.Color.r">
-<span class="sig-name descname"><span class="pre">r</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#pydexpi.dexpi_classes.graphics.color.Color.r" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-</section>
-<section id="module-pydexpi.dexpi_classes.graphics.dashStyle">
-<span id="pydexpi-dexpi-classes-graphics-dashstyle-module"></span><h2>pydexpi.dexpi_classes.graphics.dashStyle module<a class="headerlink" href="#module-pydexpi.dexpi_classes.graphics.dashStyle" title="Link to this heading"></a></h2>
-<p>This module contains a pydantic class for the DEXPI DashStyle enumeration</p>
-<dl class="py class">
-<dt class="sig sig-object py" id="pydexpi.dexpi_classes.graphics.dashStyle.DashStyle">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pydexpi.dexpi_classes.graphics.dashStyle.</span></span><span class="sig-name descname"><span class="pre">DashStyle</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pydexpi.dexpi_classes.graphics.dashStyle.DashStyle" title="Link to this definition"></a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Enum</span></code></p>
-<p>An enumeration.</p>
-</dd></dl>
-
-</section>
-<section id="module-pydexpi.dexpi_classes.graphics.diagram">
-<span id="pydexpi-dexpi-classes-graphics-diagram-module"></span><h2>pydexpi.dexpi_classes.graphics.diagram module<a class="headerlink" href="#module-pydexpi.dexpi_classes.graphics.diagram" title="Link to this heading"></a></h2>
-<p>This module contains a pydantic class for the DEXPI Diagram class</p>
-<dl class="py class">
-<dt class="sig sig-object py" id="pydexpi.dexpi_classes.graphics.diagram.Diagram">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pydexpi.dexpi_classes.graphics.diagram.</span></span><span class="sig-name descname"><span class="pre">Diagram</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pydexpi.dexpi_classes.graphics.diagram.Diagram" title="Link to this definition"></a></dt>
-<dd><p>Bases: <a class="reference internal" href="pydexpi.dexpi_classes.html#pydexpi.dexpi_classes.dexpiBaseModel.DexpiBaseModel" title="pydexpi.dexpi_classes.dexpiBaseModel.DexpiBaseModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">DexpiBaseModel</span></code></a></p>
-<dl class="py attribute">
-<dt class="sig sig-object py" id="pydexpi.dexpi_classes.graphics.diagram.Diagram.model_config">
-<span class="sig-name descname"><span class="pre">model_config</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar</span><span class="p"><span class="pre">[</span></span><span class="pre">ConfigDict</span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'validate_assignment':</span> <span class="pre">True}</span></em><a class="headerlink" href="#pydexpi.dexpi_classes.graphics.diagram.Diagram.model_config" title="Link to this definition"></a></dt>
-<dd><p>Configuration for the model, should be a dictionary conforming to [<cite>ConfigDict</cite>][pydantic.config.ConfigDict].</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="pydexpi.dexpi_classes.graphics.diagram.Diagram.model_fields">
-<span class="sig-name descname"><span class="pre">model_fields</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar</span><span class="p"><span class="pre">[</span></span><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">FieldInfo</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'id':</span> <span class="pre">FieldInfo(annotation=str,</span> <span class="pre">required=False,</span> <span class="pre">default_factory=&lt;lambda&gt;),</span> <span class="pre">'value':</span> <span class="pre">FieldInfo(annotation=str,</span> <span class="pre">required=True)}</span></em><a class="headerlink" href="#pydexpi.dexpi_classes.graphics.diagram.Diagram.model_fields" title="Link to this definition"></a></dt>
-<dd><p>Metadata about the fields defined on the model,
-mapping of field names to [<cite>FieldInfo</cite>][pydantic.fields.FieldInfo].</p>
-<p>This replaces <cite>Model.__fields__</cite> from Pydantic V1.</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="pydexpi.dexpi_classes.graphics.diagram.Diagram.value">
-<span class="sig-name descname"><span class="pre">value</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#pydexpi.dexpi_classes.graphics.diagram.Diagram.value" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-</section>
-<section id="module-pydexpi.dexpi_classes.graphics.ellipse">
-<span id="pydexpi-dexpi-classes-graphics-ellipse-module"></span><h2>pydexpi.dexpi_classes.graphics.ellipse module<a class="headerlink" href="#module-pydexpi.dexpi_classes.graphics.ellipse" title="Link to this heading"></a></h2>
-<p>This module contains a pydantic class for the DEXPI Ellipse class</p>
-<dl class="py class">
-<dt class="sig sig-object py" id="pydexpi.dexpi_classes.graphics.ellipse.Ellipse">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pydexpi.dexpi_classes.graphics.ellipse.</span></span><span class="sig-name descname"><span class="pre">Ellipse</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stroke</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#pydexpi.dexpi_classes.graphics.stroke.Stroke" title="pydexpi.dexpi_classes.graphics.stroke.Stroke"><span class="pre">Stroke</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">center</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#pydexpi.dexpi_classes.graphics.point.Point" title="pydexpi.dexpi_classes.graphics.point.Point"><span class="pre">Point</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">fillStyle</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#pydexpi.dexpi_classes.graphics.fillStyle.FillStyle" title="pydexpi.dexpi_classes.graphics.fillStyle.FillStyle"><span class="pre">FillStyle</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">horizontalSemiAxis</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Decimal</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rotation</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Decimal</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verticalSemiAxis</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Decimal</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pydexpi.dexpi_classes.graphics.ellipse.Ellipse" title="Link to this definition"></a></dt>
-<dd><p>Bases: <a class="reference internal" href="#pydexpi.dexpi_classes.graphics.graphicalPrimitive.GraphicalPrimitive" title="pydexpi.dexpi_classes.graphics.graphicalPrimitive.GraphicalPrimitive"><code class="xref py py-class docutils literal notranslate"><span class="pre">GraphicalPrimitive</span></code></a></p>
-<p>An ellipse.</p>
-<dl class="py attribute">
-<dt class="sig sig-object py" id="pydexpi.dexpi_classes.graphics.ellipse.Ellipse.center">
-<span class="sig-name descname"><span class="pre">center</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#pydexpi.dexpi_classes.graphics.point.Point" title="pydexpi.dexpi_classes.graphics.point.Point"><span class="pre">Point</span></a></em><a class="headerlink" href="#pydexpi.dexpi_classes.graphics.ellipse.Ellipse.center" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="pydexpi.dexpi_classes.graphics.ellipse.Ellipse.fillStyle">
-<span class="sig-name descname"><span class="pre">fillStyle</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#pydexpi.dexpi_classes.graphics.fillStyle.FillStyle" title="pydexpi.dexpi_classes.graphics.fillStyle.FillStyle"><span class="pre">FillStyle</span></a></em><a class="headerlink" href="#pydexpi.dexpi_classes.graphics.ellipse.Ellipse.fillStyle" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="pydexpi.dexpi_classes.graphics.ellipse.Ellipse.horizontalSemiAxis">
-<span class="sig-name descname"><span class="pre">horizontalSemiAxis</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Decimal</span></em><a class="headerlink" href="#pydexpi.dexpi_classes.graphics.ellipse.Ellipse.horizontalSemiAxis" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="pydexpi.dexpi_classes.graphics.ellipse.Ellipse.model_config">
-<span class="sig-name descname"><span class="pre">model_config</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar</span><span class="p"><span class="pre">[</span></span><span class="pre">ConfigDict</span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'validate_assignment':</span> <span class="pre">True}</span></em><a class="headerlink" href="#pydexpi.dexpi_classes.graphics.ellipse.Ellipse.model_config" title="Link to this definition"></a></dt>
-<dd><p>Configuration for the model, should be a dictionary conforming to [<cite>ConfigDict</cite>][pydantic.config.ConfigDict].</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="pydexpi.dexpi_classes.graphics.ellipse.Ellipse.model_fields">
-<span class="sig-name descname"><span class="pre">model_fields</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar</span><span class="p"><span class="pre">[</span></span><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">FieldInfo</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'center':</span> <span class="pre">FieldInfo(annotation=Point,</span> <span class="pre">required=True),</span> <span class="pre">'fillStyle':</span> <span class="pre">FieldInfo(annotation=FillStyle,</span> <span class="pre">required=True),</span> <span class="pre">'horizontalSemiAxis':</span> <span class="pre">FieldInfo(annotation=Decimal,</span> <span class="pre">required=True),</span> <span class="pre">'id':</span> <span class="pre">FieldInfo(annotation=str,</span> <span class="pre">required=False,</span> <span class="pre">default_factory=&lt;lambda&gt;),</span> <span class="pre">'rotation':</span> <span class="pre">FieldInfo(annotation=Decimal,</span> <span class="pre">required=True),</span> <span class="pre">'stroke':</span> <span class="pre">FieldInfo(annotation=Stroke,</span> <span class="pre">required=True),</span> <span class="pre">'verticalSemiAxis':</span> <span class="pre">FieldInfo(annotation=Decimal,</span> <span class="pre">required=True)}</span></em><a class="headerlink" href="#pydexpi.dexpi_classes.graphics.ellipse.Ellipse.model_fields" title="Link to this definition"></a></dt>
-<dd><p>Metadata about the fields defined on the model,
-mapping of field names to [<cite>FieldInfo</cite>][pydantic.fields.FieldInfo].</p>
-<p>This replaces <cite>Model.__fields__</cite> from Pydantic V1.</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="pydexpi.dexpi_classes.graphics.ellipse.Ellipse.rotation">
-<span class="sig-name descname"><span class="pre">rotation</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Decimal</span></em><a class="headerlink" href="#pydexpi.dexpi_classes.graphics.ellipse.Ellipse.rotation" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="pydexpi.dexpi_classes.graphics.ellipse.Ellipse.verticalSemiAxis">
-<span class="sig-name descname"><span class="pre">verticalSemiAxis</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Decimal</span></em><a class="headerlink" href="#pydexpi.dexpi_classes.graphics.ellipse.Ellipse.verticalSemiAxis" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-</section>
-<section id="module-pydexpi.dexpi_classes.graphics.ellipseArc">
-<span id="pydexpi-dexpi-classes-graphics-ellipsearc-module"></span><h2>pydexpi.dexpi_classes.graphics.ellipseArc module<a class="headerlink" href="#module-pydexpi.dexpi_classes.graphics.ellipseArc" title="Link to this heading"></a></h2>
-<p>This module contains a pydantic class for the DEXPI EllipseArc class</p>
-<dl class="py class">
-<dt class="sig sig-object py" id="pydexpi.dexpi_classes.graphics.ellipseArc.EllipseArc">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pydexpi.dexpi_classes.graphics.ellipseArc.</span></span><span class="sig-name descname"><span class="pre">EllipseArc</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stroke</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#pydexpi.dexpi_classes.graphics.stroke.Stroke" title="pydexpi.dexpi_classes.graphics.stroke.Stroke"><span class="pre">Stroke</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">center</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#pydexpi.dexpi_classes.graphics.point.Point" title="pydexpi.dexpi_classes.graphics.point.Point"><span class="pre">Point</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">endAngle</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Decimal</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">horizontalSemiAxis</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Decimal</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rotation</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Decimal</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">startAngle</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Decimal</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verticalSemiAxis</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Decimal</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pydexpi.dexpi_classes.graphics.ellipseArc.EllipseArc" title="Link to this definition"></a></dt>
-<dd><p>Bases: <a class="reference internal" href="#pydexpi.dexpi_classes.graphics.graphicalPrimitive.GraphicalPrimitive" title="pydexpi.dexpi_classes.graphics.graphicalPrimitive.GraphicalPrimitive"><code class="xref py py-class docutils literal notranslate"><span class="pre">GraphicalPrimitive</span></code></a></p>
-<p>A ellipse arc.</p>
-<dl class="py attribute">
-<dt class="sig sig-object py" id="pydexpi.dexpi_classes.graphics.ellipseArc.EllipseArc.center">
-<span class="sig-name descname"><span class="pre">center</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#pydexpi.dexpi_classes.graphics.point.Point" title="pydexpi.dexpi_classes.graphics.point.Point"><span class="pre">Point</span></a></em><a class="headerlink" href="#pydexpi.dexpi_classes.graphics.ellipseArc.EllipseArc.center" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="pydexpi.dexpi_classes.graphics.ellipseArc.EllipseArc.endAngle">
-<span class="sig-name descname"><span class="pre">endAngle</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Decimal</span></em><a class="headerlink" href="#pydexpi.dexpi_classes.graphics.ellipseArc.EllipseArc.endAngle" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="pydexpi.dexpi_classes.graphics.ellipseArc.EllipseArc.horizontalSemiAxis">
-<span class="sig-name descname"><span class="pre">horizontalSemiAxis</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Decimal</span></em><a class="headerlink" href="#pydexpi.dexpi_classes.graphics.ellipseArc.EllipseArc.horizontalSemiAxis" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="pydexpi.dexpi_classes.graphics.ellipseArc.EllipseArc.model_config">
-<span class="sig-name descname"><span class="pre">model_config</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar</span><span class="p"><span class="pre">[</span></span><span class="pre">ConfigDict</span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'validate_assignment':</span> <span class="pre">True}</span></em><a class="headerlink" href="#pydexpi.dexpi_classes.graphics.ellipseArc.EllipseArc.model_config" title="Link to this definition"></a></dt>
-<dd><p>Configuration for the model, should be a dictionary conforming to [<cite>ConfigDict</cite>][pydantic.config.ConfigDict].</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="pydexpi.dexpi_classes.graphics.ellipseArc.EllipseArc.model_fields">
-<span class="sig-name descname"><span class="pre">model_fields</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar</span><span class="p"><span class="pre">[</span></span><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">FieldInfo</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'center':</span> <span class="pre">FieldInfo(annotation=Point,</span> <span class="pre">required=True),</span> <span class="pre">'endAngle':</span> <span class="pre">FieldInfo(annotation=Decimal,</span> <span class="pre">required=True),</span> <span class="pre">'horizontalSemiAxis':</span> <span class="pre">FieldInfo(annotation=Decimal,</span> <span class="pre">required=True),</span> <span class="pre">'id':</span> <span class="pre">FieldInfo(annotation=str,</span> <span class="pre">required=False,</span> <span class="pre">default_factory=&lt;lambda&gt;),</span> <span class="pre">'rotation':</span> <span class="pre">FieldInfo(annotation=Decimal,</span> <span class="pre">required=True),</span> <span class="pre">'startAngle':</span> <span class="pre">FieldInfo(annotation=Decimal,</span> <span class="pre">required=True),</span> <span class="pre">'stroke':</span> <span class="pre">FieldInfo(annotation=Stroke,</span> <span class="pre">required=True),</span> <span class="pre">'verticalSemiAxis':</span> <span class="pre">FieldInfo(annotation=Decimal,</span> <span class="pre">required=True)}</span></em><a class="headerlink" href="#pydexpi.dexpi_classes.graphics.ellipseArc.EllipseArc.model_fields" title="Link to this definition"></a></dt>
-<dd><p>Metadata about the fields defined on the model,
-mapping of field names to [<cite>FieldInfo</cite>][pydantic.fields.FieldInfo].</p>
-<p>This replaces <cite>Model.__fields__</cite> from Pydantic V1.</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="pydexpi.dexpi_classes.graphics.ellipseArc.EllipseArc.rotation">
-<span class="sig-name descname"><span class="pre">rotation</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Decimal</span></em><a class="headerlink" href="#pydexpi.dexpi_classes.graphics.ellipseArc.EllipseArc.rotation" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="pydexpi.dexpi_classes.graphics.ellipseArc.EllipseArc.startAngle">
-<span class="sig-name descname"><span class="pre">startAngle</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Decimal</span></em><a class="headerlink" href="#pydexpi.dexpi_classes.graphics.ellipseArc.EllipseArc.startAngle" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="pydexpi.dexpi_classes.graphics.ellipseArc.EllipseArc.verticalSemiAxis">
-<span class="sig-name descname"><span class="pre">verticalSemiAxis</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Decimal</span></em><a class="headerlink" href="#pydexpi.dexpi_classes.graphics.ellipseArc.EllipseArc.verticalSemiAxis" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-</section>
-<section id="module-pydexpi.dexpi_classes.graphics.fillStyle">
-<span id="pydexpi-dexpi-classes-graphics-fillstyle-module"></span><h2>pydexpi.dexpi_classes.graphics.fillStyle module<a class="headerlink" href="#module-pydexpi.dexpi_classes.graphics.fillStyle" title="Link to this heading"></a></h2>
-<p>This module contains a pydantic class for the DEXPI FillStyle enumeration</p>
-<dl class="py class">
-<dt class="sig sig-object py" id="pydexpi.dexpi_classes.graphics.fillStyle.FillStyle">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pydexpi.dexpi_classes.graphics.fillStyle.</span></span><span class="sig-name descname"><span class="pre">FillStyle</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">value</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pydexpi.dexpi_classes.graphics.fillStyle.FillStyle" title="Link to this definition"></a></dt>
-<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">Enum</span></code></p>
-<p>An enumeration.</p>
-<dl class="py attribute">
-<dt class="sig sig-object py" id="pydexpi.dexpi_classes.graphics.fillStyle.FillStyle.Hatch">
-<span class="sig-name descname"><span class="pre">Hatch</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'Hatch'</span></em><a class="headerlink" href="#pydexpi.dexpi_classes.graphics.fillStyle.FillStyle.Hatch" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="pydexpi.dexpi_classes.graphics.fillStyle.FillStyle.Solid">
-<span class="sig-name descname"><span class="pre">Solid</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'Solid'</span></em><a class="headerlink" href="#pydexpi.dexpi_classes.graphics.fillStyle.FillStyle.Solid" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="pydexpi.dexpi_classes.graphics.fillStyle.FillStyle.Transparent">
-<span class="sig-name descname"><span class="pre">Transparent</span></span><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">'Transparent'</span></em><a class="headerlink" href="#pydexpi.dexpi_classes.graphics.fillStyle.FillStyle.Transparent" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-</section>
-<section id="module-pydexpi.dexpi_classes.graphics.graphicalElement">
-<span id="pydexpi-dexpi-classes-graphics-graphicalelement-module"></span><h2>pydexpi.dexpi_classes.graphics.graphicalElement module<a class="headerlink" href="#module-pydexpi.dexpi_classes.graphics.graphicalElement" title="Link to this heading"></a></h2>
-<p>This module contains a pydantic class for the DEXPI GraphicalElement class</p>
-<dl class="py class">
-<dt class="sig sig-object py" id="pydexpi.dexpi_classes.graphics.graphicalElement.GraphicalElement">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pydexpi.dexpi_classes.graphics.graphicalElement.</span></span><span class="sig-name descname"><span class="pre">GraphicalElement</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pydexpi.dexpi_classes.graphics.graphicalElement.GraphicalElement" title="Link to this definition"></a></dt>
-<dd><p>Bases: <a class="reference internal" href="pydexpi.dexpi_classes.html#pydexpi.dexpi_classes.dexpiBaseModel.DexpiBaseModel" title="pydexpi.dexpi_classes.dexpiBaseModel.DexpiBaseModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">DexpiBaseModel</span></code></a></p>
-<p>A graphical element.</p>
-<dl class="py attribute">
-<dt class="sig sig-object py" id="pydexpi.dexpi_classes.graphics.graphicalElement.GraphicalElement.model_config">
-<span class="sig-name descname"><span class="pre">model_config</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar</span><span class="p"><span class="pre">[</span></span><span class="pre">ConfigDict</span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'validate_assignment':</span> <span class="pre">True}</span></em><a class="headerlink" href="#pydexpi.dexpi_classes.graphics.graphicalElement.GraphicalElement.model_config" title="Link to this definition"></a></dt>
-<dd><p>Configuration for the model, should be a dictionary conforming to [<cite>ConfigDict</cite>][pydantic.config.ConfigDict].</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="pydexpi.dexpi_classes.graphics.graphicalElement.GraphicalElement.model_fields">
-<span class="sig-name descname"><span class="pre">model_fields</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar</span><span class="p"><span class="pre">[</span></span><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">FieldInfo</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'id':</span> <span class="pre">FieldInfo(annotation=str,</span> <span class="pre">required=False,</span> <span class="pre">default_factory=&lt;lambda&gt;)}</span></em><a class="headerlink" href="#pydexpi.dexpi_classes.graphics.graphicalElement.GraphicalElement.model_fields" title="Link to this definition"></a></dt>
-<dd><p>Metadata about the fields defined on the model,
-mapping of field names to [<cite>FieldInfo</cite>][pydantic.fields.FieldInfo].</p>
-<p>This replaces <cite>Model.__fields__</cite> from Pydantic V1.</p>
-</dd></dl>
-
-</dd></dl>
-
-</section>
-<section id="module-pydexpi.dexpi_classes.graphics.graphicalPrimitive">
-<span id="pydexpi-dexpi-classes-graphics-graphicalprimitive-module"></span><h2>pydexpi.dexpi_classes.graphics.graphicalPrimitive module<a class="headerlink" href="#module-pydexpi.dexpi_classes.graphics.graphicalPrimitive" title="Link to this heading"></a></h2>
-<p>This module contains a pydantic class for the DEXPI GraphicalPrimitive class</p>
-<dl class="py class">
-<dt class="sig sig-object py" id="pydexpi.dexpi_classes.graphics.graphicalPrimitive.GraphicalPrimitive">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pydexpi.dexpi_classes.graphics.graphicalPrimitive.</span></span><span class="sig-name descname"><span class="pre">GraphicalPrimitive</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stroke</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#pydexpi.dexpi_classes.graphics.stroke.Stroke" title="pydexpi.dexpi_classes.graphics.stroke.Stroke"><span class="pre">Stroke</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pydexpi.dexpi_classes.graphics.graphicalPrimitive.GraphicalPrimitive" title="Link to this definition"></a></dt>
-<dd><p>Bases: <a class="reference internal" href="#pydexpi.dexpi_classes.graphics.graphicalElement.GraphicalElement" title="pydexpi.dexpi_classes.graphics.graphicalElement.GraphicalElement"><code class="xref py py-class docutils literal notranslate"><span class="pre">GraphicalElement</span></code></a></p>
-<p>A primitive graphical element.</p>
-<dl class="py attribute">
-<dt class="sig sig-object py" id="pydexpi.dexpi_classes.graphics.graphicalPrimitive.GraphicalPrimitive.model_config">
-<span class="sig-name descname"><span class="pre">model_config</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar</span><span class="p"><span class="pre">[</span></span><span class="pre">ConfigDict</span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'validate_assignment':</span> <span class="pre">True}</span></em><a class="headerlink" href="#pydexpi.dexpi_classes.graphics.graphicalPrimitive.GraphicalPrimitive.model_config" title="Link to this definition"></a></dt>
-<dd><p>Configuration for the model, should be a dictionary conforming to [<cite>ConfigDict</cite>][pydantic.config.ConfigDict].</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="pydexpi.dexpi_classes.graphics.graphicalPrimitive.GraphicalPrimitive.model_fields">
-<span class="sig-name descname"><span class="pre">model_fields</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar</span><span class="p"><span class="pre">[</span></span><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">FieldInfo</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'id':</span> <span class="pre">FieldInfo(annotation=str,</span> <span class="pre">required=False,</span> <span class="pre">default_factory=&lt;lambda&gt;),</span> <span class="pre">'stroke':</span> <span class="pre">FieldInfo(annotation=Stroke,</span> <span class="pre">required=True)}</span></em><a class="headerlink" href="#pydexpi.dexpi_classes.graphics.graphicalPrimitive.GraphicalPrimitive.model_fields" title="Link to this definition"></a></dt>
-<dd><p>Metadata about the fields defined on the model,
-mapping of field names to [<cite>FieldInfo</cite>][pydantic.fields.FieldInfo].</p>
-<p>This replaces <cite>Model.__fields__</cite> from Pydantic V1.</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="pydexpi.dexpi_classes.graphics.graphicalPrimitive.GraphicalPrimitive.stroke">
-<span class="sig-name descname"><span class="pre">stroke</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#pydexpi.dexpi_classes.graphics.stroke.Stroke" title="pydexpi.dexpi_classes.graphics.stroke.Stroke"><span class="pre">Stroke</span></a></em><a class="headerlink" href="#pydexpi.dexpi_classes.graphics.graphicalPrimitive.GraphicalPrimitive.stroke" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-</section>
-<section id="module-pydexpi.dexpi_classes.graphics.point">
-<span id="pydexpi-dexpi-classes-graphics-point-module"></span><h2>pydexpi.dexpi_classes.graphics.point module<a class="headerlink" href="#module-pydexpi.dexpi_classes.graphics.point" title="Link to this heading"></a></h2>
-<p>This module contains a pydantic class for the DEXPI Point class</p>
-<dl class="py class">
-<dt class="sig sig-object py" id="pydexpi.dexpi_classes.graphics.point.Point">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pydexpi.dexpi_classes.graphics.point.</span></span><span class="sig-name descname"><span class="pre">Point</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">x</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Decimal</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Decimal</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pydexpi.dexpi_classes.graphics.point.Point" title="Link to this definition"></a></dt>
-<dd><p>Bases: <a class="reference internal" href="pydexpi.dexpi_classes.html#pydexpi.dexpi_classes.dexpiDataTypeBaseModel.DexpiDataTypeBaseModel" title="pydexpi.dexpi_classes.dexpiDataTypeBaseModel.DexpiDataTypeBaseModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">DexpiDataTypeBaseModel</span></code></a></p>
-<p>A point in the X-Y-plane.</p>
-<dl class="py attribute">
-<dt class="sig sig-object py" id="pydexpi.dexpi_classes.graphics.point.Point.model_config">
-<span class="sig-name descname"><span class="pre">model_config</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar</span><span class="p"><span class="pre">[</span></span><span class="pre">ConfigDict</span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'validate_assignment':</span> <span class="pre">True}</span></em><a class="headerlink" href="#pydexpi.dexpi_classes.graphics.point.Point.model_config" title="Link to this definition"></a></dt>
-<dd><p>Configuration for the model, should be a dictionary conforming to [<cite>ConfigDict</cite>][pydantic.config.ConfigDict].</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="pydexpi.dexpi_classes.graphics.point.Point.model_fields">
-<span class="sig-name descname"><span class="pre">model_fields</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar</span><span class="p"><span class="pre">[</span></span><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">FieldInfo</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'id':</span> <span class="pre">FieldInfo(annotation=str,</span> <span class="pre">required=False,</span> <span class="pre">default_factory=&lt;lambda&gt;),</span> <span class="pre">'x':</span> <span class="pre">FieldInfo(annotation=Decimal,</span> <span class="pre">required=True),</span> <span class="pre">'y':</span> <span class="pre">FieldInfo(annotation=Decimal,</span> <span class="pre">required=True)}</span></em><a class="headerlink" href="#pydexpi.dexpi_classes.graphics.point.Point.model_fields" title="Link to this definition"></a></dt>
-<dd><p>Metadata about the fields defined on the model,
-mapping of field names to [<cite>FieldInfo</cite>][pydantic.fields.FieldInfo].</p>
-<p>This replaces <cite>Model.__fields__</cite> from Pydantic V1.</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="pydexpi.dexpi_classes.graphics.point.Point.x">
-<span class="sig-name descname"><span class="pre">x</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Decimal</span></em><a class="headerlink" href="#pydexpi.dexpi_classes.graphics.point.Point.x" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="pydexpi.dexpi_classes.graphics.point.Point.y">
-<span class="sig-name descname"><span class="pre">y</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Decimal</span></em><a class="headerlink" href="#pydexpi.dexpi_classes.graphics.point.Point.y" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-</section>
-<section id="module-pydexpi.dexpi_classes.graphics.polyLine">
-<span id="pydexpi-dexpi-classes-graphics-polyline-module"></span><h2>pydexpi.dexpi_classes.graphics.polyLine module<a class="headerlink" href="#module-pydexpi.dexpi_classes.graphics.polyLine" title="Link to this heading"></a></h2>
-<p>This module contains a pydantic class for the DEXPI PolyLine class</p>
-<dl class="py class">
-<dt class="sig sig-object py" id="pydexpi.dexpi_classes.graphics.polyLine.PolyLine">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pydexpi.dexpi_classes.graphics.polyLine.</span></span><span class="sig-name descname"><span class="pre">PolyLine</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stroke</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#pydexpi.dexpi_classes.graphics.stroke.Stroke" title="pydexpi.dexpi_classes.graphics.stroke.Stroke"><span class="pre">Stroke</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">points</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#pydexpi.dexpi_classes.graphics.point.Point" title="pydexpi.dexpi_classes.graphics.point.Point"><span class="pre">Point</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pydexpi.dexpi_classes.graphics.polyLine.PolyLine" title="Link to this definition"></a></dt>
-<dd><p>Bases: <a class="reference internal" href="#pydexpi.dexpi_classes.graphics.graphicalPrimitive.GraphicalPrimitive" title="pydexpi.dexpi_classes.graphics.graphicalPrimitive.GraphicalPrimitive"><code class="xref py py-class docutils literal notranslate"><span class="pre">GraphicalPrimitive</span></code></a></p>
-<p>A poly line, i.e., a line that consists of 1 or more straight sections.</p>
-<dl class="py attribute">
-<dt class="sig sig-object py" id="pydexpi.dexpi_classes.graphics.polyLine.PolyLine.model_config">
-<span class="sig-name descname"><span class="pre">model_config</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar</span><span class="p"><span class="pre">[</span></span><span class="pre">ConfigDict</span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'validate_assignment':</span> <span class="pre">True}</span></em><a class="headerlink" href="#pydexpi.dexpi_classes.graphics.polyLine.PolyLine.model_config" title="Link to this definition"></a></dt>
-<dd><p>Configuration for the model, should be a dictionary conforming to [<cite>ConfigDict</cite>][pydantic.config.ConfigDict].</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="pydexpi.dexpi_classes.graphics.polyLine.PolyLine.model_fields">
-<span class="sig-name descname"><span class="pre">model_fields</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar</span><span class="p"><span class="pre">[</span></span><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">FieldInfo</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'id':</span> <span class="pre">FieldInfo(annotation=str,</span> <span class="pre">required=False,</span> <span class="pre">default_factory=&lt;lambda&gt;),</span> <span class="pre">'points':</span> <span class="pre">FieldInfo(annotation=list[Point],</span> <span class="pre">required=True),</span> <span class="pre">'stroke':</span> <span class="pre">FieldInfo(annotation=Stroke,</span> <span class="pre">required=True)}</span></em><a class="headerlink" href="#pydexpi.dexpi_classes.graphics.polyLine.PolyLine.model_fields" title="Link to this definition"></a></dt>
-<dd><p>Metadata about the fields defined on the model,
-mapping of field names to [<cite>FieldInfo</cite>][pydantic.fields.FieldInfo].</p>
-<p>This replaces <cite>Model.__fields__</cite> from Pydantic V1.</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="pydexpi.dexpi_classes.graphics.polyLine.PolyLine.points">
-<span class="sig-name descname"><span class="pre">points</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#pydexpi.dexpi_classes.graphics.point.Point" title="pydexpi.dexpi_classes.graphics.point.Point"><span class="pre">Point</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#pydexpi.dexpi_classes.graphics.polyLine.PolyLine.points" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-</section>
-<section id="module-pydexpi.dexpi_classes.graphics.polygon">
-<span id="pydexpi-dexpi-classes-graphics-polygon-module"></span><h2>pydexpi.dexpi_classes.graphics.polygon module<a class="headerlink" href="#module-pydexpi.dexpi_classes.graphics.polygon" title="Link to this heading"></a></h2>
-<p>This module contains a pydantic class for the DEXPI Polygon class</p>
-<dl class="py class">
-<dt class="sig sig-object py" id="pydexpi.dexpi_classes.graphics.polygon.Polygon">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pydexpi.dexpi_classes.graphics.polygon.</span></span><span class="sig-name descname"><span class="pre">Polygon</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stroke</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#pydexpi.dexpi_classes.graphics.stroke.Stroke" title="pydexpi.dexpi_classes.graphics.stroke.Stroke"><span class="pre">Stroke</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">fillStyle</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#pydexpi.dexpi_classes.graphics.fillStyle.FillStyle" title="pydexpi.dexpi_classes.graphics.fillStyle.FillStyle"><span class="pre">FillStyle</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">points</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#pydexpi.dexpi_classes.graphics.point.Point" title="pydexpi.dexpi_classes.graphics.point.Point"><span class="pre">Point</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pydexpi.dexpi_classes.graphics.polygon.Polygon" title="Link to this definition"></a></dt>
-<dd><p>Bases: <a class="reference internal" href="#pydexpi.dexpi_classes.graphics.graphicalPrimitive.GraphicalPrimitive" title="pydexpi.dexpi_classes.graphics.graphicalPrimitive.GraphicalPrimitive"><code class="xref py py-class docutils literal notranslate"><span class="pre">GraphicalPrimitive</span></code></a></p>
-<p>A polygon.</p>
-<dl class="py attribute">
-<dt class="sig sig-object py" id="pydexpi.dexpi_classes.graphics.polygon.Polygon.fillStyle">
-<span class="sig-name descname"><span class="pre">fillStyle</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#pydexpi.dexpi_classes.graphics.fillStyle.FillStyle" title="pydexpi.dexpi_classes.graphics.fillStyle.FillStyle"><span class="pre">FillStyle</span></a></em><a class="headerlink" href="#pydexpi.dexpi_classes.graphics.polygon.Polygon.fillStyle" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="pydexpi.dexpi_classes.graphics.polygon.Polygon.model_config">
-<span class="sig-name descname"><span class="pre">model_config</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar</span><span class="p"><span class="pre">[</span></span><span class="pre">ConfigDict</span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'validate_assignment':</span> <span class="pre">True}</span></em><a class="headerlink" href="#pydexpi.dexpi_classes.graphics.polygon.Polygon.model_config" title="Link to this definition"></a></dt>
-<dd><p>Configuration for the model, should be a dictionary conforming to [<cite>ConfigDict</cite>][pydantic.config.ConfigDict].</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="pydexpi.dexpi_classes.graphics.polygon.Polygon.model_fields">
-<span class="sig-name descname"><span class="pre">model_fields</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar</span><span class="p"><span class="pre">[</span></span><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">FieldInfo</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'fillStyle':</span> <span class="pre">FieldInfo(annotation=FillStyle,</span> <span class="pre">required=True),</span> <span class="pre">'id':</span> <span class="pre">FieldInfo(annotation=str,</span> <span class="pre">required=False,</span> <span class="pre">default_factory=&lt;lambda&gt;),</span> <span class="pre">'points':</span> <span class="pre">FieldInfo(annotation=list[Point],</span> <span class="pre">required=True),</span> <span class="pre">'stroke':</span> <span class="pre">FieldInfo(annotation=Stroke,</span> <span class="pre">required=True)}</span></em><a class="headerlink" href="#pydexpi.dexpi_classes.graphics.polygon.Polygon.model_fields" title="Link to this definition"></a></dt>
-<dd><p>Metadata about the fields defined on the model,
-mapping of field names to [<cite>FieldInfo</cite>][pydantic.fields.FieldInfo].</p>
-<p>This replaces <cite>Model.__fields__</cite> from Pydantic V1.</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="pydexpi.dexpi_classes.graphics.polygon.Polygon.points">
-<span class="sig-name descname"><span class="pre">points</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#pydexpi.dexpi_classes.graphics.point.Point" title="pydexpi.dexpi_classes.graphics.point.Point"><span class="pre">Point</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#pydexpi.dexpi_classes.graphics.polygon.Polygon.points" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-</section>
-<section id="module-pydexpi.dexpi_classes.graphics.shape">
-<span id="pydexpi-dexpi-classes-graphics-shape-module"></span><h2>pydexpi.dexpi_classes.graphics.shape module<a class="headerlink" href="#module-pydexpi.dexpi_classes.graphics.shape" title="Link to this heading"></a></h2>
-<p>This module contains a pydantic class for the DEXPI Shape class</p>
-<dl class="py class">
-<dt class="sig sig-object py" id="pydexpi.dexpi_classes.graphics.shape.Shape">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pydexpi.dexpi_classes.graphics.shape.</span></span><span class="sig-name descname"><span class="pre">Shape</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pydexpi.dexpi_classes.graphics.shape.Shape" title="Link to this definition"></a></dt>
-<dd><p>Bases: <a class="reference internal" href="pydexpi.dexpi_classes.html#pydexpi.dexpi_classes.dexpiBaseModel.DexpiBaseModel" title="pydexpi.dexpi_classes.dexpiBaseModel.DexpiBaseModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">DexpiBaseModel</span></code></a></p>
-<dl class="py attribute">
-<dt class="sig sig-object py" id="pydexpi.dexpi_classes.graphics.shape.Shape.model_config">
-<span class="sig-name descname"><span class="pre">model_config</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar</span><span class="p"><span class="pre">[</span></span><span class="pre">ConfigDict</span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'validate_assignment':</span> <span class="pre">True}</span></em><a class="headerlink" href="#pydexpi.dexpi_classes.graphics.shape.Shape.model_config" title="Link to this definition"></a></dt>
-<dd><p>Configuration for the model, should be a dictionary conforming to [<cite>ConfigDict</cite>][pydantic.config.ConfigDict].</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="pydexpi.dexpi_classes.graphics.shape.Shape.model_fields">
-<span class="sig-name descname"><span class="pre">model_fields</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar</span><span class="p"><span class="pre">[</span></span><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">FieldInfo</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'id':</span> <span class="pre">FieldInfo(annotation=str,</span> <span class="pre">required=False,</span> <span class="pre">default_factory=&lt;lambda&gt;),</span> <span class="pre">'value':</span> <span class="pre">FieldInfo(annotation=str,</span> <span class="pre">required=True)}</span></em><a class="headerlink" href="#pydexpi.dexpi_classes.graphics.shape.Shape.model_fields" title="Link to this definition"></a></dt>
-<dd><p>Metadata about the fields defined on the model,
-mapping of field names to [<cite>FieldInfo</cite>][pydantic.fields.FieldInfo].</p>
-<p>This replaces <cite>Model.__fields__</cite> from Pydantic V1.</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="pydexpi.dexpi_classes.graphics.shape.Shape.value">
-<span class="sig-name descname"><span class="pre">value</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#pydexpi.dexpi_classes.graphics.shape.Shape.value" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-</section>
-<section id="module-pydexpi.dexpi_classes.graphics.shapeCatalogue">
-<span id="pydexpi-dexpi-classes-graphics-shapecatalogue-module"></span><h2>pydexpi.dexpi_classes.graphics.shapeCatalogue module<a class="headerlink" href="#module-pydexpi.dexpi_classes.graphics.shapeCatalogue" title="Link to this heading"></a></h2>
-<p>This module contains a pydantic class for the DEXPI ShapeCatalogue class</p>
-<dl class="py class">
-<dt class="sig sig-object py" id="pydexpi.dexpi_classes.graphics.shapeCatalogue.ShapeCatalogue">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pydexpi.dexpi_classes.graphics.shapeCatalogue.</span></span><span class="sig-name descname"><span class="pre">ShapeCatalogue</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shapes</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#pydexpi.dexpi_classes.graphics.shape.Shape" title="pydexpi.dexpi_classes.graphics.shape.Shape"><span class="pre">Shape</span></a><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pydexpi.dexpi_classes.graphics.shapeCatalogue.ShapeCatalogue" title="Link to this definition"></a></dt>
-<dd><p>Bases: <a class="reference internal" href="pydexpi.dexpi_classes.html#pydexpi.dexpi_classes.dexpiBaseModel.DexpiBaseModel" title="pydexpi.dexpi_classes.dexpiBaseModel.DexpiBaseModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">DexpiBaseModel</span></code></a></p>
-<p>Attributes (data)</p>
-<dl class="py attribute">
-<dt class="sig sig-object py" id="pydexpi.dexpi_classes.graphics.shapeCatalogue.ShapeCatalogue.model_config">
-<span class="sig-name descname"><span class="pre">model_config</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar</span><span class="p"><span class="pre">[</span></span><span class="pre">ConfigDict</span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'validate_assignment':</span> <span class="pre">True}</span></em><a class="headerlink" href="#pydexpi.dexpi_classes.graphics.shapeCatalogue.ShapeCatalogue.model_config" title="Link to this definition"></a></dt>
-<dd><p>Configuration for the model, should be a dictionary conforming to [<cite>ConfigDict</cite>][pydantic.config.ConfigDict].</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="pydexpi.dexpi_classes.graphics.shapeCatalogue.ShapeCatalogue.model_fields">
-<span class="sig-name descname"><span class="pre">model_fields</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar</span><span class="p"><span class="pre">[</span></span><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">FieldInfo</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'id':</span> <span class="pre">FieldInfo(annotation=str,</span> <span class="pre">required=False,</span> <span class="pre">default_factory=&lt;lambda&gt;),</span> <span class="pre">'name':</span> <span class="pre">FieldInfo(annotation=str,</span> <span class="pre">required=True),</span> <span class="pre">'shapes':</span> <span class="pre">FieldInfo(annotation=list[Shape],</span> <span class="pre">required=False,</span> <span class="pre">default=[])}</span></em><a class="headerlink" href="#pydexpi.dexpi_classes.graphics.shapeCatalogue.ShapeCatalogue.model_fields" title="Link to this definition"></a></dt>
-<dd><p>Metadata about the fields defined on the model,
-mapping of field names to [<cite>FieldInfo</cite>][pydantic.fields.FieldInfo].</p>
-<p>This replaces <cite>Model.__fields__</cite> from Pydantic V1.</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="pydexpi.dexpi_classes.graphics.shapeCatalogue.ShapeCatalogue.name">
-<span class="sig-name descname"><span class="pre">name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#pydexpi.dexpi_classes.graphics.shapeCatalogue.ShapeCatalogue.name" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="pydexpi.dexpi_classes.graphics.shapeCatalogue.ShapeCatalogue.shapes">
-<span class="sig-name descname"><span class="pre">shapes</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#pydexpi.dexpi_classes.graphics.shape.Shape" title="pydexpi.dexpi_classes.graphics.shape.Shape"><span class="pre">Shape</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#pydexpi.dexpi_classes.graphics.shapeCatalogue.ShapeCatalogue.shapes" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-</section>
-<section id="module-pydexpi.dexpi_classes.graphics.stroke">
-<span id="pydexpi-dexpi-classes-graphics-stroke-module"></span><h2>pydexpi.dexpi_classes.graphics.stroke module<a class="headerlink" href="#module-pydexpi.dexpi_classes.graphics.stroke" title="Link to this heading"></a></h2>
-<p>This module contains a pydantic class for the DEXPI Stroke class</p>
-<dl class="py class">
-<dt class="sig sig-object py" id="pydexpi.dexpi_classes.graphics.stroke.Stroke">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pydexpi.dexpi_classes.graphics.stroke.</span></span><span class="sig-name descname"><span class="pre">Stroke</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">color</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Decimal</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dashStyle</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#pydexpi.dexpi_classes.graphics.dashStyle.DashStyle" title="pydexpi.dexpi_classes.graphics.dashStyle.DashStyle"><span class="pre">DashStyle</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">width</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Decimal</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pydexpi.dexpi_classes.graphics.stroke.Stroke" title="Link to this definition"></a></dt>
-<dd><p>Bases: <a class="reference internal" href="pydexpi.dexpi_classes.html#pydexpi.dexpi_classes.dexpiDataTypeBaseModel.DexpiDataTypeBaseModel" title="pydexpi.dexpi_classes.dexpiDataTypeBaseModel.DexpiDataTypeBaseModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">DexpiDataTypeBaseModel</span></code></a></p>
-<p>A stroke style.</p>
-<dl class="py attribute">
-<dt class="sig sig-object py" id="pydexpi.dexpi_classes.graphics.stroke.Stroke.color">
-<span class="sig-name descname"><span class="pre">color</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Decimal</span></em><a class="headerlink" href="#pydexpi.dexpi_classes.graphics.stroke.Stroke.color" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="pydexpi.dexpi_classes.graphics.stroke.Stroke.dashStyle">
-<span class="sig-name descname"><span class="pre">dashStyle</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference internal" href="#pydexpi.dexpi_classes.graphics.dashStyle.DashStyle" title="pydexpi.dexpi_classes.graphics.dashStyle.DashStyle"><span class="pre">DashStyle</span></a></em><a class="headerlink" href="#pydexpi.dexpi_classes.graphics.stroke.Stroke.dashStyle" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="pydexpi.dexpi_classes.graphics.stroke.Stroke.model_config">
-<span class="sig-name descname"><span class="pre">model_config</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar</span><span class="p"><span class="pre">[</span></span><span class="pre">ConfigDict</span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'validate_assignment':</span> <span class="pre">True}</span></em><a class="headerlink" href="#pydexpi.dexpi_classes.graphics.stroke.Stroke.model_config" title="Link to this definition"></a></dt>
-<dd><p>Configuration for the model, should be a dictionary conforming to [<cite>ConfigDict</cite>][pydantic.config.ConfigDict].</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="pydexpi.dexpi_classes.graphics.stroke.Stroke.model_fields">
-<span class="sig-name descname"><span class="pre">model_fields</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar</span><span class="p"><span class="pre">[</span></span><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">FieldInfo</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'color':</span> <span class="pre">FieldInfo(annotation=Decimal,</span> <span class="pre">required=True),</span> <span class="pre">'dashStyle':</span> <span class="pre">FieldInfo(annotation=DashStyle,</span> <span class="pre">required=True),</span> <span class="pre">'id':</span> <span class="pre">FieldInfo(annotation=str,</span> <span class="pre">required=False,</span> <span class="pre">default_factory=&lt;lambda&gt;),</span> <span class="pre">'width':</span> <span class="pre">FieldInfo(annotation=Decimal,</span> <span class="pre">required=True)}</span></em><a class="headerlink" href="#pydexpi.dexpi_classes.graphics.stroke.Stroke.model_fields" title="Link to this definition"></a></dt>
-<dd><p>Metadata about the fields defined on the model,
-mapping of field names to [<cite>FieldInfo</cite>][pydantic.fields.FieldInfo].</p>
-<p>This replaces <cite>Model.__fields__</cite> from Pydantic V1.</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="pydexpi.dexpi_classes.graphics.stroke.Stroke.width">
-<span class="sig-name descname"><span class="pre">width</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Decimal</span></em><a class="headerlink" href="#pydexpi.dexpi_classes.graphics.stroke.Stroke.width" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="pydexpi.dexpi_classes.graphics.circle.html">pydexpi.dexpi_classes.graphics.circle module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="pydexpi.dexpi_classes.graphics.circle.html#pydexpi.dexpi_classes.graphics.circle.Circle"><code class="docutils literal notranslate"><span class="pre">Circle</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pydexpi.dexpi_classes.graphics.circle.html#pydexpi.dexpi_classes.graphics.circle.Circle.center"><code class="docutils literal notranslate"><span class="pre">Circle.center</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pydexpi.dexpi_classes.graphics.circle.html#pydexpi.dexpi_classes.graphics.circle.Circle.fillStyle"><code class="docutils literal notranslate"><span class="pre">Circle.fillStyle</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pydexpi.dexpi_classes.graphics.circle.html#pydexpi.dexpi_classes.graphics.circle.Circle.model_config"><code class="docutils literal notranslate"><span class="pre">Circle.model_config</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pydexpi.dexpi_classes.graphics.circle.html#pydexpi.dexpi_classes.graphics.circle.Circle.model_fields"><code class="docutils literal notranslate"><span class="pre">Circle.model_fields</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pydexpi.dexpi_classes.graphics.circle.html#pydexpi.dexpi_classes.graphics.circle.Circle.radius"><code class="docutils literal notranslate"><span class="pre">Circle.radius</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="pydexpi.dexpi_classes.graphics.circleArc.html">pydexpi.dexpi_classes.graphics.circleArc module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="pydexpi.dexpi_classes.graphics.circleArc.html#pydexpi.dexpi_classes.graphics.circleArc.CircleArc"><code class="docutils literal notranslate"><span class="pre">CircleArc</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pydexpi.dexpi_classes.graphics.circleArc.html#pydexpi.dexpi_classes.graphics.circleArc.CircleArc.center"><code class="docutils literal notranslate"><span class="pre">CircleArc.center</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pydexpi.dexpi_classes.graphics.circleArc.html#pydexpi.dexpi_classes.graphics.circleArc.CircleArc.endAngle"><code class="docutils literal notranslate"><span class="pre">CircleArc.endAngle</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pydexpi.dexpi_classes.graphics.circleArc.html#pydexpi.dexpi_classes.graphics.circleArc.CircleArc.model_config"><code class="docutils literal notranslate"><span class="pre">CircleArc.model_config</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pydexpi.dexpi_classes.graphics.circleArc.html#pydexpi.dexpi_classes.graphics.circleArc.CircleArc.model_fields"><code class="docutils literal notranslate"><span class="pre">CircleArc.model_fields</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pydexpi.dexpi_classes.graphics.circleArc.html#pydexpi.dexpi_classes.graphics.circleArc.CircleArc.radius"><code class="docutils literal notranslate"><span class="pre">CircleArc.radius</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pydexpi.dexpi_classes.graphics.circleArc.html#pydexpi.dexpi_classes.graphics.circleArc.CircleArc.startAngle"><code class="docutils literal notranslate"><span class="pre">CircleArc.startAngle</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="pydexpi.dexpi_classes.graphics.color.html">pydexpi.dexpi_classes.graphics.color module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="pydexpi.dexpi_classes.graphics.color.html#pydexpi.dexpi_classes.graphics.color.Color"><code class="docutils literal notranslate"><span class="pre">Color</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pydexpi.dexpi_classes.graphics.color.html#pydexpi.dexpi_classes.graphics.color.Color.b"><code class="docutils literal notranslate"><span class="pre">Color.b</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pydexpi.dexpi_classes.graphics.color.html#pydexpi.dexpi_classes.graphics.color.Color.g"><code class="docutils literal notranslate"><span class="pre">Color.g</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pydexpi.dexpi_classes.graphics.color.html#pydexpi.dexpi_classes.graphics.color.Color.model_config"><code class="docutils literal notranslate"><span class="pre">Color.model_config</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pydexpi.dexpi_classes.graphics.color.html#pydexpi.dexpi_classes.graphics.color.Color.model_fields"><code class="docutils literal notranslate"><span class="pre">Color.model_fields</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pydexpi.dexpi_classes.graphics.color.html#pydexpi.dexpi_classes.graphics.color.Color.r"><code class="docutils literal notranslate"><span class="pre">Color.r</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="pydexpi.dexpi_classes.graphics.dashStyle.html">pydexpi.dexpi_classes.graphics.dashStyle module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="pydexpi.dexpi_classes.graphics.dashStyle.html#pydexpi.dexpi_classes.graphics.dashStyle.DashStyle"><code class="docutils literal notranslate"><span class="pre">DashStyle</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="pydexpi.dexpi_classes.graphics.diagram.html">pydexpi.dexpi_classes.graphics.diagram module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="pydexpi.dexpi_classes.graphics.diagram.html#pydexpi.dexpi_classes.graphics.diagram.Diagram"><code class="docutils literal notranslate"><span class="pre">Diagram</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pydexpi.dexpi_classes.graphics.diagram.html#pydexpi.dexpi_classes.graphics.diagram.Diagram.model_config"><code class="docutils literal notranslate"><span class="pre">Diagram.model_config</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pydexpi.dexpi_classes.graphics.diagram.html#pydexpi.dexpi_classes.graphics.diagram.Diagram.model_fields"><code class="docutils literal notranslate"><span class="pre">Diagram.model_fields</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pydexpi.dexpi_classes.graphics.diagram.html#pydexpi.dexpi_classes.graphics.diagram.Diagram.value"><code class="docutils literal notranslate"><span class="pre">Diagram.value</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="pydexpi.dexpi_classes.graphics.ellipse.html">pydexpi.dexpi_classes.graphics.ellipse module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="pydexpi.dexpi_classes.graphics.ellipse.html#pydexpi.dexpi_classes.graphics.ellipse.Ellipse"><code class="docutils literal notranslate"><span class="pre">Ellipse</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pydexpi.dexpi_classes.graphics.ellipse.html#pydexpi.dexpi_classes.graphics.ellipse.Ellipse.center"><code class="docutils literal notranslate"><span class="pre">Ellipse.center</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pydexpi.dexpi_classes.graphics.ellipse.html#pydexpi.dexpi_classes.graphics.ellipse.Ellipse.fillStyle"><code class="docutils literal notranslate"><span class="pre">Ellipse.fillStyle</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pydexpi.dexpi_classes.graphics.ellipse.html#pydexpi.dexpi_classes.graphics.ellipse.Ellipse.horizontalSemiAxis"><code class="docutils literal notranslate"><span class="pre">Ellipse.horizontalSemiAxis</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pydexpi.dexpi_classes.graphics.ellipse.html#pydexpi.dexpi_classes.graphics.ellipse.Ellipse.model_config"><code class="docutils literal notranslate"><span class="pre">Ellipse.model_config</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pydexpi.dexpi_classes.graphics.ellipse.html#pydexpi.dexpi_classes.graphics.ellipse.Ellipse.model_fields"><code class="docutils literal notranslate"><span class="pre">Ellipse.model_fields</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pydexpi.dexpi_classes.graphics.ellipse.html#pydexpi.dexpi_classes.graphics.ellipse.Ellipse.rotation"><code class="docutils literal notranslate"><span class="pre">Ellipse.rotation</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pydexpi.dexpi_classes.graphics.ellipse.html#pydexpi.dexpi_classes.graphics.ellipse.Ellipse.verticalSemiAxis"><code class="docutils literal notranslate"><span class="pre">Ellipse.verticalSemiAxis</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="pydexpi.dexpi_classes.graphics.ellipseArc.html">pydexpi.dexpi_classes.graphics.ellipseArc module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="pydexpi.dexpi_classes.graphics.ellipseArc.html#pydexpi.dexpi_classes.graphics.ellipseArc.EllipseArc"><code class="docutils literal notranslate"><span class="pre">EllipseArc</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pydexpi.dexpi_classes.graphics.ellipseArc.html#pydexpi.dexpi_classes.graphics.ellipseArc.EllipseArc.center"><code class="docutils literal notranslate"><span class="pre">EllipseArc.center</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pydexpi.dexpi_classes.graphics.ellipseArc.html#pydexpi.dexpi_classes.graphics.ellipseArc.EllipseArc.endAngle"><code class="docutils literal notranslate"><span class="pre">EllipseArc.endAngle</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pydexpi.dexpi_classes.graphics.ellipseArc.html#pydexpi.dexpi_classes.graphics.ellipseArc.EllipseArc.horizontalSemiAxis"><code class="docutils literal notranslate"><span class="pre">EllipseArc.horizontalSemiAxis</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pydexpi.dexpi_classes.graphics.ellipseArc.html#pydexpi.dexpi_classes.graphics.ellipseArc.EllipseArc.model_config"><code class="docutils literal notranslate"><span class="pre">EllipseArc.model_config</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pydexpi.dexpi_classes.graphics.ellipseArc.html#pydexpi.dexpi_classes.graphics.ellipseArc.EllipseArc.model_fields"><code class="docutils literal notranslate"><span class="pre">EllipseArc.model_fields</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pydexpi.dexpi_classes.graphics.ellipseArc.html#pydexpi.dexpi_classes.graphics.ellipseArc.EllipseArc.rotation"><code class="docutils literal notranslate"><span class="pre">EllipseArc.rotation</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pydexpi.dexpi_classes.graphics.ellipseArc.html#pydexpi.dexpi_classes.graphics.ellipseArc.EllipseArc.startAngle"><code class="docutils literal notranslate"><span class="pre">EllipseArc.startAngle</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pydexpi.dexpi_classes.graphics.ellipseArc.html#pydexpi.dexpi_classes.graphics.ellipseArc.EllipseArc.verticalSemiAxis"><code class="docutils literal notranslate"><span class="pre">EllipseArc.verticalSemiAxis</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="pydexpi.dexpi_classes.graphics.fillStyle.html">pydexpi.dexpi_classes.graphics.fillStyle module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="pydexpi.dexpi_classes.graphics.fillStyle.html#pydexpi.dexpi_classes.graphics.fillStyle.FillStyle"><code class="docutils literal notranslate"><span class="pre">FillStyle</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pydexpi.dexpi_classes.graphics.fillStyle.html#pydexpi.dexpi_classes.graphics.fillStyle.FillStyle.Hatch"><code class="docutils literal notranslate"><span class="pre">FillStyle.Hatch</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pydexpi.dexpi_classes.graphics.fillStyle.html#pydexpi.dexpi_classes.graphics.fillStyle.FillStyle.Solid"><code class="docutils literal notranslate"><span class="pre">FillStyle.Solid</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pydexpi.dexpi_classes.graphics.fillStyle.html#pydexpi.dexpi_classes.graphics.fillStyle.FillStyle.Transparent"><code class="docutils literal notranslate"><span class="pre">FillStyle.Transparent</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="pydexpi.dexpi_classes.graphics.graphicalElement.html">pydexpi.dexpi_classes.graphics.graphicalElement module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="pydexpi.dexpi_classes.graphics.graphicalElement.html#pydexpi.dexpi_classes.graphics.graphicalElement.GraphicalElement"><code class="docutils literal notranslate"><span class="pre">GraphicalElement</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pydexpi.dexpi_classes.graphics.graphicalElement.html#pydexpi.dexpi_classes.graphics.graphicalElement.GraphicalElement.model_config"><code class="docutils literal notranslate"><span class="pre">GraphicalElement.model_config</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pydexpi.dexpi_classes.graphics.graphicalElement.html#pydexpi.dexpi_classes.graphics.graphicalElement.GraphicalElement.model_fields"><code class="docutils literal notranslate"><span class="pre">GraphicalElement.model_fields</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="pydexpi.dexpi_classes.graphics.graphicalPrimitive.html">pydexpi.dexpi_classes.graphics.graphicalPrimitive module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="pydexpi.dexpi_classes.graphics.graphicalPrimitive.html#pydexpi.dexpi_classes.graphics.graphicalPrimitive.GraphicalPrimitive"><code class="docutils literal notranslate"><span class="pre">GraphicalPrimitive</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pydexpi.dexpi_classes.graphics.graphicalPrimitive.html#pydexpi.dexpi_classes.graphics.graphicalPrimitive.GraphicalPrimitive.model_config"><code class="docutils literal notranslate"><span class="pre">GraphicalPrimitive.model_config</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pydexpi.dexpi_classes.graphics.graphicalPrimitive.html#pydexpi.dexpi_classes.graphics.graphicalPrimitive.GraphicalPrimitive.model_fields"><code class="docutils literal notranslate"><span class="pre">GraphicalPrimitive.model_fields</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pydexpi.dexpi_classes.graphics.graphicalPrimitive.html#pydexpi.dexpi_classes.graphics.graphicalPrimitive.GraphicalPrimitive.stroke"><code class="docutils literal notranslate"><span class="pre">GraphicalPrimitive.stroke</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="pydexpi.dexpi_classes.graphics.point.html">pydexpi.dexpi_classes.graphics.point module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="pydexpi.dexpi_classes.graphics.point.html#pydexpi.dexpi_classes.graphics.point.Point"><code class="docutils literal notranslate"><span class="pre">Point</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pydexpi.dexpi_classes.graphics.point.html#pydexpi.dexpi_classes.graphics.point.Point.model_config"><code class="docutils literal notranslate"><span class="pre">Point.model_config</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pydexpi.dexpi_classes.graphics.point.html#pydexpi.dexpi_classes.graphics.point.Point.model_fields"><code class="docutils literal notranslate"><span class="pre">Point.model_fields</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pydexpi.dexpi_classes.graphics.point.html#pydexpi.dexpi_classes.graphics.point.Point.x"><code class="docutils literal notranslate"><span class="pre">Point.x</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pydexpi.dexpi_classes.graphics.point.html#pydexpi.dexpi_classes.graphics.point.Point.y"><code class="docutils literal notranslate"><span class="pre">Point.y</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="pydexpi.dexpi_classes.graphics.polyLine.html">pydexpi.dexpi_classes.graphics.polyLine module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="pydexpi.dexpi_classes.graphics.polyLine.html#pydexpi.dexpi_classes.graphics.polyLine.PolyLine"><code class="docutils literal notranslate"><span class="pre">PolyLine</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pydexpi.dexpi_classes.graphics.polyLine.html#pydexpi.dexpi_classes.graphics.polyLine.PolyLine.model_config"><code class="docutils literal notranslate"><span class="pre">PolyLine.model_config</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pydexpi.dexpi_classes.graphics.polyLine.html#pydexpi.dexpi_classes.graphics.polyLine.PolyLine.model_fields"><code class="docutils literal notranslate"><span class="pre">PolyLine.model_fields</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pydexpi.dexpi_classes.graphics.polyLine.html#pydexpi.dexpi_classes.graphics.polyLine.PolyLine.points"><code class="docutils literal notranslate"><span class="pre">PolyLine.points</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="pydexpi.dexpi_classes.graphics.polygon.html">pydexpi.dexpi_classes.graphics.polygon module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="pydexpi.dexpi_classes.graphics.polygon.html#pydexpi.dexpi_classes.graphics.polygon.Polygon"><code class="docutils literal notranslate"><span class="pre">Polygon</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pydexpi.dexpi_classes.graphics.polygon.html#pydexpi.dexpi_classes.graphics.polygon.Polygon.fillStyle"><code class="docutils literal notranslate"><span class="pre">Polygon.fillStyle</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pydexpi.dexpi_classes.graphics.polygon.html#pydexpi.dexpi_classes.graphics.polygon.Polygon.model_config"><code class="docutils literal notranslate"><span class="pre">Polygon.model_config</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pydexpi.dexpi_classes.graphics.polygon.html#pydexpi.dexpi_classes.graphics.polygon.Polygon.model_fields"><code class="docutils literal notranslate"><span class="pre">Polygon.model_fields</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pydexpi.dexpi_classes.graphics.polygon.html#pydexpi.dexpi_classes.graphics.polygon.Polygon.points"><code class="docutils literal notranslate"><span class="pre">Polygon.points</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="pydexpi.dexpi_classes.graphics.shape.html">pydexpi.dexpi_classes.graphics.shape module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="pydexpi.dexpi_classes.graphics.shape.html#pydexpi.dexpi_classes.graphics.shape.Shape"><code class="docutils literal notranslate"><span class="pre">Shape</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pydexpi.dexpi_classes.graphics.shape.html#pydexpi.dexpi_classes.graphics.shape.Shape.model_config"><code class="docutils literal notranslate"><span class="pre">Shape.model_config</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pydexpi.dexpi_classes.graphics.shape.html#pydexpi.dexpi_classes.graphics.shape.Shape.model_fields"><code class="docutils literal notranslate"><span class="pre">Shape.model_fields</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pydexpi.dexpi_classes.graphics.shape.html#pydexpi.dexpi_classes.graphics.shape.Shape.value"><code class="docutils literal notranslate"><span class="pre">Shape.value</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="pydexpi.dexpi_classes.graphics.shapeCatalogue.html">pydexpi.dexpi_classes.graphics.shapeCatalogue module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="pydexpi.dexpi_classes.graphics.shapeCatalogue.html#pydexpi.dexpi_classes.graphics.shapeCatalogue.ShapeCatalogue"><code class="docutils literal notranslate"><span class="pre">ShapeCatalogue</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pydexpi.dexpi_classes.graphics.shapeCatalogue.html#pydexpi.dexpi_classes.graphics.shapeCatalogue.ShapeCatalogue.model_config"><code class="docutils literal notranslate"><span class="pre">ShapeCatalogue.model_config</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pydexpi.dexpi_classes.graphics.shapeCatalogue.html#pydexpi.dexpi_classes.graphics.shapeCatalogue.ShapeCatalogue.model_fields"><code class="docutils literal notranslate"><span class="pre">ShapeCatalogue.model_fields</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pydexpi.dexpi_classes.graphics.shapeCatalogue.html#pydexpi.dexpi_classes.graphics.shapeCatalogue.ShapeCatalogue.name"><code class="docutils literal notranslate"><span class="pre">ShapeCatalogue.name</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pydexpi.dexpi_classes.graphics.shapeCatalogue.html#pydexpi.dexpi_classes.graphics.shapeCatalogue.ShapeCatalogue.shapes"><code class="docutils literal notranslate"><span class="pre">ShapeCatalogue.shapes</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="pydexpi.dexpi_classes.graphics.stroke.html">pydexpi.dexpi_classes.graphics.stroke module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="pydexpi.dexpi_classes.graphics.stroke.html#pydexpi.dexpi_classes.graphics.stroke.Stroke"><code class="docutils literal notranslate"><span class="pre">Stroke</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pydexpi.dexpi_classes.graphics.stroke.html#pydexpi.dexpi_classes.graphics.stroke.Stroke.color"><code class="docutils literal notranslate"><span class="pre">Stroke.color</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pydexpi.dexpi_classes.graphics.stroke.html#pydexpi.dexpi_classes.graphics.stroke.Stroke.dashStyle"><code class="docutils literal notranslate"><span class="pre">Stroke.dashStyle</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pydexpi.dexpi_classes.graphics.stroke.html#pydexpi.dexpi_classes.graphics.stroke.Stroke.model_config"><code class="docutils literal notranslate"><span class="pre">Stroke.model_config</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pydexpi.dexpi_classes.graphics.stroke.html#pydexpi.dexpi_classes.graphics.stroke.Stroke.model_fields"><code class="docutils literal notranslate"><span class="pre">Stroke.model_fields</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pydexpi.dexpi_classes.graphics.stroke.html#pydexpi.dexpi_classes.graphics.stroke.Stroke.width"><code class="docutils literal notranslate"><span class="pre">Stroke.width</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
 </section>
 <section id="module-pydexpi.dexpi_classes.graphics">
 <span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-pydexpi.dexpi_classes.graphics" title="Link to this heading"></a></h2>
@@ -659,8 +267,8 @@ mapping of field names to [<cite>FieldInfo</cite>][pydantic.fields.FieldInfo].</
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="pydexpi.dexpi_classes.equipment.html" class="btn btn-neutral float-left" title="pydexpi.dexpi_classes.equipment package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="pydexpi.dexpi_classes.instrumentation.html" class="btn btn-neutral float-right" title="pydexpi.dexpi_classes.instrumentation package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="pydexpi.dexpi_classes.equipment.wetCoolingTower.html" class="btn btn-neutral float-left" title="pydexpi.dexpi_classes.equipment.wetCoolingTower module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="pydexpi.dexpi_classes.graphics.circle.html" class="btn btn-neutral float-right" title="pydexpi.dexpi_classes.graphics.circle module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

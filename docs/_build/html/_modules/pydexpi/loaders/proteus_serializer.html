@@ -1,0 +1,1225 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>pydexpi.loaders.proteus_serializer &mdash; pyDEXPI v0.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../../_static/documentation_options.js?v=fa47ad08"></script>
+        <script src="../../../_static/doctools.js?v=9a2dae69"></script>
+        <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            pyDEXPI
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">pydexpi</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">pyDEXPI</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">pydexpi.loaders.proteus_serializer</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for pydexpi.loaders.proteus_serializer</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">xml.etree.ElementTree</span> <span class="k">as</span> <span class="nn">ET</span>
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
+<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+
+<span class="kn">from</span> <span class="nn">pydantic</span> <span class="kn">import</span> <span class="n">ValidationError</span>
+
+<span class="kn">from</span> <span class="nn">pydexpi.dexpi_classes</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">dataTypes</span><span class="p">,</span>
+    <span class="n">dexpiModel</span><span class="p">,</span>
+    <span class="n">enumerations</span><span class="p">,</span>
+    <span class="n">equipment</span><span class="p">,</span>
+    <span class="n">instrumentation</span><span class="p">,</span>
+    <span class="n">physicalQuantities</span><span class="p">,</span>
+    <span class="n">piping</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">pydexpi.toolkits</span> <span class="kn">import</span> <span class="n">piping_toolkit</span>
+
+
+<div class="viewcode-block" id="ProteusSerializer">
+<a class="viewcode-back" href="../../../pydexpi.loaders.proteus_serializer.html#pydexpi.loaders.proteus_serializer.ProteusSerializer">[docs]</a>
+<span class="k">class</span> <span class="nc">ProteusSerializer</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This class loads an XML file containing data in Proteus format into memory</span>
+<span class="sd">    and transforms it into a Dexpi format.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">proteus_root</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_all_objects</span> <span class="o">=</span> <span class="p">{}</span>
+
+<div class="viewcode-block" id="ProteusSerializer.save">
+<a class="viewcode-back" href="../../../pydexpi.loaders.proteus_serializer.html#pydexpi.loaders.proteus_serializer.ProteusSerializer.save">[docs]</a>
+    <span class="k">def</span> <span class="nf">save</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">model</span><span class="p">:</span> <span class="n">dexpiModel</span><span class="o">.</span><span class="n">DexpiModel</span><span class="p">,</span> <span class="n">dir_path</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span> <span class="n">filename</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Transforms a DexpiModel to the Proteus format. Not implemented yet.&quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span></div>
+
+
+<div class="viewcode-block" id="ProteusSerializer.load">
+<a class="viewcode-back" href="../../../pydexpi.loaders.proteus_serializer.html#pydexpi.loaders.proteus_serializer.ProteusSerializer.load">[docs]</a>
+    <span class="k">def</span> <span class="nf">load</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dir_path</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span> <span class="n">filename</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Transforms the data in the Proteus .xml file to a DexpiModel class.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        dir_path : Path</span>
+<span class="sd">            Directory where the proteus file is stored.</span>
+<span class="sd">        filename : str</span>
+<span class="sd">            Filename of the proteus file.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        DexpiModel</span>
+<span class="sd">            Loaded DEXPI model.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">filename</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;.xml&quot;</span><span class="p">):</span>
+            <span class="n">filename</span> <span class="o">+=</span> <span class="s2">&quot;.xml&quot;</span>
+        <span class="n">path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">dir_path</span><span class="p">)</span> <span class="o">/</span> <span class="n">filename</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">proteus_root</span> <span class="o">=</span> <span class="n">ET</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">path</span><span class="p">)</span><span class="o">.</span><span class="n">getroot</span><span class="p">()</span>
+        <span class="c1"># call all lower lever parsers methods</span>
+        <span class="n">equipment</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parse_equipment</span><span class="p">()</span>
+        <span class="n">piping_network_systems</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parse_piping_network_systems</span><span class="p">()</span>
+        <span class="n">actuating_systems</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parse_actuating_system</span><span class="p">()</span>
+        <span class="n">p_signal_generating_system</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">parse_process_signal_generating_systems</span><span class="p">()</span>
+        <span class="p">)</span>
+        <span class="n">p_instrumentation_function</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">parse_process_instrumentation_functions</span><span class="p">()</span>
+        <span class="p">)</span>
+        <span class="n">i_loop_functions</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parse_instrumentation_loop_functions</span><span class="p">()</span>
+
+        <span class="c1"># Make a conceptual model</span>
+        <span class="n">conceptual_model</span> <span class="o">=</span> <span class="n">dexpiModel</span><span class="o">.</span><span class="n">ConceptualModel</span><span class="p">(</span>
+            <span class="n">taggedPlantItems</span><span class="o">=</span><span class="n">equipment</span><span class="p">,</span>
+            <span class="n">pipingNetworkSystems</span><span class="o">=</span><span class="n">piping_network_systems</span><span class="p">,</span>
+            <span class="n">actuatingSystems</span><span class="o">=</span><span class="n">actuating_systems</span><span class="p">,</span>
+            <span class="n">processSignalGeneratingSystems</span><span class="o">=</span><span class="n">p_signal_generating_system</span><span class="p">,</span>
+            <span class="n">instrumentationLoopFunctions</span><span class="o">=</span><span class="n">i_loop_functions</span><span class="p">,</span>
+            <span class="n">processInstrumentationFunctions</span><span class="o">=</span><span class="n">p_instrumentation_function</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="c1"># Make a dexpi model with only the conceptual model</span>
+        <span class="n">plant_information</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">proteus_root</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="s2">&quot;PlantInformation&quot;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">the_date</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span>
+            <span class="nb">int</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">plant_information</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;Date&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;-&quot;</span><span class="p">)</span>
+        <span class="p">)</span>
+        <span class="n">raw_time</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span>
+            <span class="nb">float</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">plant_information</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;Time&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;:&quot;</span><span class="p">)</span>
+        <span class="p">)</span>
+        <span class="n">microseconds</span> <span class="o">=</span> <span class="nb">int</span><span class="p">((</span><span class="n">raw_time</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">-</span> <span class="nb">int</span><span class="p">(</span><span class="n">raw_time</span><span class="p">[</span><span class="mi">2</span><span class="p">]))</span> <span class="o">*</span> <span class="mi">1000000</span><span class="p">)</span>
+        <span class="n">the_time</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="nb">int</span><span class="p">(</span><span class="n">raw_time</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span>
+            <span class="nb">int</span><span class="p">(</span><span class="n">raw_time</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span>
+            <span class="nb">int</span><span class="p">(</span><span class="n">raw_time</span><span class="p">[</span><span class="mi">2</span><span class="p">]),</span>
+            <span class="n">microseconds</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="n">date_time</span> <span class="o">=</span> <span class="n">datetime</span><span class="p">(</span><span class="o">*</span><span class="p">(</span><span class="n">the_date</span> <span class="o">+</span> <span class="n">the_time</span><span class="p">))</span>
+        <span class="n">the_system</span> <span class="o">=</span> <span class="n">plant_information</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;OriginatingSystem&quot;</span><span class="p">)</span>
+        <span class="n">the_vendor</span> <span class="o">=</span> <span class="n">plant_information</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;OriginatingSystemVendor&quot;</span><span class="p">)</span>
+        <span class="n">the_version</span> <span class="o">=</span> <span class="n">plant_information</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;OriginatingSystemVersion&quot;</span><span class="p">)</span>
+        <span class="n">dexpi_plant</span> <span class="o">=</span> <span class="n">dexpiModel</span><span class="o">.</span><span class="n">DexpiModel</span><span class="p">(</span>
+            <span class="n">conceptualModel</span><span class="o">=</span><span class="n">conceptual_model</span><span class="p">,</span>
+            <span class="n">exportDateTime</span><span class="o">=</span><span class="n">date_time</span><span class="p">,</span>
+            <span class="n">originatingSystemName</span><span class="o">=</span><span class="n">the_system</span><span class="p">,</span>
+            <span class="n">originatingSystemVendorName</span><span class="o">=</span><span class="n">the_vendor</span><span class="p">,</span>
+            <span class="n">originatingSystemVersion</span><span class="o">=</span><span class="n">the_version</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="n">dexpi_plant</span></div>
+
+
+<div class="viewcode-block" id="ProteusSerializer.parse_equipment">
+<a class="viewcode-back" href="../../../pydexpi.loaders.proteus_serializer.html#pydexpi.loaders.proteus_serializer.ProteusSerializer.parse_equipment">[docs]</a>
+    <span class="k">def</span> <span class="nf">parse_equipment</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Parse all proteus equipment found in the root element to DEXPI</span>
+<span class="sd">        equipment classes.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        list of Equipment</span>
+<span class="sd">            A list of DEXPI equipment objects that have been created.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">def</span> <span class="nf">add_by_inferring_type</span><span class="p">(</span><span class="n">to_be_added</span><span class="p">,</span> <span class="n">to_be_added_to</span><span class="p">):</span>
+<span class="w">            </span><span class="sd">&quot;&quot;&quot;Adds an attribute to a class by inferring the correct type. Tries</span>
+<span class="sd">            to set all attributes or add them to existing lists in that field.</span>
+<span class="sd">            Returns the name of the field found</span>
+<span class="sd">            &quot;&quot;&quot;</span>
+            <span class="n">field_found</span> <span class="o">=</span> <span class="kc">False</span>
+            <span class="n">found_field</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="n">to_be_added_to</span><span class="o">.</span><span class="n">model_fields</span><span class="p">:</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="nb">setattr</span><span class="p">(</span><span class="n">to_be_added_to</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">to_be_added</span><span class="p">)</span>
+                    <span class="n">field_found</span> <span class="o">=</span> <span class="kc">True</span>
+                    <span class="n">found_field</span> <span class="o">=</span> <span class="n">field</span>
+                    <span class="k">break</span>
+                <span class="k">except</span> <span class="n">ValidationError</span><span class="p">:</span>
+                    <span class="k">pass</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">new_list</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">getattr</span><span class="p">(</span><span class="n">to_be_added_to</span><span class="p">,</span> <span class="n">field</span><span class="p">))</span>
+                    <span class="n">new_list</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">to_be_added</span><span class="p">)</span>
+                    <span class="nb">setattr</span><span class="p">(</span><span class="n">to_be_added_to</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">new_list</span><span class="p">)</span>
+                    <span class="n">field_found</span> <span class="o">=</span> <span class="kc">True</span>
+                    <span class="n">found_field</span> <span class="o">=</span> <span class="n">field</span>
+                    <span class="k">break</span>
+                <span class="k">except</span> <span class="p">(</span><span class="n">ValidationError</span><span class="p">,</span> <span class="ne">TypeError</span><span class="p">):</span>
+                    <span class="k">pass</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">field_found</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">&quot;No suitable field found in </span><span class="si">{</span><span class="n">to_be_added_to</span><span class="si">}</span><span class="s2"> for </span><span class="si">{</span><span class="n">to_be_added</span><span class="si">}</span><span class="s2">&quot;</span>
+                <span class="p">)</span>
+
+            <span class="k">return</span> <span class="n">found_field</span>
+
+        <span class="k">def</span> <span class="nf">make_equipment</span><span class="p">(</span><span class="n">root_element</span><span class="p">:</span> <span class="n">ET</span><span class="o">.</span><span class="n">Element</span><span class="p">,</span> <span class="n">depth</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+<span class="w">            </span><span class="sd">&quot;&quot;&quot;Function to extract an equipment from a root element. Defined here</span>
+<span class="sd">            to be used recursively.</span>
+
+<span class="sd">            Parameters</span>
+<span class="sd">            ----------</span>
+<span class="sd">            root_element : ET.Element</span>
+<span class="sd">                The proteus xml element corresponding to the equipment</span>
+
+<span class="sd">            Returns</span>
+<span class="sd">            -------</span>
+<span class="sd">            equipment.Equipment</span>
+<span class="sd">                Extracted equipment with nested equipment</span>
+<span class="sd">            &quot;&quot;&quot;</span>
+            <span class="n">class_name</span> <span class="o">=</span> <span class="n">root_element</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;ComponentClass&quot;</span><span class="p">)</span>
+            <span class="c1"># Manage the differentiation between subtagged and tagged column sections</span>
+            <span class="k">if</span> <span class="n">class_name</span> <span class="o">==</span> <span class="s2">&quot;ColumnSection&quot;</span><span class="p">:</span>
+                <span class="n">class_name</span> <span class="o">=</span> <span class="p">(</span>
+                    <span class="s2">&quot;TaggedColumnSection&quot;</span>
+                    <span class="k">if</span> <span class="n">depth</span> <span class="o">==</span> <span class="mi">0</span>
+                    <span class="k">else</span> <span class="s2">&quot;SubTaggedColumnSection&quot;</span>
+                <span class="p">)</span>
+            <span class="n">MyClass</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">equipment</span><span class="p">,</span> <span class="n">class_name</span><span class="p">)</span>
+            <span class="n">nozzles</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">prot_nozzle</span> <span class="ow">in</span> <span class="n">root_element</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="s2">&quot;Nozzle&quot;</span><span class="p">):</span>
+                <span class="n">nozzle_piping_nodes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">retrieve_piping_nodes</span><span class="p">(</span><span class="n">prot_nozzle</span><span class="p">)</span>
+                <span class="n">dexpi_nozzle</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_or_retrieve_class</span><span class="p">(</span>
+                    <span class="n">equipment</span><span class="o">.</span><span class="n">Nozzle</span><span class="p">,</span>
+                    <span class="n">prot_nozzle</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;ID&quot;</span><span class="p">),</span>
+                    <span class="n">prot_nozzle</span><span class="p">,</span>
+                    <span class="n">nodes</span><span class="o">=</span><span class="n">nozzle_piping_nodes</span><span class="p">,</span>
+                <span class="p">)</span>
+                <span class="n">nozzles</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">dexpi_nozzle</span><span class="p">)</span>
+
+            <span class="c1"># Make new equipment instance</span>
+            <span class="n">new_equipment</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_or_retrieve_class</span><span class="p">(</span>
+                <span class="n">MyClass</span><span class="p">,</span>
+                <span class="n">root_element</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;ID&quot;</span><span class="p">),</span>
+                <span class="n">root_element</span><span class="p">,</span>
+                <span class="n">nozzles</span><span class="o">=</span><span class="n">nozzles</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="c1"># Manage and add subequipments</span>
+            <span class="k">for</span> <span class="n">subequipment</span> <span class="ow">in</span> <span class="n">root_element</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="s2">&quot;Equipment&quot;</span><span class="p">):</span>
+                <span class="n">new_subequipment</span> <span class="o">=</span> <span class="n">make_equipment</span><span class="p">(</span><span class="n">subequipment</span><span class="p">,</span> <span class="n">depth</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+                <span class="n">add_by_inferring_type</span><span class="p">(</span><span class="n">new_subequipment</span><span class="p">,</span> <span class="n">new_equipment</span><span class="p">)</span>
+            <span class="c1"># Manage &quot;is located in&quot; relationships</span>
+            <span class="k">for</span> <span class="n">association_element</span> <span class="ow">in</span> <span class="n">root_element</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="s2">&quot;Association&quot;</span><span class="p">):</span>
+                <span class="c1"># Add after occurring the &quot;is location of&quot; or the &quot;is located in&quot;</span>
+                <span class="c1"># relationship. To avoid redundance, this is only invoked if the</span>
+                <span class="c1"># other object of the relationship has already been created and</span>
+                <span class="c1"># is found in _all_objects</span>
+                <span class="n">item_id</span> <span class="o">=</span> <span class="n">association_element</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;ItemID&quot;</span><span class="p">)</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="n">associated_object</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_all_objects</span><span class="p">[</span><span class="n">item_id</span><span class="p">]</span>
+                <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+                    <span class="k">pass</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">association_element</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;Type&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&quot;is the location of&quot;</span><span class="p">:</span>
+                        <span class="k">try</span><span class="p">:</span>
+                            <span class="n">add_by_inferring_type</span><span class="p">(</span>
+                                <span class="n">associated_object</span><span class="p">,</span> <span class="n">new_equipment</span>
+                            <span class="p">)</span>
+                        <span class="c1"># This error handling is necessary because sometimes the association</span>
+                        <span class="c1"># is the other way around for reference attributes in dexpi (e.g. for nozzles and chambers)</span>
+                        <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+                            <span class="n">add_by_inferring_type</span><span class="p">(</span>
+                                <span class="n">new_equipment</span><span class="p">,</span> <span class="n">associated_object</span>
+                            <span class="p">)</span>
+                    <span class="k">elif</span> <span class="n">association_element</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;Type&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&quot;is located in&quot;</span><span class="p">:</span>
+                        <span class="k">try</span><span class="p">:</span>
+                            <span class="n">add_by_inferring_type</span><span class="p">(</span>
+                                <span class="n">new_equipment</span><span class="p">,</span> <span class="n">associated_object</span>
+                            <span class="p">)</span>
+                        <span class="c1"># This error handling is necessary because sometimes the association</span>
+                        <span class="c1"># is the other way around for reference attributes in dexpi (e.g. for tube bundles and chambers)</span>
+                        <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+                            <span class="n">add_by_inferring_type</span><span class="p">(</span>
+                                <span class="n">associated_object</span><span class="p">,</span> <span class="n">new_equipment</span>
+                            <span class="p">)</span>
+
+            <span class="k">return</span> <span class="n">new_equipment</span>
+
+        <span class="n">tagged_plant_items</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">prot_equipment</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">proteus_root</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="s2">&quot;Equipment&quot;</span><span class="p">):</span>
+            <span class="n">new_equipment</span> <span class="o">=</span> <span class="n">make_equipment</span><span class="p">(</span><span class="n">prot_equipment</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">new_equipment</span><span class="p">,</span> <span class="n">equipment</span><span class="o">.</span><span class="n">TaggedPlantItem</span><span class="p">):</span>
+                <span class="n">tagged_plant_items</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">new_equipment</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">tagged_plant_items</span></div>
+
+
+<div class="viewcode-block" id="ProteusSerializer.parse_piping_network_systems">
+<a class="viewcode-back" href="../../../pydexpi.loaders.proteus_serializer.html#pydexpi.loaders.proteus_serializer.ProteusSerializer.parse_piping_network_systems">[docs]</a>
+    <span class="k">def</span> <span class="nf">parse_piping_network_systems</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Parse all proteus piping network systems found in the root element</span>
+<span class="sd">        to DEXPI equipment classes.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        list of PipingNetworkSystems:</span>
+<span class="sd">            DEXPI equipment objects that have been created.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">def</span> <span class="nf">get_item_connection_nodes</span><span class="p">(</span><span class="n">proteus_item</span><span class="p">:</span> <span class="n">ET</span><span class="o">.</span><span class="n">Element</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">proteus_item</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">return</span> <span class="kc">None</span>
+            <span class="n">connection_dict</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;inlet&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">,</span> <span class="s2">&quot;outlet&quot;</span><span class="p">:</span> <span class="kc">None</span><span class="p">}</span>
+            <span class="p">(</span><span class="n">cpoints</span><span class="p">,)</span> <span class="o">=</span> <span class="n">proteus_item</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="s2">&quot;ConnectionPoints&quot;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">cpoints</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">connection_dict</span>
+            <span class="n">out_flow_node_index</span> <span class="o">=</span> <span class="n">cpoints</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;FlowOut&quot;</span><span class="p">)</span>
+            <span class="n">in_flow_node_index</span> <span class="o">=</span> <span class="n">cpoints</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;FlowIn&quot;</span><span class="p">)</span>
+            <span class="n">no_process_nodes</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span>
+                <span class="p">[</span>
+                    <span class="n">i</span>
+                    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">cpoints</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="s2">&quot;Node&quot;</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="n">i</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;Type&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&quot;process&quot;</span>
+                <span class="p">]</span>
+            <span class="p">)</span>
+            <span class="k">if</span> <span class="n">out_flow_node_index</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">in_flow_node_index</span> <span class="o">!=</span> <span class="mi">2</span> <span class="ow">and</span> <span class="n">no_process_nodes</span> <span class="o">&gt;=</span> <span class="mi">2</span><span class="p">:</span>
+                    <span class="n">out_flow_node_index</span> <span class="o">=</span> <span class="mi">2</span>  <span class="c1"># Defauts to 2 in proteus schema</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">out_flow_node_index</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">out_flow_node_index</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="n">in_flow_node_index</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">out_flow_node_index</span> <span class="o">!=</span> <span class="mi">1</span> <span class="ow">and</span> <span class="n">no_process_nodes</span> <span class="o">&gt;=</span> <span class="mi">1</span><span class="p">:</span>
+                    <span class="n">in_flow_node_index</span> <span class="o">=</span> <span class="mi">1</span>  <span class="c1"># Defauts to 1 in proteus schema</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">in_flow_node_index</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">in_flow_node_index</span><span class="p">)</span>
+
+            <span class="n">connection_dict</span><span class="p">[</span><span class="s2">&quot;outlet&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">out_flow_node_index</span>
+            <span class="n">connection_dict</span><span class="p">[</span><span class="s2">&quot;inlet&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">in_flow_node_index</span>
+            <span class="k">return</span> <span class="n">connection_dict</span>
+
+        <span class="c1"># First pass over piping network systems to create all segments, and</span>
+        <span class="c1"># connect implicit connections</span>
+        <span class="k">for</span> <span class="n">pr_piping_network_system</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">proteus_root</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span>
+            <span class="s2">&quot;PipingNetworkSystem&quot;</span>
+        <span class="p">):</span>
+            <span class="k">for</span> <span class="n">pr_piping_network_segment</span> <span class="ow">in</span> <span class="n">pr_piping_network_system</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span>
+                <span class="s2">&quot;PipingNetworkSegment&quot;</span>
+            <span class="p">):</span>
+                <span class="c1"># Create new, empty segment with data atributes</span>
+                <span class="n">the_segment</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_or_retrieve_class</span><span class="p">(</span>
+                    <span class="n">piping</span><span class="o">.</span><span class="n">PipingNetworkSegment</span><span class="p">,</span>
+                    <span class="n">pr_piping_network_segment</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;ID&quot;</span><span class="p">),</span>
+                    <span class="n">pr_piping_network_segment</span><span class="p">,</span>
+                <span class="p">)</span>
+
+                <span class="c1"># Iterate over elements and look for items and center lines,</span>
+                <span class="c1"># i.e pipes</span>
+                <span class="n">connection_counter</span> <span class="o">=</span> <span class="mi">0</span>
+                <span class="n">last_was_connection</span> <span class="o">=</span> <span class="kc">True</span>
+                <span class="n">last_outlet_index</span> <span class="o">=</span> <span class="kc">None</span>
+                <span class="n">previous_final_connector</span> <span class="o">=</span> <span class="kc">None</span>
+                <span class="n">previous_segment</span> <span class="o">=</span> <span class="kc">None</span>
+                <span class="n">prev_prot_segment</span> <span class="o">=</span> <span class="kc">None</span>
+                <span class="c1"># Keep track of first and last connector (i.e. node or item)</span>
+                <span class="c1"># to manage implicit connection. Leave as None if segment starts</span>
+                <span class="c1"># or ends in connection (in which case it would have to</span>
+                <span class="c1"># reference the final connection rather than be referenced)</span>
+                <span class="n">first_connector</span> <span class="o">=</span> <span class="kc">None</span>
+                <span class="n">last_connector</span> <span class="o">=</span> <span class="kc">None</span>
+                <span class="n">is_first</span> <span class="o">=</span> <span class="kc">True</span>  <span class="c1"># Switch for first_connector</span>
+                <span class="k">for</span> <span class="n">element</span> <span class="ow">in</span> <span class="n">pr_piping_network_segment</span><span class="o">.</span><span class="n">iter</span><span class="p">():</span>
+                    <span class="k">if</span> <span class="n">element</span><span class="o">.</span><span class="n">tag</span> <span class="ow">in</span> <span class="p">[</span>
+                        <span class="s2">&quot;PipingComponent&quot;</span><span class="p">,</span>
+                        <span class="s2">&quot;PipeOffPageConnector&quot;</span><span class="p">,</span>
+                        <span class="s2">&quot;PropertyBreak&quot;</span><span class="p">,</span>
+                    <span class="p">]:</span>
+                        <span class="c1"># If no center line was encountered since the last item,</span>
+                        <span class="c1"># establish direct connection (Not for fist element as</span>
+                        <span class="c1"># last_was_connection starts as True)</span>
+                        <span class="k">if</span> <span class="ow">not</span> <span class="n">last_was_connection</span><span class="p">:</span>
+                            <span class="nb">id</span> <span class="o">=</span> <span class="s2">&quot;.&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+                                <span class="p">[</span>
+                                    <span class="n">pr_piping_network_system</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;ID&quot;</span><span class="p">),</span>
+                                    <span class="n">pr_piping_network_segment</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;ID&quot;</span><span class="p">),</span>
+                                    <span class="nb">str</span><span class="p">(</span><span class="n">connection_counter</span><span class="p">),</span>
+                                <span class="p">]</span>
+                            <span class="p">)</span>
+                            <span class="n">connection_counter</span> <span class="o">+=</span> <span class="mi">1</span>
+                            <span class="n">the_pipe</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_or_retrieve_class</span><span class="p">(</span>
+                                <span class="n">piping</span><span class="o">.</span><span class="n">DirectPipingConnection</span><span class="p">,</span> <span class="nb">id</span><span class="p">,</span> <span class="n">element</span>
+                            <span class="p">)</span>
+                            <span class="n">piping_toolkit</span><span class="o">.</span><span class="n">append_connection_to_unconnected_segment</span><span class="p">(</span>
+                                <span class="n">the_segment</span><span class="p">,</span> <span class="n">the_pipe</span><span class="p">,</span> <span class="n">last_outlet_index</span>
+                            <span class="p">)</span>
+                            <span class="n">last_was_connection</span> <span class="o">=</span> <span class="kc">True</span>
+
+                        <span class="c1"># Make class</span>
+                        <span class="n">class_name</span> <span class="o">=</span> <span class="n">element</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;ComponentClass&quot;</span><span class="p">)</span>
+                        <span class="n">the_class</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">piping</span><span class="p">,</span> <span class="n">class_name</span><span class="p">)</span>
+                        <span class="n">nodes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">retrieve_piping_nodes</span><span class="p">(</span><span class="n">element</span><span class="p">)</span>
+                        <span class="c1"># TODO: for off page connector, implement reference</span>
+                        <span class="n">item</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_or_retrieve_class</span><span class="p">(</span>
+                            <span class="n">the_class</span><span class="p">,</span>
+                            <span class="n">element</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;ID&quot;</span><span class="p">),</span>
+                            <span class="n">element</span><span class="p">,</span>
+                            <span class="n">nodes</span><span class="o">=</span><span class="n">nodes</span><span class="p">,</span>
+                        <span class="p">)</span>
+                        <span class="n">cnct_node_indices</span> <span class="o">=</span> <span class="n">get_item_connection_nodes</span><span class="p">(</span><span class="n">element</span><span class="p">)</span>
+                        <span class="k">if</span> <span class="n">cnct_node_indices</span><span class="p">[</span><span class="s2">&quot;inlet&quot;</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                            <span class="n">inlet_node_index</span> <span class="o">=</span> <span class="kc">None</span>
+                        <span class="k">else</span><span class="p">:</span>
+                            <span class="n">inlet_node_index</span> <span class="o">=</span> <span class="n">cnct_node_indices</span><span class="p">[</span><span class="s2">&quot;inlet&quot;</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1</span>
+                        <span class="k">if</span> <span class="n">cnct_node_indices</span><span class="p">[</span><span class="s2">&quot;outlet&quot;</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                            <span class="n">last_outlet_index</span> <span class="o">=</span> <span class="kc">None</span>
+                        <span class="k">else</span><span class="p">:</span>
+                            <span class="n">last_outlet_index</span> <span class="o">=</span> <span class="n">cnct_node_indices</span><span class="p">[</span><span class="s2">&quot;outlet&quot;</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1</span>
+                        <span class="c1"># Pass the outlet node to the new segment if it is empty</span>
+                        <span class="n">segment_isnt_empty</span> <span class="o">=</span> <span class="p">(</span>
+                            <span class="n">the_segment</span><span class="o">.</span><span class="n">items</span> <span class="ow">or</span> <span class="n">the_segment</span><span class="o">.</span><span class="n">connections</span>
+                        <span class="p">)</span>
+                        <span class="n">outlet_node_index</span> <span class="o">=</span> <span class="p">(</span>
+                            <span class="kc">None</span> <span class="k">if</span> <span class="n">segment_isnt_empty</span> <span class="k">else</span> <span class="n">last_outlet_index</span>
+                        <span class="p">)</span>
+                        <span class="n">piping_toolkit</span><span class="o">.</span><span class="n">append_item_to_unconnected_segment</span><span class="p">(</span>
+                            <span class="n">the_segment</span><span class="p">,</span>
+                            <span class="n">item</span><span class="p">,</span>
+                            <span class="n">inlet_node_index</span><span class="p">,</span>
+                            <span class="n">outlet_node_index</span><span class="p">,</span>
+                        <span class="p">)</span>
+                        <span class="k">if</span> <span class="n">is_first</span><span class="p">:</span>
+                            <span class="n">first_connector</span> <span class="o">=</span> <span class="p">(</span>
+                                <span class="n">item</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">inlet_node_index</span><span class="p">]</span>
+                                <span class="k">if</span> <span class="n">inlet_node_index</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+                                <span class="k">else</span> <span class="n">item</span>
+                            <span class="p">)</span>
+                            <span class="n">is_first</span> <span class="o">=</span> <span class="kc">False</span>
+                        <span class="n">last_connector</span> <span class="o">=</span> <span class="p">(</span>
+                            <span class="n">item</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">last_outlet_index</span><span class="p">]</span>
+                            <span class="k">if</span> <span class="n">last_outlet_index</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+                            <span class="k">else</span> <span class="n">item</span>
+                        <span class="p">)</span>
+                        <span class="n">last_was_connection</span> <span class="o">=</span> <span class="kc">False</span>
+
+                    <span class="k">elif</span> <span class="n">element</span><span class="o">.</span><span class="n">tag</span> <span class="o">==</span> <span class="s2">&quot;CenterLine&quot;</span><span class="p">:</span>
+                        <span class="nb">id</span> <span class="o">=</span> <span class="s2">&quot;.&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+                            <span class="p">[</span>
+                                <span class="n">pr_piping_network_system</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;ID&quot;</span><span class="p">),</span>
+                                <span class="n">pr_piping_network_segment</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;ID&quot;</span><span class="p">),</span>
+                                <span class="nb">str</span><span class="p">(</span><span class="n">connection_counter</span><span class="p">),</span>
+                            <span class="p">]</span>
+                        <span class="p">)</span>
+                        <span class="n">connection_counter</span> <span class="o">+=</span> <span class="mi">1</span>
+                        <span class="n">the_pipe</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_or_retrieve_class</span><span class="p">(</span>
+                            <span class="n">piping</span><span class="o">.</span><span class="n">Pipe</span><span class="p">,</span> <span class="nb">id</span><span class="p">,</span> <span class="n">element</span>
+                        <span class="p">)</span>
+                        <span class="n">piping_toolkit</span><span class="o">.</span><span class="n">append_connection_to_unconnected_segment</span><span class="p">(</span>
+                            <span class="n">the_segment</span><span class="p">,</span> <span class="n">the_pipe</span><span class="p">,</span> <span class="n">last_outlet_index</span>
+                        <span class="p">)</span>
+                        <span class="n">is_first</span> <span class="o">=</span> <span class="kc">False</span>
+                        <span class="n">last_was_connection</span> <span class="o">=</span> <span class="kc">True</span>
+
+                <span class="c1"># Check if the segment has outside connections, and manage</span>
+                <span class="c1"># missing direct connections</span>
+                <span class="n">connections</span> <span class="o">=</span> <span class="n">pr_piping_network_segment</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="s2">&quot;Connection&quot;</span><span class="p">)</span>
+                <span class="n">pr_seg_connection</span> <span class="o">=</span> <span class="n">connections</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">if</span> <span class="n">connections</span> <span class="k">else</span> <span class="kc">None</span>
+                <span class="n">from_needs_connection</span> <span class="o">=</span> <span class="kc">False</span>
+                <span class="n">to_needs_connection</span> <span class="o">=</span> <span class="kc">False</span>
+                <span class="k">if</span> <span class="n">pr_seg_connection</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="n">frID</span> <span class="o">=</span> <span class="n">pr_seg_connection</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;FromID&quot;</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="n">frID</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                        <span class="k">if</span> <span class="n">frID</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_all_objects</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_all_objects</span><span class="p">[</span><span class="n">frID</span><span class="p">]</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">the_segment</span><span class="o">.</span><span class="n">items</span><span class="p">:</span>
+                                <span class="n">from_needs_connection</span> <span class="o">=</span> <span class="kc">True</span>
+                        <span class="k">else</span><span class="p">:</span>
+                            <span class="n">from_needs_connection</span> <span class="o">=</span> <span class="kc">True</span>
+                    <span class="n">toID</span> <span class="o">=</span> <span class="n">pr_seg_connection</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;ToID&quot;</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="n">toID</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                        <span class="k">if</span> <span class="n">toID</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_all_objects</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_all_objects</span><span class="p">[</span><span class="n">toID</span><span class="p">]</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">the_segment</span><span class="o">.</span><span class="n">items</span><span class="p">:</span>
+                                <span class="n">to_needs_connection</span> <span class="o">=</span> <span class="kc">True</span>
+                        <span class="k">else</span><span class="p">:</span>
+                            <span class="n">to_needs_connection</span> <span class="o">=</span> <span class="kc">True</span>
+
+                <span class="k">if</span> <span class="p">(</span>
+                    <span class="n">from_needs_connection</span>
+                    <span class="ow">and</span> <span class="ow">not</span> <span class="n">piping_toolkit</span><span class="o">.</span><span class="n">segment_is_free_and_unconnected</span><span class="p">(</span>
+                        <span class="n">the_segment</span><span class="p">,</span> <span class="n">as_source</span><span class="o">=</span><span class="kc">True</span>
+                    <span class="p">)</span>
+                <span class="p">):</span>
+                    <span class="nb">id</span> <span class="o">=</span> <span class="s2">&quot;.&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+                        <span class="p">[</span>
+                            <span class="n">pr_piping_network_system</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;ID&quot;</span><span class="p">),</span>
+                            <span class="n">pr_piping_network_segment</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;ID&quot;</span><span class="p">),</span>
+                            <span class="nb">str</span><span class="p">(</span><span class="n">connection_counter</span><span class="p">),</span>
+                        <span class="p">]</span>
+                    <span class="p">)</span>
+                    <span class="n">connection_counter</span> <span class="o">+=</span> <span class="mi">1</span>
+                    <span class="n">the_pipe</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_or_retrieve_class</span><span class="p">(</span>
+                        <span class="n">piping</span><span class="o">.</span><span class="n">DirectPipingConnection</span><span class="p">,</span> <span class="nb">id</span><span class="p">,</span> <span class="n">element</span>
+                    <span class="p">)</span>
+                    <span class="n">piping_toolkit</span><span class="o">.</span><span class="n">append_connection_to_unconnected_segment</span><span class="p">(</span>
+                        <span class="n">the_segment</span><span class="p">,</span>
+                        <span class="n">the_pipe</span><span class="p">,</span>
+                        <span class="n">last_outlet_index</span><span class="p">,</span>
+                        <span class="n">insert_before</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                    <span class="p">)</span>
+                <span class="k">if</span> <span class="p">(</span>
+                    <span class="n">to_needs_connection</span>
+                    <span class="ow">and</span> <span class="ow">not</span> <span class="n">piping_toolkit</span><span class="o">.</span><span class="n">segment_is_free_and_unconnected</span><span class="p">(</span>
+                        <span class="n">the_segment</span>
+                    <span class="p">)</span>
+                <span class="p">):</span>
+                    <span class="nb">id</span> <span class="o">=</span> <span class="s2">&quot;.&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+                        <span class="p">[</span>
+                            <span class="n">pr_piping_network_system</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;ID&quot;</span><span class="p">),</span>
+                            <span class="n">pr_piping_network_segment</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;ID&quot;</span><span class="p">),</span>
+                            <span class="nb">str</span><span class="p">(</span><span class="n">connection_counter</span><span class="p">),</span>
+                        <span class="p">]</span>
+                    <span class="p">)</span>
+                    <span class="n">connection_counter</span> <span class="o">+=</span> <span class="mi">1</span>
+                    <span class="n">the_pipe</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_or_retrieve_class</span><span class="p">(</span>
+                        <span class="n">piping</span><span class="o">.</span><span class="n">DirectPipingConnection</span><span class="p">,</span> <span class="nb">id</span><span class="p">,</span> <span class="n">element</span>
+                    <span class="p">)</span>
+                    <span class="n">piping_toolkit</span><span class="o">.</span><span class="n">append_connection_to_unconnected_segment</span><span class="p">(</span>
+                        <span class="n">the_segment</span><span class="p">,</span> <span class="n">the_pipe</span><span class="p">,</span> <span class="n">last_outlet_index</span>
+                    <span class="p">)</span>
+                    <span class="n">last_was_connection</span> <span class="o">=</span> <span class="kc">True</span>
+
+                <span class="c1"># Create implicit connection to predecessor if no connection</span>
+                <span class="c1"># data given</span>
+                <span class="k">if</span> <span class="n">last_was_connection</span><span class="p">:</span>
+                    <span class="n">last_connector</span> <span class="o">=</span> <span class="kc">None</span>
+
+                <span class="n">connections</span> <span class="o">=</span> <span class="n">pr_piping_network_segment</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="s2">&quot;Connection&quot;</span><span class="p">)</span>
+                <span class="n">pr_seg_connection</span> <span class="o">=</span> <span class="n">connections</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">if</span> <span class="n">connections</span> <span class="k">else</span> <span class="kc">None</span>
+                <span class="n">pr_seg_has_from</span> <span class="o">=</span> <span class="kc">False</span>
+                <span class="k">if</span> <span class="n">pr_seg_connection</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">pr_seg_connection</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;FromID&quot;</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                        <span class="n">pr_seg_has_from</span> <span class="o">=</span> <span class="kc">True</span>
+                <span class="k">if</span> <span class="p">(</span>
+                    <span class="p">(</span><span class="ow">not</span> <span class="n">pr_seg_has_from</span><span class="p">)</span>
+                    <span class="ow">and</span> <span class="n">first_connector</span> <span class="ow">is</span> <span class="kc">None</span>
+                    <span class="ow">and</span> <span class="n">previous_final_connector</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+                <span class="p">):</span>
+                    <span class="n">piping_toolkit</span><span class="o">.</span><span class="n">connect_piping_network_segment</span><span class="p">(</span>
+                        <span class="n">the_segment</span><span class="p">,</span> <span class="n">previous_final_connector</span><span class="p">,</span> <span class="n">as_source</span><span class="o">=</span><span class="kc">True</span>
+                    <span class="p">)</span>
+                <span class="k">if</span> <span class="n">prev_prot_segment</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="n">connections</span> <span class="o">=</span> <span class="n">pr_piping_network_segment</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span>
+                        <span class="s2">&quot;Connection&quot;</span>
+                    <span class="p">)</span>
+                    <span class="n">prev_seg_connection</span> <span class="o">=</span> <span class="p">(</span>
+                        <span class="n">connections</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">if</span> <span class="n">connections</span> <span class="k">else</span> <span class="kc">None</span>
+                    <span class="p">)</span>
+                    <span class="n">prev_pr_seg_has_to</span> <span class="o">=</span> <span class="kc">False</span>
+                    <span class="k">if</span> <span class="n">prev_seg_connection</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                        <span class="k">if</span> <span class="n">prev_seg_connection</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;ToID&quot;</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                            <span class="n">prev_pr_seg_has_to</span> <span class="o">=</span> <span class="kc">True</span>
+                    <span class="k">if</span> <span class="p">(</span>
+                        <span class="p">(</span><span class="ow">not</span> <span class="n">prev_pr_seg_has_to</span><span class="p">)</span>
+                        <span class="ow">and</span> <span class="n">previous_final_connector</span> <span class="ow">is</span> <span class="kc">None</span>
+                        <span class="ow">and</span> <span class="n">first_connector</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+                    <span class="p">):</span>
+                        <span class="n">piping_toolkit</span><span class="o">.</span><span class="n">connect_piping_network_segment</span><span class="p">(</span>
+                            <span class="n">previous_segment</span><span class="p">,</span> <span class="n">first_connector</span><span class="p">,</span> <span class="n">as_source</span><span class="o">=</span><span class="kc">False</span>
+                        <span class="p">)</span>
+
+                <span class="n">previous_final_connector</span> <span class="o">=</span> <span class="n">last_connector</span>
+                <span class="n">previous_segment</span> <span class="o">=</span> <span class="n">the_segment</span>
+                <span class="n">prev_prot_segment</span> <span class="o">=</span> <span class="n">pr_piping_network_segment</span>
+
+        <span class="c1"># Second pass to connect the segments and create the systems</span>
+        <span class="n">dx_piping_network_systems</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">pr_piping_network_system</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">proteus_root</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span>
+            <span class="s2">&quot;PipingNetworkSystem&quot;</span>
+        <span class="p">):</span>
+            <span class="n">pn_segments</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">pr_piping_network_segment</span> <span class="ow">in</span> <span class="n">pr_piping_network_system</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span>
+                <span class="s2">&quot;PipingNetworkSegment&quot;</span>
+            <span class="p">):</span>
+                <span class="n">dx_segment</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_all_objects</span><span class="p">[</span>
+                    <span class="n">pr_piping_network_segment</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;ID&quot;</span><span class="p">)</span>
+                <span class="p">]</span>
+                <span class="n">connections</span> <span class="o">=</span> <span class="n">pr_piping_network_segment</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="s2">&quot;Connection&quot;</span><span class="p">)</span>
+                <span class="n">pr_seg_connection</span> <span class="o">=</span> <span class="n">connections</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">if</span> <span class="n">connections</span> <span class="k">else</span> <span class="kc">None</span>
+                <span class="n">src_obj</span> <span class="o">=</span> <span class="kc">None</span>
+                <span class="n">trg_obj</span> <span class="o">=</span> <span class="kc">None</span>
+
+                <span class="c1"># Check if connection IDs exists</span>
+                <span class="n">pr_seg_has_from</span> <span class="o">=</span> <span class="kc">False</span>
+                <span class="n">pr_seg_has_to</span> <span class="o">=</span> <span class="kc">False</span>
+                <span class="k">if</span> <span class="n">pr_seg_connection</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">pr_seg_connection</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;FromID&quot;</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                        <span class="n">pr_seg_has_from</span> <span class="o">=</span> <span class="kc">True</span>
+                    <span class="k">if</span> <span class="n">pr_seg_connection</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;ToID&quot;</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                        <span class="n">pr_seg_has_to</span> <span class="o">=</span> <span class="kc">True</span>
+
+                <span class="c1"># Find source and target items. Skip if the item references itsf</span>
+                <span class="k">if</span> <span class="n">pr_seg_has_from</span><span class="p">:</span>
+                    <span class="n">src_item</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_all_objects</span><span class="p">[</span>
+                        <span class="n">pr_seg_connection</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;FromID&quot;</span><span class="p">)</span>
+                    <span class="p">]</span>
+                    <span class="k">if</span> <span class="n">src_item</span> <span class="ow">in</span> <span class="n">dx_segment</span><span class="o">.</span><span class="n">items</span><span class="p">:</span>
+                        <span class="n">src_item</span> <span class="o">=</span> <span class="kc">None</span>
+                    <span class="k">elif</span> <span class="n">pr_seg_connection</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;FromNode&quot;</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                        <span class="n">src_obj</span> <span class="o">=</span> <span class="n">src_item</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span>
+                            <span class="nb">int</span><span class="p">(</span><span class="n">pr_seg_connection</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;FromNode&quot;</span><span class="p">))</span> <span class="o">-</span> <span class="mi">1</span>
+                        <span class="p">]</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">src_obj</span> <span class="o">=</span> <span class="n">src_item</span>
+                <span class="k">if</span> <span class="n">pr_seg_has_to</span><span class="p">:</span>
+                    <span class="n">trg_item</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_all_objects</span><span class="p">[</span><span class="n">pr_seg_connection</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;ToID&quot;</span><span class="p">)]</span>
+                    <span class="k">if</span> <span class="n">trg_item</span> <span class="ow">in</span> <span class="n">dx_segment</span><span class="o">.</span><span class="n">items</span><span class="p">:</span>
+                        <span class="n">trg_item</span> <span class="o">=</span> <span class="kc">None</span>
+                    <span class="k">elif</span> <span class="n">pr_seg_connection</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;ToNode&quot;</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                        <span class="n">trg_obj</span> <span class="o">=</span> <span class="n">trg_item</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span>
+                            <span class="nb">int</span><span class="p">(</span><span class="n">pr_seg_connection</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;ToNode&quot;</span><span class="p">))</span> <span class="o">-</span> <span class="mi">1</span>
+                        <span class="p">]</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">trg_obj</span> <span class="o">=</span> <span class="n">trg_item</span>
+
+                <span class="c1"># Perform connection</span>
+                <span class="k">if</span> <span class="n">src_obj</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="n">piping_toolkit</span><span class="o">.</span><span class="n">connect_piping_network_segment</span><span class="p">(</span>
+                        <span class="n">dx_segment</span><span class="p">,</span> <span class="n">src_obj</span><span class="p">,</span> <span class="n">as_source</span><span class="o">=</span><span class="kc">True</span>
+                    <span class="p">)</span>
+                <span class="k">if</span> <span class="n">trg_obj</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="n">piping_toolkit</span><span class="o">.</span><span class="n">connect_piping_network_segment</span><span class="p">(</span>
+                        <span class="n">dx_segment</span><span class="p">,</span> <span class="n">trg_obj</span><span class="p">,</span> <span class="n">as_source</span><span class="o">=</span><span class="kc">False</span>
+                    <span class="p">)</span>
+                <span class="n">pn_segments</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">dx_segment</span><span class="p">)</span>
+
+            <span class="n">the_network</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_or_retrieve_class</span><span class="p">(</span>
+                <span class="n">piping</span><span class="o">.</span><span class="n">PipingNetworkSystem</span><span class="p">,</span>
+                <span class="n">pr_piping_network_system</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;ID&quot;</span><span class="p">),</span>
+                <span class="n">pr_piping_network_system</span><span class="p">,</span>
+                <span class="n">segments</span><span class="o">=</span><span class="n">pn_segments</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="n">dx_piping_network_systems</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">the_network</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">dx_piping_network_systems</span></div>
+
+
+<div class="viewcode-block" id="ProteusSerializer.parse_actuating_system">
+<a class="viewcode-back" href="../../../pydexpi.loaders.proteus_serializer.html#pydexpi.loaders.proteus_serializer.ProteusSerializer.parse_actuating_system">[docs]</a>
+    <span class="k">def</span> <span class="nf">parse_actuating_system</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Parse proteus actuating system to DEXPI actuating system classes.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        list</span>
+<span class="sd">            DEXPI actuating system objects that have been created.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">actuating_systems</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">pr_actuating_system</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">proteus_root</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="s2">&quot;ActuatingSystem&quot;</span><span class="p">):</span>
+            <span class="n">act_system_kwargs</span> <span class="o">=</span> <span class="p">{}</span>
+            <span class="k">for</span> <span class="n">pr_actuating_system_component</span> <span class="ow">in</span> <span class="n">pr_actuating_system</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span>
+                <span class="s2">&quot;ActuatingSystemComponent&quot;</span>
+            <span class="p">):</span>
+                <span class="n">component_class</span> <span class="o">=</span> <span class="n">pr_actuating_system_component</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+                    <span class="s2">&quot;ComponentClass&quot;</span>
+                <span class="p">)</span>
+                <span class="k">if</span> <span class="n">component_class</span> <span class="o">==</span> <span class="s2">&quot;OperatedValveReference&quot;</span><span class="p">:</span>
+                    <span class="n">association</span> <span class="o">=</span> <span class="n">pr_actuating_system_component</span><span class="o">.</span><span class="n">find</span><span class="p">(</span>
+                        <span class="s2">&quot;Association&quot;</span>
+                    <span class="p">)</span>
+                    <span class="n">association_id</span> <span class="o">=</span> <span class="n">association</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;ItemID&quot;</span><span class="p">)</span>
+                    <span class="n">act_system_kwargs</span><span class="p">[</span><span class="s2">&quot;operatedValveReference&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">make_or_retrieve_class</span><span class="p">(</span>
+                            <span class="n">instrumentation</span><span class="o">.</span><span class="n">OperatedValveReference</span><span class="p">,</span>
+                            <span class="n">pr_actuating_system_component</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;ID&quot;</span><span class="p">),</span>
+                            <span class="n">pr_actuating_system_component</span><span class="p">,</span>
+                            <span class="n">valve</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_all_objects</span><span class="p">[</span><span class="n">association_id</span><span class="p">],</span>
+                        <span class="p">)</span>
+                    <span class="p">)</span>
+                <span class="k">elif</span> <span class="n">component_class</span> <span class="o">==</span> <span class="s2">&quot;ControlledActuator&quot;</span><span class="p">:</span>
+                    <span class="n">act_system_kwargs</span><span class="p">[</span><span class="s2">&quot;controlledActuator&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">make_or_retrieve_class</span><span class="p">(</span>
+                            <span class="n">instrumentation</span><span class="o">.</span><span class="n">ControlledActuator</span><span class="p">,</span>
+                            <span class="n">pr_actuating_system_component</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;ID&quot;</span><span class="p">),</span>
+                            <span class="n">pr_actuating_system_component</span><span class="p">,</span>
+                        <span class="p">)</span>
+                    <span class="p">)</span>
+                <span class="k">elif</span> <span class="n">component_class</span> <span class="o">==</span> <span class="s2">&quot;Positioner&quot;</span><span class="p">:</span>
+                    <span class="n">act_system_kwargs</span><span class="p">[</span><span class="s2">&quot;positioner&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">make_or_retrieve_class</span><span class="p">(</span>
+                            <span class="n">instrumentation</span><span class="o">.</span><span class="n">Positioner</span><span class="p">,</span>
+                            <span class="n">pr_actuating_system_component</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;ID&quot;</span><span class="p">),</span>
+                            <span class="n">pr_actuating_system_component</span><span class="p">,</span>
+                        <span class="p">)</span>
+                    <span class="p">)</span>
+            <span class="n">new_actuating_system</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_or_retrieve_class</span><span class="p">(</span>
+                <span class="n">instrumentation</span><span class="o">.</span><span class="n">ActuatingSystem</span><span class="p">,</span>
+                <span class="n">pr_actuating_system</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;ID&quot;</span><span class="p">),</span>
+                <span class="n">pr_actuating_system</span><span class="p">,</span>
+                <span class="o">**</span><span class="n">act_system_kwargs</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="n">actuating_systems</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">new_actuating_system</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">actuating_systems</span></div>
+
+
+<div class="viewcode-block" id="ProteusSerializer.parse_process_signal_generating_systems">
+<a class="viewcode-back" href="../../../pydexpi.loaders.proteus_serializer.html#pydexpi.loaders.proteus_serializer.ProteusSerializer.parse_process_signal_generating_systems">[docs]</a>
+    <span class="k">def</span> <span class="nf">parse_process_signal_generating_systems</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Parses the process signal generating systems from a proteus xml</span>
+<span class="sd">        element tree to DEXPI classes. Needs to be parsed before process</span>
+<span class="sd">        instrumentation function.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        list</span>
+<span class="sd">            List of all system objects</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">p_s_generating_systems</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">p_s_generating_system</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">proteus_root</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span>
+            <span class="s2">&quot;ProcessSignalGeneratingSystem&quot;</span>
+        <span class="p">):</span>
+            <span class="n">p_s_generating_systems_kwargs</span> <span class="o">=</span> <span class="p">{}</span>
+            <span class="k">for</span> <span class="n">component</span> <span class="ow">in</span> <span class="n">p_s_generating_system</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span>
+                <span class="s2">&quot;ProcessSignalGeneratingSystemComponent&quot;</span>
+            <span class="p">):</span>
+                <span class="n">class_name</span> <span class="o">=</span> <span class="n">component</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;ComponentClass&quot;</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">class_name</span> <span class="o">==</span> <span class="s2">&quot;Transmitter&quot;</span><span class="p">:</span>
+                    <span class="n">new_component</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_or_retrieve_class</span><span class="p">(</span>
+                        <span class="n">instrumentation</span><span class="o">.</span><span class="n">Transmitter</span><span class="p">,</span>
+                        <span class="n">component</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;ID&quot;</span><span class="p">),</span>
+                        <span class="n">component</span><span class="p">,</span>
+                    <span class="p">)</span>
+                    <span class="n">p_s_generating_systems_kwargs</span><span class="p">[</span><span class="s2">&quot;transmitter&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">new_component</span>
+
+                <span class="k">else</span><span class="p">:</span>  <span class="c1"># PrimaryElement</span>
+                    <span class="n">primary_element_kwargs</span> <span class="o">=</span> <span class="p">{}</span>
+                    <span class="k">if</span> <span class="n">class_name</span> <span class="o">==</span> <span class="s2">&quot;InlinePrimaryElementReference&quot;</span><span class="p">:</span>
+                        <span class="n">association_id</span> <span class="o">=</span> <span class="n">component</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;Association&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+                            <span class="s2">&quot;ItemID&quot;</span>
+                        <span class="p">)</span>
+                        <span class="n">primary_element_kwargs</span><span class="p">[</span><span class="s2">&quot;inlinePrimaryElement&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">_all_objects</span><span class="p">[</span><span class="n">association_id</span><span class="p">]</span>
+                        <span class="p">)</span>
+                    <span class="n">MyClass</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">instrumentation</span><span class="p">,</span> <span class="n">class_name</span><span class="p">)</span>
+                    <span class="n">new_component</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_or_retrieve_class</span><span class="p">(</span>
+                        <span class="n">MyClass</span><span class="p">,</span>
+                        <span class="n">component</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;ID&quot;</span><span class="p">),</span>
+                        <span class="n">component</span><span class="p">,</span>
+                        <span class="o">**</span><span class="n">primary_element_kwargs</span><span class="p">,</span>
+                    <span class="p">)</span>
+                    <span class="n">p_s_generating_systems_kwargs</span><span class="p">[</span><span class="s2">&quot;primaryElement&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+                        <span class="n">new_component</span>
+                    <span class="p">)</span>
+            <span class="n">class_name</span> <span class="o">=</span> <span class="n">p_s_generating_system</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;ComponentClass&quot;</span><span class="p">)</span>
+            <span class="n">MyClass</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">instrumentation</span><span class="p">,</span> <span class="n">class_name</span><span class="p">)</span>
+            <span class="n">new_generating_system</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_or_retrieve_class</span><span class="p">(</span>
+                <span class="n">MyClass</span><span class="p">,</span>
+                <span class="n">p_s_generating_system</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;ID&quot;</span><span class="p">),</span>
+                <span class="n">p_s_generating_system</span><span class="p">,</span>
+                <span class="o">**</span><span class="n">p_s_generating_systems_kwargs</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="n">p_s_generating_systems</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">new_generating_system</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">p_s_generating_systems</span></div>
+
+
+<div class="viewcode-block" id="ProteusSerializer.parse_process_instrumentation_functions">
+<a class="viewcode-back" href="../../../pydexpi.loaders.proteus_serializer.html#pydexpi.loaders.proteus_serializer.ProteusSerializer.parse_process_instrumentation_functions">[docs]</a>
+    <span class="k">def</span> <span class="nf">parse_process_instrumentation_functions</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Parses the instrumentation from a proteus xml element tree to DEXPI</span>
+<span class="sd">        classes.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        list</span>
+<span class="sd">            List of all instrumentation objects</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># First pass: Create all instances for process instrumentation function</span>
+        <span class="k">for</span> <span class="n">p_instrumentation_function</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">proteus_root</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span>
+            <span class="s2">&quot;ProcessInstrumentationFunction&quot;</span>
+        <span class="p">):</span>
+            <span class="c1"># create actuating function</span>
+            <span class="n">actuatingFunctions</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">actuating_function</span> <span class="ow">in</span> <span class="n">p_instrumentation_function</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span>
+                <span class="s2">&quot;ActuatingFunction&quot;</span>
+            <span class="p">):</span>
+                <span class="n">act_funct_kwargs</span> <span class="o">=</span> <span class="p">{}</span>
+                <span class="k">for</span> <span class="n">association</span> <span class="ow">in</span> <span class="n">actuating_function</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="s2">&quot;Association&quot;</span><span class="p">):</span>
+                    <span class="n">association_id</span> <span class="o">=</span> <span class="n">association</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;ItemID&quot;</span><span class="p">)</span>
+                    <span class="c1"># Reference to PipingNetworkSegment</span>
+                    <span class="k">if</span> <span class="n">association</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;Type&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&quot;is located in&quot;</span><span class="p">:</span>
+                        <span class="n">act_funct_kwargs</span><span class="p">[</span><span class="s2">&quot;actuatingLocation&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">_all_objects</span><span class="p">[</span><span class="n">association_id</span><span class="p">]</span>
+                        <span class="p">)</span>
+                    <span class="c1"># Reference to ActuatingSystem</span>
+                    <span class="k">if</span> <span class="n">association</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;Type&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&quot;is fulfilled by&quot;</span><span class="p">:</span>
+                        <span class="n">act_funct_kwargs</span><span class="p">[</span><span class="s2">&quot;systems&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_all_objects</span><span class="p">[</span>
+                            <span class="n">association_id</span>
+                        <span class="p">]</span>
+
+                <span class="n">new_actuating_function</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_or_retrieve_class</span><span class="p">(</span>
+                    <span class="n">instrumentation</span><span class="o">.</span><span class="n">ActuatingFunction</span><span class="p">,</span>
+                    <span class="n">actuating_function</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;ID&quot;</span><span class="p">),</span>
+                    <span class="n">actuating_function</span><span class="p">,</span>
+                    <span class="o">**</span><span class="n">act_funct_kwargs</span><span class="p">,</span>
+                <span class="p">)</span>
+                <span class="n">actuatingFunctions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">new_actuating_function</span><span class="p">)</span>
+
+            <span class="n">class_name</span> <span class="o">=</span> <span class="n">p_instrumentation_function</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;ComponentClass&quot;</span><span class="p">)</span>
+            <span class="n">MyClass</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">instrumentation</span><span class="p">,</span> <span class="n">class_name</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">make_or_retrieve_class</span><span class="p">(</span>
+                <span class="n">MyClass</span><span class="p">,</span>
+                <span class="n">p_instrumentation_function</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;ID&quot;</span><span class="p">),</span>
+                <span class="n">p_instrumentation_function</span><span class="p">,</span>
+                <span class="n">actuatingFunctions</span><span class="o">=</span><span class="n">actuatingFunctions</span><span class="p">,</span>
+            <span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">p_instrumentation_function</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">proteus_root</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span>
+            <span class="s2">&quot;ProcessInstrumentationFunction&quot;</span>
+        <span class="p">):</span>
+            <span class="k">for</span> <span class="n">information_flow</span> <span class="ow">in</span> <span class="n">p_instrumentation_function</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span>
+                <span class="s2">&quot;InformationFlow&quot;</span>
+            <span class="p">):</span>
+                <span class="n">class_name</span> <span class="o">=</span> <span class="n">information_flow</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;ComponentClass&quot;</span><span class="p">)</span>
+                <span class="n">MyClass</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">instrumentation</span><span class="p">,</span> <span class="n">class_name</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">make_or_retrieve_class</span><span class="p">(</span>
+                    <span class="n">MyClass</span><span class="p">,</span>
+                    <span class="n">information_flow</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;ID&quot;</span><span class="p">),</span>
+                    <span class="n">information_flow</span><span class="p">,</span>
+                <span class="p">)</span>
+            <span class="k">for</span> <span class="n">p_signal_g_f</span> <span class="ow">in</span> <span class="n">p_instrumentation_function</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span>
+                <span class="s2">&quot;ProcessSignalGeneratingFunction&quot;</span>
+            <span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">make_or_retrieve_class</span><span class="p">(</span>
+                    <span class="n">instrumentation</span><span class="o">.</span><span class="n">ProcessSignalGeneratingFunction</span><span class="p">,</span>
+                    <span class="n">p_signal_g_f</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;ID&quot;</span><span class="p">),</span>
+                    <span class="n">p_signal_g_f</span><span class="p">,</span>
+                <span class="p">)</span>
+            <span class="k">for</span> <span class="n">actuating_e_f</span> <span class="ow">in</span> <span class="n">p_instrumentation_function</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span>
+                <span class="s2">&quot;ActuatingElectricalFunction&quot;</span>
+            <span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">make_or_retrieve_class</span><span class="p">(</span>
+                    <span class="n">instrumentation</span><span class="o">.</span><span class="n">ActuatingElectricalFunction</span><span class="p">,</span>
+                    <span class="n">actuating_e_f</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;ID&quot;</span><span class="p">),</span>
+                    <span class="n">actuating_e_f</span><span class="p">,</span>
+                <span class="p">)</span>
+            <span class="k">for</span> <span class="n">signal_o_p_c</span> <span class="ow">in</span> <span class="n">p_instrumentation_function</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span>
+                <span class="s2">&quot;SignalOffPageConnector&quot;</span>
+            <span class="p">):</span>
+                <span class="n">class_name</span> <span class="o">=</span> <span class="n">signal_o_p_c</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;ComponentClass&quot;</span><span class="p">)</span>
+                <span class="n">MyClass</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">instrumentation</span><span class="p">,</span> <span class="n">class_name</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">make_or_retrieve_class</span><span class="p">(</span>
+                    <span class="n">MyClass</span><span class="p">,</span>
+                    <span class="n">signal_o_p_c</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;ID&quot;</span><span class="p">),</span>
+                    <span class="n">signal_o_p_c</span><span class="p">,</span>
+                <span class="p">)</span>
+            <span class="c1"># From the DEXPI documentation it is not clear whether ActuatingElectricalSystem</span>
+            <span class="c1"># is a sub element of ProcessInstrumentationFunction or of</span>
+            <span class="c1"># ActuatingElectricalFunction. Implementation assumes ProcessInstrumentationFunction.</span>
+            <span class="k">for</span> <span class="n">actuating_e_s</span> <span class="ow">in</span> <span class="n">p_instrumentation_function</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span>
+                <span class="s2">&quot;ActuatingElectricalSystem&quot;</span>
+            <span class="p">):</span>
+                <span class="n">a_e_s_component</span> <span class="o">=</span> <span class="n">actuating_e_s</span><span class="o">.</span><span class="n">find</span><span class="p">(</span>
+                    <span class="s2">&quot;ActuatingElectricalSystemComponent&quot;</span>
+                <span class="p">)</span>
+                <span class="k">if</span> <span class="n">a_e_s_component</span><span class="p">:</span>
+                    <span class="n">new_converter</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_or_retrieve_class</span><span class="p">(</span>
+                        <span class="n">instrumentation</span><span class="o">.</span><span class="n">ElectronicFrequencyConverter</span><span class="p">,</span>
+                        <span class="n">a_e_s_component</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;ID&quot;</span><span class="p">),</span>
+                        <span class="n">a_e_s_component</span><span class="p">,</span>
+                    <span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">new_converter</span> <span class="o">=</span> <span class="kc">None</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">make_or_retrieve_class</span><span class="p">(</span>
+                    <span class="n">instrumentation</span><span class="o">.</span><span class="n">ActuatingElectricalSystem</span><span class="p">,</span>
+                    <span class="n">actuating_e_s</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;ID&quot;</span><span class="p">),</span>
+                    <span class="n">actuating_e_s</span><span class="p">,</span>
+                    <span class="n">electronicFrequencyConverter</span><span class="o">=</span><span class="n">new_converter</span><span class="p">,</span>
+                <span class="p">)</span>
+
+        <span class="c1"># Second pass: Connect all instances of the process instrumentation function.</span>
+        <span class="n">p_instrumentation_functions</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">p_instrumentation_function</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">proteus_root</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span>
+            <span class="s2">&quot;ProcessInstrumentationFunction&quot;</span>
+        <span class="p">):</span>
+            <span class="n">p_instrumentation_f_id</span> <span class="o">=</span> <span class="n">p_instrumentation_function</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;ID&quot;</span><span class="p">)</span>
+
+            <span class="n">signalConveyingFunctions</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">signal_c_f</span> <span class="ow">in</span> <span class="n">p_instrumentation_function</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span>
+                <span class="s2">&quot;InformationFlow&quot;</span>
+            <span class="p">):</span>
+                <span class="n">signal_c_f_id</span> <span class="o">=</span> <span class="n">signal_c_f</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;ID&quot;</span><span class="p">)</span>
+                <span class="k">for</span> <span class="n">association</span> <span class="ow">in</span> <span class="n">signal_c_f</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="s2">&quot;Association&quot;</span><span class="p">):</span>
+                    <span class="n">association_id</span> <span class="o">=</span> <span class="n">association</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;ItemID&quot;</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="n">association</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;Type&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&quot;has logical start&quot;</span><span class="p">:</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">_all_objects</span><span class="p">[</span>
+                            <span class="n">signal_c_f_id</span>
+                        <span class="p">]</span><span class="o">.</span><span class="n">source</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_all_objects</span><span class="p">[</span><span class="n">association_id</span><span class="p">]</span>
+                    <span class="k">if</span> <span class="n">association</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;Type&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&quot;has logical end&quot;</span><span class="p">:</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">_all_objects</span><span class="p">[</span>
+                            <span class="n">signal_c_f_id</span>
+                        <span class="p">]</span><span class="o">.</span><span class="n">target</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_all_objects</span><span class="p">[</span><span class="n">association_id</span><span class="p">]</span>
+                <span class="n">signalConveyingFunctions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_all_objects</span><span class="p">[</span><span class="n">signal_c_f_id</span><span class="p">]</span>
+                <span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_all_objects</span><span class="p">[</span>
+                <span class="n">p_instrumentation_f_id</span>
+            <span class="p">]</span><span class="o">.</span><span class="n">signalConveyingFunctions</span> <span class="o">=</span> <span class="n">signalConveyingFunctions</span>
+
+            <span class="n">processSignalGeneratingFunctions</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">p_signal_g_f</span> <span class="ow">in</span> <span class="n">p_instrumentation_function</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span>
+                <span class="s2">&quot;ProcessSignalGeneratingFunction&quot;</span>
+            <span class="p">):</span>
+                <span class="n">p_signal_g_f_id</span> <span class="o">=</span> <span class="n">p_signal_g_f</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;ID&quot;</span><span class="p">)</span>
+                <span class="k">for</span> <span class="n">association</span> <span class="ow">in</span> <span class="n">p_signal_g_f</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="s2">&quot;Association&quot;</span><span class="p">):</span>
+                    <span class="n">association_id</span> <span class="o">=</span> <span class="n">association</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;ItemID&quot;</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="n">association</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;Type&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&quot;is located in&quot;</span><span class="p">:</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">_all_objects</span><span class="p">[</span>
+                            <span class="n">p_signal_g_f_id</span>
+                        <span class="p">]</span><span class="o">.</span><span class="n">sensingLocation</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_all_objects</span><span class="p">[</span><span class="n">association_id</span><span class="p">]</span>
+                    <span class="k">if</span> <span class="n">association</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;Type&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&quot;is fulfilled by&quot;</span><span class="p">:</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">_all_objects</span><span class="p">[</span>
+                            <span class="n">p_signal_g_f_id</span>
+                        <span class="p">]</span><span class="o">.</span><span class="n">systems</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_all_objects</span><span class="p">[</span><span class="n">association_id</span><span class="p">]</span>
+                <span class="n">processSignalGeneratingFunctions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_all_objects</span><span class="p">[</span><span class="n">p_signal_g_f_id</span><span class="p">]</span>
+                <span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_all_objects</span><span class="p">[</span>
+                <span class="n">p_instrumentation_f_id</span>
+            <span class="p">]</span><span class="o">.</span><span class="n">processSignalGeneratingFunctions</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="n">processSignalGeneratingFunctions</span>
+            <span class="p">)</span>
+
+            <span class="n">actuatingElectricalFunctions</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">actuating_e_f</span> <span class="ow">in</span> <span class="n">p_instrumentation_function</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span>
+                <span class="s2">&quot;ActuatingElectricalFunction&quot;</span>
+            <span class="p">):</span>
+                <span class="n">actuating_e_f_id</span> <span class="o">=</span> <span class="n">actuating_e_f</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;ID&quot;</span><span class="p">)</span>
+                <span class="k">for</span> <span class="n">association</span> <span class="ow">in</span> <span class="n">actuating_e_f</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="s2">&quot;Association&quot;</span><span class="p">):</span>
+                    <span class="n">association_id</span> <span class="o">=</span> <span class="n">association</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;ItemID&quot;</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="n">association</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;Type&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&quot;is located in&quot;</span><span class="p">:</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">_all_objects</span><span class="p">[</span>
+                            <span class="n">actuating_e_f_id</span>
+                        <span class="p">]</span><span class="o">.</span><span class="n">actuatingElectricalLocation</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_all_objects</span><span class="p">[</span>
+                            <span class="n">association_id</span>
+                        <span class="p">]</span>
+                    <span class="k">if</span> <span class="n">association</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;Type&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&quot;is fulfilled by&quot;</span><span class="p">:</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">_all_objects</span><span class="p">[</span>
+                            <span class="n">actuating_e_f_id</span>
+                        <span class="p">]</span><span class="o">.</span><span class="n">systems</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_all_objects</span><span class="p">[</span><span class="n">association_id</span><span class="p">]</span>
+                <span class="n">actuatingElectricalFunctions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">_all_objects</span><span class="p">[</span><span class="n">actuating_e_f_id</span><span class="p">]</span>
+                <span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_all_objects</span><span class="p">[</span>
+                <span class="n">p_instrumentation_f_id</span>
+            <span class="p">]</span><span class="o">.</span><span class="n">actuatingElectricalFunctions</span> <span class="o">=</span> <span class="n">actuatingElectricalFunctions</span>
+
+            <span class="n">signalOffPageConnectors</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">signal_o_p_c</span> <span class="ow">in</span> <span class="n">p_instrumentation_function</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span>
+                <span class="s2">&quot;SignalOffPageConnector&quot;</span>
+            <span class="p">):</span>
+                <span class="n">signal_o_p_c_id</span> <span class="o">=</span> <span class="n">signal_o_p_c</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;ID&quot;</span><span class="p">)</span>
+                <span class="k">for</span> <span class="n">s_o_p_c_reference</span> <span class="ow">in</span> <span class="n">signal_o_p_c</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span>
+                    <span class="s2">&quot;signalOffPageConnectorReference&quot;</span>
+                <span class="p">):</span>
+                    <span class="n">class_name</span> <span class="o">=</span> <span class="n">s_o_p_c_reference</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;ComponentClass&quot;</span><span class="p">)</span>
+                    <span class="n">s_o_p_c_reference_kwargs</span> <span class="o">=</span> <span class="p">{}</span>
+                    <span class="k">if</span> <span class="n">class_name</span> <span class="o">==</span> <span class="s2">&quot;SignalOffPageConnectorObjectReference&quot;</span><span class="p">:</span>
+                        <span class="n">association</span> <span class="o">=</span> <span class="n">s_o_p_c_reference</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;Association&quot;</span><span class="p">)</span>
+                        <span class="k">if</span> <span class="n">association</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;type&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&quot;refers to&quot;</span><span class="p">:</span>
+                            <span class="n">s_o_p_c_reference_kwargs</span><span class="p">[</span><span class="s2">&quot;referencedConnector&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+                                <span class="bp">self</span><span class="o">.</span><span class="n">_all_objects</span><span class="p">[</span><span class="n">association</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;ID&quot;</span><span class="p">)]</span>
+                            <span class="p">)</span>
+                    <span class="n">MyClass</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">instrumentation</span><span class="p">,</span> <span class="n">class_name</span><span class="p">)</span>
+                    <span class="n">connector_reference</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_or_retrieve_class</span><span class="p">(</span>
+                        <span class="n">MyClass</span><span class="p">,</span>
+                        <span class="n">signal_o_p_c</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;ID&quot;</span><span class="p">),</span>
+                        <span class="n">signal_o_p_c</span><span class="p">,</span>
+                        <span class="o">**</span><span class="n">s_o_p_c_reference_kwargs</span><span class="p">,</span>
+                    <span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_all_objects</span><span class="p">[</span>
+                    <span class="n">signal_o_p_c_id</span>
+                <span class="p">]</span><span class="o">.</span><span class="n">connectorReference</span> <span class="o">=</span> <span class="n">connector_reference</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_all_objects</span><span class="p">[</span>
+                <span class="n">p_instrumentation_f_id</span>
+            <span class="p">]</span><span class="o">.</span><span class="n">signalConnectors</span> <span class="o">=</span> <span class="n">signalOffPageConnectors</span>
+
+            <span class="n">p_instrumentation_functions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_all_objects</span><span class="p">[</span><span class="n">p_instrumentation_f_id</span><span class="p">]</span>
+            <span class="p">)</span>
+        <span class="k">return</span> <span class="n">p_instrumentation_functions</span></div>
+
+
+<div class="viewcode-block" id="ProteusSerializer.parse_instrumentation_loop_functions">
+<a class="viewcode-back" href="../../../pydexpi.loaders.proteus_serializer.html#pydexpi.loaders.proteus_serializer.ProteusSerializer.parse_instrumentation_loop_functions">[docs]</a>
+    <span class="k">def</span> <span class="nf">parse_instrumentation_loop_functions</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Parse proteus instrumentation loop function to DEXPI instrumentation</span>
+<span class="sd">        loop function classes.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            i_loop_functions(list): DEXPI instrumentation loop</span>
+<span class="sd">                function objects that have been created.&quot;&quot;&quot;</span>
+        <span class="n">i_loop_functions</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">i_loop_function</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">proteus_root</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span>
+            <span class="s2">&quot;InstrumentationLoopFunction&quot;</span>
+        <span class="p">):</span>
+            <span class="n">p_intrumentation_functions</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">association</span> <span class="ow">in</span> <span class="n">i_loop_function</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="s2">&quot;Association&quot;</span><span class="p">):</span>
+                <span class="n">association_id</span> <span class="o">=</span> <span class="n">association</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;ItemID&quot;</span><span class="p">)</span>
+                <span class="c1"># ProcessInstrumentationFunction</span>
+                <span class="k">if</span> <span class="n">association</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;Type&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&quot;is a collection including&quot;</span><span class="p">:</span>
+                    <span class="n">p_intrumentation_functions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">_all_objects</span><span class="p">[</span><span class="n">association_id</span><span class="p">]</span>
+                    <span class="p">)</span>
+
+            <span class="n">new_i_loop_functions</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_or_retrieve_class</span><span class="p">(</span>
+                <span class="n">instrumentation</span><span class="o">.</span><span class="n">InstrumentationLoopFunction</span><span class="p">,</span>
+                <span class="n">i_loop_function</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;ID&quot;</span><span class="p">),</span>
+                <span class="n">processInstrumentationFunctions</span><span class="o">=</span><span class="n">p_intrumentation_functions</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="n">i_loop_functions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">new_i_loop_functions</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">i_loop_functions</span></div>
+
+
+<div class="viewcode-block" id="ProteusSerializer.retrieve_piping_nodes">
+<a class="viewcode-back" href="../../../pydexpi.loaders.proteus_serializer.html#pydexpi.loaders.proteus_serializer.ProteusSerializer.retrieve_piping_nodes">[docs]</a>
+    <span class="k">def</span> <span class="nf">retrieve_piping_nodes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">connection_point_owner</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get a list of piping nodes associated to a proteus connection_point</span>
+<span class="sd">        owner (i.e. PipingNodeOwner in Dexpi). Create piping nodes new if</span>
+<span class="sd">        non_existent and add them to self._piping_nodes_dict, or get them from</span>
+<span class="sd">        self._piping_nodes_dict</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">            list(PipingNode)</span>
+<span class="sd">                List of piping node objects associated to the connection_point_owner</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">piping_nodes</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">connection_point</span> <span class="ow">in</span> <span class="n">connection_point_owner</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span>
+            <span class="s2">&quot;ConnectionPoints&quot;</span>
+        <span class="p">):</span>
+            <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">connection_point</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="s2">&quot;Node&quot;</span><span class="p">):</span>
+                <span class="k">if</span> <span class="n">node</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;Type&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&quot;process&quot;</span><span class="p">:</span>
+                    <span class="n">piping_node</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_or_retrieve_class</span><span class="p">(</span>
+                        <span class="n">piping</span><span class="o">.</span><span class="n">PipingNode</span><span class="p">,</span> <span class="n">node</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;ID&quot;</span><span class="p">),</span> <span class="n">node</span>
+                    <span class="p">)</span>
+                    <span class="n">piping_nodes</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">piping_node</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">piping_nodes</span></div>
+
+
+<div class="viewcode-block" id="ProteusSerializer.make_or_retrieve_class">
+<a class="viewcode-back" href="../../../pydexpi.loaders.proteus_serializer.html#pydexpi.loaders.proteus_serializer.ProteusSerializer.make_or_retrieve_class">[docs]</a>
+    <span class="k">def</span> <span class="nf">make_or_retrieve_class</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">class_type</span><span class="p">,</span>
+        <span class="n">proteus_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">proteus_element</span><span class="p">:</span> <span class="n">ET</span><span class="o">.</span><span class="n">Element</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+    <span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Creates a class with the id and the class type. If an object with this</span>
+<span class="sd">        ID has been created before, the method returns this object, provided the</span>
+<span class="sd">        class type matches. An exception is thrown otherwise. If no object with</span>
+<span class="sd">        this ID is found, a new object is created and added to the _all_classes</span>
+<span class="sd">        dictionary.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">            class_type: Any</span>
+<span class="sd">                type of the class to be created</span>
+<span class="sd">            proteus_id : str</span>
+<span class="sd">                ID of the object for the lookup table. Should be the proteus id</span>
+<span class="sd">                if available</span>
+<span class="sd">            proteus_element : ET.Element, optional</span>
+<span class="sd">                Corresponding proteus element, from which the generic attributes</span>
+<span class="sd">                are parsed if not None</span>
+<span class="sd">            kwargs:</span>
+<span class="sd">                keyword arguments to be passed to the constructor</span>
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">            class_type</span>
+<span class="sd">                object corresponding to the ID</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">proteus_id</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_all_objects</span><span class="o">.</span><span class="n">keys</span><span class="p">()):</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_all_objects</span><span class="p">[</span><span class="n">proteus_id</span><span class="p">])</span> <span class="o">==</span> <span class="n">class_type</span><span class="p">:</span>
+                <span class="n">msg</span> <span class="o">=</span> <span class="p">(</span>
+                    <span class="sa">f</span><span class="s2">&quot;Class type of entry for ID </span><span class="si">{</span><span class="n">proteus_id</span><span class="si">}</span><span class="s2"> is &quot;</span>
+                    <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_all_objects</span><span class="p">[</span><span class="n">proteus_id</span><span class="p">])</span><span class="si">}</span><span class="s2"> and doesnt match&quot;</span>
+                    <span class="sa">f</span><span class="s2">&quot;class type </span><span class="si">{</span><span class="n">class_type</span><span class="si">}</span><span class="s2"> in argument&quot;</span>
+                <span class="p">)</span>
+                <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_all_objects</span><span class="p">[</span><span class="n">proteus_id</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># Parse generic attributes if proteus element is given.</span>
+            <span class="k">if</span> <span class="n">proteus_element</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">generic_attributes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parse_generic_attributes</span><span class="p">(</span>
+                    <span class="n">class_type</span><span class="p">,</span> <span class="n">proteus_element</span>
+                <span class="p">)</span>
+                <span class="n">kwargs</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">generic_attributes</span><span class="p">)</span>
+
+            <span class="n">new_object</span> <span class="o">=</span> <span class="n">class_type</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_all_objects</span><span class="p">[</span><span class="n">proteus_id</span><span class="p">]</span> <span class="o">=</span> <span class="n">new_object</span>
+            <span class="k">return</span> <span class="n">new_object</span></div>
+
+
+<div class="viewcode-block" id="ProteusSerializer.parse_generic_attributes">
+<a class="viewcode-back" href="../../../pydexpi.loaders.proteus_serializer.html#pydexpi.loaders.proteus_serializer.ProteusSerializer.parse_generic_attributes">[docs]</a>
+    <span class="k">def</span> <span class="nf">parse_generic_attributes</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">component_class</span><span class="p">,</span> <span class="n">proteus_component</span><span class="p">:</span> <span class="n">ET</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">dict</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Parse generic attributes from xml tree to DEXPI data classes.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            component_class: DEXPI class for which we want to parse attributes</span>
+<span class="sd">            proteus_attributes (ET): Proteus element tree of the DEXPI class.</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            dict: attributes, DEXPI data classes</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">attributes</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">component_attributes</span> <span class="o">=</span> <span class="n">component_class</span><span class="o">.</span><span class="n">model_fields</span>
+        <span class="c1"># We assume all DEXPI attributes are stored as GenericAttributes in proteus</span>
+        <span class="c1"># Return none in case no attributes are found</span>
+        <span class="k">if</span> <span class="n">proteus_component</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;GenericAttributes&quot;</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">{}</span>
+        <span class="n">multi_language_strings</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">attribute</span> <span class="ow">in</span> <span class="n">proteus_component</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s2">&quot;GenericAttributes&quot;</span><span class="p">):</span>
+            <span class="c1"># Edit proteus attribute name to correspond to DEXPI class field.</span>
+            <span class="n">name</span> <span class="o">=</span> <span class="n">attribute</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;Name&quot;</span><span class="p">)</span>
+            <span class="n">name</span> <span class="o">=</span> <span class="n">name</span><span class="o">.</span><span class="n">removesuffix</span><span class="p">(</span><span class="s2">&quot;AssignmentClass&quot;</span><span class="p">)</span>
+            <span class="n">name</span> <span class="o">=</span> <span class="n">name</span><span class="o">.</span><span class="n">removesuffix</span><span class="p">(</span><span class="s2">&quot;Specialization&quot;</span><span class="p">)</span>
+            <span class="n">name</span> <span class="o">=</span> <span class="n">name</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">+</span> <span class="n">name</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
+            <span class="c1"># Only parse an attribute if it exists both in proteus and DEXPI.</span>
+            <span class="k">if</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">component_attributes</span><span class="p">:</span>
+                <span class="n">value</span> <span class="o">=</span> <span class="n">attribute</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;Value&quot;</span><span class="p">)</span>
+                <span class="n">unit</span> <span class="o">=</span> <span class="n">component_attributes</span><span class="p">[</span><span class="n">name</span><span class="p">]</span><span class="o">.</span><span class="n">annotation</span><span class="o">.</span><span class="n">__args__</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                <span class="c1"># In physicalQuantities, some parent classes start with Nullable,</span>
+                <span class="c1"># like NullablePower. We want to use the child class, like</span>
+                <span class="c1"># Power, to store value and unit.</span>
+                <span class="n">unit_name</span> <span class="o">=</span> <span class="n">unit</span><span class="o">.</span><span class="vm">__name__</span><span class="o">.</span><span class="n">removeprefix</span><span class="p">(</span><span class="s2">&quot;Nullable&quot;</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">unit</span> <span class="o">==</span> <span class="nb">str</span><span class="p">:</span>
+                    <span class="n">attributes</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+                <span class="k">elif</span> <span class="n">unit</span> <span class="o">==</span> <span class="nb">int</span><span class="p">:</span>
+                    <span class="n">attributes</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+                <span class="k">elif</span> <span class="n">unit</span> <span class="o">==</span> <span class="n">dataTypes</span><span class="o">.</span><span class="n">MultiLanguageString</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">multi_language_strings</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                        <span class="n">multi_language_strings</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+                    <span class="n">single_language_string</span> <span class="o">=</span> <span class="n">dataTypes</span><span class="o">.</span><span class="n">SingleLanguageString</span><span class="p">(</span>
+                        <span class="n">language</span><span class="o">=</span><span class="n">attribute</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;Language&quot;</span><span class="p">),</span>
+                        <span class="n">value</span><span class="o">=</span><span class="n">attribute</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;Value&quot;</span><span class="p">),</span>
+                    <span class="p">)</span>
+                    <span class="n">multi_language_strings</span><span class="p">[</span><span class="n">name</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">single_language_string</span><span class="p">)</span>
+                <span class="k">elif</span> <span class="n">unit_name</span> <span class="ow">in</span> <span class="nb">dir</span><span class="p">(</span><span class="n">physicalQuantities</span><span class="p">):</span>
+                    <span class="n">unit_class</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">physicalQuantities</span><span class="p">,</span> <span class="n">unit_name</span><span class="p">)</span>
+                    <span class="n">dexpi_attribute</span> <span class="o">=</span> <span class="n">unit_class</span><span class="p">(</span>
+                        <span class="n">value</span><span class="o">=</span><span class="n">value</span><span class="p">,</span>
+                        <span class="n">unit</span><span class="o">=</span><span class="n">unit_class</span><span class="o">.</span><span class="n">model_fields</span><span class="p">[</span><span class="s2">&quot;unit&quot;</span><span class="p">]</span>
+                        <span class="o">.</span><span class="n">annotation</span><span class="p">[</span><span class="n">attribute</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;Units&quot;</span><span class="p">)]</span>
+                        <span class="o">.</span><span class="n">value</span><span class="p">,</span>
+                    <span class="p">)</span>
+                    <span class="n">attributes</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">dexpi_attribute</span>
+                <span class="k">elif</span> <span class="n">unit_name</span> <span class="ow">in</span> <span class="nb">dir</span><span class="p">(</span><span class="n">enumerations</span><span class="p">):</span>
+                    <span class="n">unit_class</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">enumerations</span><span class="p">,</span> <span class="n">unit_name</span><span class="p">)</span>
+                    <span class="n">attributes</span><span class="p">[</span><span class="n">name</span><span class="p">]</span> <span class="o">=</span> <span class="n">unit_class</span><span class="p">[</span><span class="n">value</span><span class="p">]</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Attribute </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2"> not defined.&quot;</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">attribute_name</span> <span class="ow">in</span> <span class="n">multi_language_strings</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="n">single_language_strings</span> <span class="o">=</span> <span class="n">multi_language_strings</span><span class="p">[</span><span class="n">attribute_name</span><span class="p">]</span>
+            <span class="n">multi_language_string</span> <span class="o">=</span> <span class="n">dataTypes</span><span class="o">.</span><span class="n">MultiLanguageString</span><span class="p">(</span>
+                <span class="n">singleLanguageStrings</span><span class="o">=</span><span class="n">single_language_strings</span>
+            <span class="p">)</span>
+            <span class="n">attributes</span><span class="p">[</span><span class="n">attribute_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">multi_language_string</span>
+        <span class="k">return</span> <span class="n">attributes</span></div>
+</div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Domink Goldstein, Lukas Schulze Balhorn, Artur Schweidtmann.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

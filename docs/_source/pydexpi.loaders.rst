@@ -4,29 +4,12 @@ pydexpi.loaders package
 Submodules
 ----------
 
-pydexpi.loaders.graph\_loader module
-------------------------------------
+.. toctree::
+   :maxdepth: 4
 
-.. automodule:: pydexpi.loaders.graph_loader
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-pydexpi.loaders.proteus\_serializer module
-------------------------------------------
-
-.. automodule:: pydexpi.loaders.proteus_serializer
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-pydexpi.loaders.serializer module
----------------------------------
-
-.. automodule:: pydexpi.loaders.serializer
-   :members:
-   :undoc-members:
-   :show-inheritance:
+   pydexpi.loaders.graph_loader
+   pydexpi.loaders.proteus_serializer
+   pydexpi.loaders.serializer
 
 Module contents
 ---------------

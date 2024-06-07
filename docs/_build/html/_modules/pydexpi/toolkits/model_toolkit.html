@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>pydexpi.toolkits.model_toolkit &mdash; pyDEXPI v0.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../../_static/documentation_options.js?v=fa47ad08"></script>
+        <script src="../../../_static/doctools.js?v=9a2dae69"></script>
+        <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            pyDEXPI
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">pydexpi</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">pyDEXPI</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">pydexpi.toolkits.model_toolkit</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for pydexpi.toolkits.model_toolkit</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Dexpi Model Toolkit</span>
+<span class="sd">--------------------</span>
+<span class="sd">This module contains functions and tools that concern overall of an overall</span>
+<span class="sd">dexpi model/conceptual model.</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">pydexpi.dexpi_classes</span> <span class="kn">import</span> <span class="n">DexpiBaseModel</span>
+<span class="kn">from</span> <span class="nn">pydexpi.dexpi_classes.customization</span> <span class="kn">import</span> <span class="n">CustomAttributeOwner</span>
+<span class="kn">from</span> <span class="nn">pydexpi.dexpi_classes.dexpiModel</span> <span class="kn">import</span> <span class="n">ConceptualModel</span><span class="p">,</span> <span class="n">DexpiModel</span>
+
+
+<div class="viewcode-block" id="combine_dexpi_models">
+<a class="viewcode-back" href="../../../pydexpi.toolkits.model_toolkit.html#pydexpi.toolkits.model_toolkit.combine_dexpi_models">[docs]</a>
+<span class="k">def</span> <span class="nf">combine_dexpi_models</span><span class="p">(</span><span class="n">models</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">DexpiModel</span><span class="p">],</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;This function combines the contents of a list of dexpi models and returns</span>
+<span class="sd">    a new model with its contents.</span>
+
+<span class="sd">    The combination is performed on all list attributes of the conceptual model.</span>
+<span class="sd">    The meta data attribute and the data attributes of the dexpi model can be</span>
+<span class="sd">    passed in via kwargs.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    models : list[DexpiModel]</span>
+<span class="sd">        The list of dexpi models to be combined.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    DexpiModel</span>
+<span class="sd">        The combined dexpi model.</span>
+
+<span class="sd">    Raises</span>
+<span class="sd">    ------</span>
+<span class="sd">    NotImplementedError</span>
+<span class="sd">        Combining diagram information is not yet implemented. If any model</span>
+<span class="sd">        has diagram or shapeCatalog attributes that are not None, Error is</span>
+<span class="sd">        raised.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">for</span> <span class="n">dexpi_model</span> <span class="ow">in</span> <span class="n">models</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="p">[</span><span class="n">dexpi_model</span><span class="o">.</span><span class="n">diagram</span><span class="p">,</span> <span class="n">dexpi_model</span><span class="o">.</span><span class="n">shapeCatalogues</span><span class="p">]:</span>
+            <span class="k">if</span> <span class="n">i</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="p">[]]:</span>
+                <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;Dexpi toolkit does not yet support manipulating diagram information.&quot;</span>
+                <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+
+    <span class="c1"># Retrieve and combine list attributes</span>
+    <span class="n">new_model_args</span> <span class="o">=</span> <span class="n">kwargs</span>
+    <span class="k">for</span> <span class="n">attr_name</span> <span class="ow">in</span> <span class="n">ConceptualModel</span><span class="o">.</span><span class="vm">__annotations__</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">attr_name</span> <span class="o">!=</span> <span class="s2">&quot;metaData&quot;</span><span class="p">:</span>
+            <span class="n">attrs</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="nb">getattr</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">conceptualModel</span><span class="p">,</span> <span class="n">attr_name</span><span class="p">)</span> <span class="k">for</span> <span class="n">model</span> <span class="ow">in</span> <span class="n">models</span>
+            <span class="p">]</span>
+            <span class="n">new_model_args</span><span class="p">[</span><span class="n">attr_name</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="n">item</span> <span class="k">for</span> <span class="n">model_attr_list</span> <span class="ow">in</span> <span class="n">attrs</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">model_attr_list</span>
+            <span class="p">]</span>
+
+    <span class="n">new_conceptual_model</span> <span class="o">=</span> <span class="n">ConceptualModel</span><span class="p">(</span><span class="o">**</span><span class="n">new_model_args</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">DexpiModel</span><span class="p">(</span><span class="n">conceptualModel</span><span class="o">=</span><span class="n">new_conceptual_model</span><span class="p">,</span> <span class="o">**</span><span class="n">new_model_args</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="import_model_contents_into_model">
+<a class="viewcode-back" href="../../../pydexpi.toolkits.model_toolkit.html#pydexpi.toolkits.model_toolkit.import_model_contents_into_model">[docs]</a>
+<span class="k">def</span> <span class="nf">import_model_contents_into_model</span><span class="p">(</span>
+    <span class="n">target_model</span><span class="p">:</span> <span class="n">DexpiModel</span><span class="p">,</span> <span class="n">import_models</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">DexpiModel</span><span class="p">]</span>
+<span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Imports the contents of passed models into target model. Conceptually</span>
+<span class="sd">    similar to combine_dexpi_models, but the target_model is manipulated in</span>
+<span class="sd">    place and its other, non-list attributes are preserved.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    target_model : DexpiModel</span>
+<span class="sd">        The model that is manipulated in place and that the other models are</span>
+<span class="sd">        imported into.</span>
+<span class="sd">    import_models : list[DexpiModel]</span>
+<span class="sd">        The models that are to be imported to the target.</span>
+
+<span class="sd">    Raises</span>
+<span class="sd">    ------</span>
+<span class="sd">    NotImplementedError</span>
+<span class="sd">        Combining diagram information is not yet implemented. If any model</span>
+<span class="sd">        has diagram or shapeCatalog attributes that are not None, Error is</span>
+<span class="sd">        raised.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">for</span> <span class="n">dexpi_model</span> <span class="ow">in</span> <span class="n">import_models</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="p">[</span><span class="n">dexpi_model</span><span class="o">.</span><span class="n">diagram</span><span class="p">,</span> <span class="n">dexpi_model</span><span class="o">.</span><span class="n">shapeCatalogues</span><span class="p">]:</span>
+            <span class="k">if</span> <span class="n">i</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="p">[]]:</span>
+                <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;Dexpi toolkit does not yet support manipulating diagram information.&quot;</span>
+                <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">attr_name</span> <span class="ow">in</span> <span class="n">ConceptualModel</span><span class="o">.</span><span class="vm">__annotations__</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">attr_name</span> <span class="o">!=</span> <span class="s2">&quot;metaData&quot;</span><span class="p">:</span>
+            <span class="n">attrs</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="nb">getattr</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">conceptualModel</span><span class="p">,</span> <span class="n">attr_name</span><span class="p">)</span>
+                <span class="k">for</span> <span class="n">model</span> <span class="ow">in</span> <span class="n">import_models</span>
+            <span class="p">]</span>
+            <span class="n">new_attrs</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="n">item</span> <span class="k">for</span> <span class="n">model_attr_list</span> <span class="ow">in</span> <span class="n">attrs</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">model_attr_list</span>
+            <span class="p">]</span>
+
+            <span class="c1"># Append new attributes</span>
+            <span class="nb">getattr</span><span class="p">(</span><span class="n">target_model</span><span class="o">.</span><span class="n">conceptualModel</span><span class="p">,</span> <span class="n">attr_name</span><span class="p">)</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">new_attrs</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="get_instances_with_attribute">
+<a class="viewcode-back" href="../../../pydexpi.toolkits.model_toolkit.html#pydexpi.toolkits.model_toolkit.get_instances_with_attribute">[docs]</a>
+<span class="k">def</span> <span class="nf">get_instances_with_attribute</span><span class="p">(</span>
+    <span class="n">the_model</span><span class="p">:</span> <span class="n">DexpiBaseModel</span><span class="p">,</span>
+    <span class="n">attribute_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+    <span class="n">target_value</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">dexpi_classes</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+<span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Retrieve all subinstances associated to a dexpi model that have an</span>
+<span class="sd">    attribute with a specified name and target value. The dexpi model is</span>
+<span class="sd">    searched recursively through compositional attributes of all levels.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    the_model : DexpiBaseModel</span>
+<span class="sd">        The model to be searched.</span>
+<span class="sd">    attribute_name : str</span>
+<span class="sd">        The name of the attribute to be identified.</span>
+<span class="sd">    target_value : Any, optional</span>
+<span class="sd">        The value this attribute is supposed to have. Can be none, in which case</span>
+<span class="sd">        any value is permitted</span>
+<span class="sd">    dexpi_classes : tuple, optional</span>
+<span class="sd">        Can specify the classes if only certain class types are to be</span>
+<span class="sd">        considered. If None, all are considered, by default None.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    list</span>
+<span class="sd">        List of discovered instances that have the attribute specified.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">instances_with_attributes</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="c1"># Discover all candidates in the model of the candidate classes</span>
+    <span class="n">all_candidates</span> <span class="o">=</span> <span class="n">get_all_instances_in_model</span><span class="p">(</span><span class="n">the_model</span><span class="p">,</span> <span class="n">dexpi_classes</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">candidate</span> <span class="ow">in</span> <span class="n">all_candidates</span><span class="p">:</span>
+        <span class="c1"># Try retrieving the attribute</span>
+        <span class="n">actual_value</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">attribute_found</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">actual_value</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">candidate</span><span class="p">,</span> <span class="n">attribute_name</span><span class="p">)</span>
+            <span class="n">attribute_found</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
+            <span class="c1"># If none found, look in the custom attributes</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">candidate</span><span class="p">,</span> <span class="n">CustomAttributeOwner</span><span class="p">):</span>
+                <span class="k">for</span> <span class="n">custom_attribute</span> <span class="ow">in</span> <span class="n">candidate</span><span class="o">.</span><span class="n">customAttributes</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">custom_attribute</span><span class="o">.</span><span class="n">attributeName</span> <span class="o">==</span> <span class="n">attribute_name</span><span class="p">:</span>
+                        <span class="n">actual_value</span> <span class="o">=</span> <span class="n">custom_attribute</span><span class="o">.</span><span class="n">value</span>
+                        <span class="n">attribute_found</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">continue</span>
+        <span class="c1"># If value matches target, append to returns</span>
+        <span class="k">if</span> <span class="n">attribute_found</span> <span class="ow">and</span> <span class="p">(</span>
+            <span class="n">actual_value</span> <span class="o">==</span> <span class="n">target_value</span> <span class="ow">or</span> <span class="n">target_value</span> <span class="ow">is</span> <span class="kc">None</span>
+        <span class="p">):</span>
+            <span class="n">instances_with_attributes</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">candidate</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">instances_with_attributes</span></div>
+
+
+
+<div class="viewcode-block" id="get_all_instances_in_model">
+<a class="viewcode-back" href="../../../pydexpi.toolkits.model_toolkit.html#pydexpi.toolkits.model_toolkit.get_all_instances_in_model">[docs]</a>
+<span class="k">def</span> <span class="nf">get_all_instances_in_model</span><span class="p">(</span><span class="n">the_model</span><span class="p">:</span> <span class="n">DexpiBaseModel</span><span class="p">,</span> <span class="n">dexpi_classes</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Recursively discover and collect all instances of specified classes within a model.</span>
+
+<span class="sd">    This function traverses the attributes of the provided model object, recursively inspecting</span>
+<span class="sd">    its attributes and sub-attributes to find all instances of the specified classes. The function</span>
+<span class="sd">    returns a list of all discovered instances.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    the_model : DexpiBaseModel</span>
+<span class="sd">        The root model object to inspect.</span>
+<span class="sd">    dexpi_classes : class or tuple of classes, optional</span>
+<span class="sd">        A tuple of class types to discover within the model. Only instances of these classes will be collected.</span>
+<span class="sd">        If None, all objects are collected.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    list</span>
+<span class="sd">        A list of all discovered instances of the specified classes within the model.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">discover_instances</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">discovered_instances</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Recursively get all compositional attributes of a Python object.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        obj : object</span>
+<span class="sd">            The object to inspect.</span>
+<span class="sd">        discovered_instances : tuple or any</span>
+<span class="sd">            The set that keeps track of the discovered instances.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        discovered_instances : list</span>
+<span class="sd">            Returns the set with discovered instances.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="n">dexpi_classes</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">discovered_instances</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">dexpi_classes</span><span class="p">)</span> <span class="ow">and</span> <span class="n">obj</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">discovered_instances</span><span class="p">:</span>
+            <span class="n">discovered_instances</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">attr_name</span> <span class="ow">in</span> <span class="nb">dir</span><span class="p">(</span><span class="n">obj</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">attr_name</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;__&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">attr_name</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;__&quot;</span><span class="p">):</span>
+                <span class="k">continue</span>  <span class="c1"># Skip built-in attributes</span>
+            <span class="n">attr_value</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">attr_name</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">attr_value</span><span class="p">,</span> <span class="n">DexpiBaseModel</span><span class="p">):</span>
+                <span class="n">discovered_instances</span> <span class="o">=</span> <span class="n">discover_instances</span><span class="p">(</span>
+                    <span class="n">attr_value</span><span class="p">,</span> <span class="n">discovered_instances</span>
+                <span class="p">)</span>
+            <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">attr_value</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+                <span class="k">for</span> <span class="n">element</span> <span class="ow">in</span> <span class="n">attr_value</span><span class="p">:</span>
+                    <span class="n">discovered_instances</span> <span class="o">=</span> <span class="n">discover_instances</span><span class="p">(</span>
+                        <span class="n">element</span><span class="p">,</span> <span class="n">discovered_instances</span>
+                    <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">discovered_instances</span>
+
+    <span class="n">discovered_instances</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">return</span> <span class="n">discover_instances</span><span class="p">(</span><span class="n">the_model</span><span class="p">,</span> <span class="n">discovered_instances</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="object_is_in_model">
+<a class="viewcode-back" href="../../../pydexpi.toolkits.model_toolkit.html#pydexpi.toolkits.model_toolkit.object_is_in_model">[docs]</a>
+<span class="k">def</span> <span class="nf">object_is_in_model</span><span class="p">(</span><span class="n">dexpi_model</span><span class="p">:</span> <span class="n">DexpiModel</span><span class="p">,</span> <span class="n">dexpi_object</span><span class="p">:</span> <span class="n">DexpiBaseModel</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Checks if the given dexpi_object is in some way a member of the given</span>
+<span class="sd">    dexpi_model.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    dexpi_model : DexpiModel</span>
+<span class="sd">        The model to be searched for the object.</span>
+<span class="sd">    dexpi_object : DexpiBaseModel</span>
+<span class="sd">        The object to be searched for in the model.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    bool</span>
+<span class="sd">        True if object is found in the model, False otherwise</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">candidates</span> <span class="o">=</span> <span class="n">get_all_instances_in_model</span><span class="p">(</span><span class="n">dexpi_model</span><span class="p">,</span> <span class="nb">type</span><span class="p">(</span><span class="n">dexpi_object</span><span class="p">))</span>
+    <span class="k">if</span> <span class="n">dexpi_object</span> <span class="ow">in</span> <span class="n">candidates</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">True</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">False</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Domink Goldstein, Lukas Schulze Balhorn, Artur Schweidtmann.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

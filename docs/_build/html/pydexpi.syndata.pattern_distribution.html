@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>pydexpi.syndata.pattern_distribution module &mdash; pyDEXPI v0.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=fa47ad08"></script>
+        <script src="_static/doctools.js?v=9a2dae69"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="pydexpi.toolkits package" href="pydexpi.toolkits.html" />
+    <link rel="prev" title="pydexpi.syndata.pattern module" href="pydexpi.syndata.pattern.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            pyDEXPI
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">pydexpi</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="pydexpi.html">pydexpi package</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="pydexpi.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="pydexpi.dexpi_classes.html">pydexpi.dexpi_classes package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pydexpi.loaders.html">pydexpi.loaders package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pydexpi.pid_development.html">pydexpi.pid_development package</a></li>
+<li class="toctree-l4 current"><a class="reference internal" href="pydexpi.syndata.html">pydexpi.syndata package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="pydexpi.toolkits.html">pydexpi.toolkits package</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="pydexpi.html#module-pydexpi">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">pyDEXPI</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="modules.html">pydexpi</a></li>
+          <li class="breadcrumb-item"><a href="pydexpi.html">pydexpi package</a></li>
+          <li class="breadcrumb-item"><a href="pydexpi.syndata.html">pydexpi.syndata package</a></li>
+      <li class="breadcrumb-item active">pydexpi.syndata.pattern_distribution module</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/pydexpi.syndata.pattern_distribution.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-pydexpi.syndata.pattern_distribution">
+<span id="pydexpi-syndata-pattern-distribution-module"></span><h1>pydexpi.syndata.pattern_distribution module<a class="headerlink" href="#module-pydexpi.syndata.pattern_distribution" title="Link to this heading"></a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="pydexpi.syndata.pattern_distribution.PatternDistribution">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pydexpi.syndata.pattern_distribution.</span></span><span class="sig-name descname"><span class="pre">PatternDistribution</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">distribution</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="pydexpi.syndata.pattern.html#pydexpi.syndata.pattern.Pattern" title="pydexpi.syndata.pattern.Pattern"><span class="pre">Pattern</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">connector_labels</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pydexpi/syndata/pattern_distribution.html#PatternDistribution"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pydexpi.syndata.pattern_distribution.PatternDistribution" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>A PatternDistribution is a collection of Patterns that share the same
+properties with regards to the generation logic. The patterns are grouped
+for the sake of randomness and for structure. The grouping is based on
+similarity mainly regarding:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>Outside connectors.</p></li>
+<li><p>Transition logic.</p></li>
+<li><p>Conceptual similarity (e.g. distillation equipment).</p></li>
+</ul>
+</div></blockquote>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pydexpi.syndata.pattern_distribution.PatternDistribution.name">
+<span class="sig-name descname"><span class="pre">name</span></span><a class="headerlink" href="#pydexpi.syndata.pattern_distribution.PatternDistribution.name" title="Link to this definition"></a></dt>
+<dd><p>The name of the pattern distribution, preferably an umbrella term for
+the patterns contained.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pydexpi.syndata.pattern_distribution.PatternDistribution.distribution">
+<span class="sig-name descname"><span class="pre">distribution</span></span><a class="headerlink" href="#pydexpi.syndata.pattern_distribution.PatternDistribution.distribution" title="Link to this definition"></a></dt>
+<dd><p>The patterns contained in the distribution(keys), with the corresponding
+probabilities stored as the dictionary values.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>dict[<a class="reference internal" href="pydexpi.syndata.pattern.html#pydexpi.syndata.pattern.Pattern" title="pydexpi.syndata.pattern.Pattern">Pattern</a>, float]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pydexpi.syndata.pattern_distribution.PatternDistribution.connector_labels">
+<span class="sig-name descname"><span class="pre">connector_labels</span></span><a class="headerlink" href="#pydexpi.syndata.pattern_distribution.PatternDistribution.connector_labels" title="Link to this definition"></a></dt>
+<dd><p>The labels of the connectors that each of the patterns in the
+distribution must contain.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>list[str]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pydexpi.syndata.pattern_distribution.PatternDistribution.add_pattern">
+<span class="sig-name descname"><span class="pre">add_pattern</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pattern</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="pydexpi.syndata.pattern.html#pydexpi.syndata.pattern.Pattern" title="pydexpi.syndata.pattern.Pattern"><span class="pre">Pattern</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">probability</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">normalize</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pydexpi/syndata/pattern_distribution.html#PatternDistribution.add_pattern"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pydexpi.syndata.pattern_distribution.PatternDistribution.add_pattern" title="Link to this definition"></a></dt>
+<dd><p>Add a pattern to the distribution with a specified probability.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<em>str</em>) – Name of the new patterndistribution</p></li>
+<li><p><strong>pattern</strong> (<a class="reference internal" href="pydexpi.syndata.pattern.html#pydexpi.syndata.pattern.Pattern" title="pydexpi.syndata.pattern.Pattern"><em>Pattern</em></a>) – The pattern to be added to the distribution.</p></li>
+<li><p><strong>probability</strong> (<em>float</em>) – The probability associated with the pattern. Must be between 0 and 1.</p></li>
+<li><p><strong>normalize</strong> (<em>bool</em>) – Wherther the probabilities should be normalized after adding the pattern.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises<span class="colon">:</span></dt>
+<dd class="field-even"><p><strong>ValueError</strong> – If the pattern does not contain all required connectors.
+    If the pattern is already part of the distribution.
+    If the probability is not between 0 and 1.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pydexpi.syndata.pattern_distribution.PatternDistribution.check_pattern_compatibility">
+<span class="sig-name descname"><span class="pre">check_pattern_compatibility</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pattern</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="pydexpi.syndata.pattern.html#pydexpi.syndata.pattern.Pattern" title="pydexpi.syndata.pattern.Pattern"><span class="pre">Pattern</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pydexpi/syndata/pattern_distribution.html#PatternDistribution.check_pattern_compatibility"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pydexpi.syndata.pattern_distribution.PatternDistribution.check_pattern_compatibility" title="Link to this definition"></a></dt>
+<dd><p>Checks if the pattern is compatible with the pattern distribution, ie
+contains all required connector labels. Note that a pattern may have more
+connectors than the required ones to be valid.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>pattern</strong> (<a class="reference internal" href="pydexpi.syndata.pattern.html#pydexpi.syndata.pattern.Pattern" title="pydexpi.syndata.pattern.Pattern"><em>Pattern</em></a>) – The pattern to be evaluated for compatibility</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>True if compatible, else False</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pydexpi.syndata.pattern_distribution.PatternDistribution.load_distribution">
+<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">load_distribution</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dir_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">serializer</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="pydexpi.loaders.serializer.html#pydexpi.loaders.serializer.Serializer" title="pydexpi.loaders.serializer.Serializer"><span class="pre">Serializer</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pydexpi/syndata/pattern_distribution.html#PatternDistribution.load_distribution"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pydexpi.syndata.pattern_distribution.PatternDistribution.load_distribution" title="Link to this definition"></a></dt>
+<dd><p>Loads a distribution in the directory specified in path_dir with the
+name given in name, as previously saved by the save_distribution method.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>path_dir</strong> (<em>Path</em>) – The directory the distribution is saved in.</p></li>
+<li><p><strong>name</strong> (<em>str</em>) – The name of the distribution.</p></li>
+<li><p><strong>serializer</strong> (<a class="reference internal" href="pydexpi.loaders.serializer.html#pydexpi.loaders.serializer.Serializer" title="pydexpi.loaders.serializer.Serializer"><em>Serializer</em></a>) – The serializer to be used for loading.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>The loaded pattern.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="pydexpi.syndata.pattern.html#pydexpi.syndata.pattern.Pattern" title="pydexpi.syndata.pattern.Pattern">Pattern</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pydexpi.syndata.pattern_distribution.PatternDistribution.normalize_probabilities">
+<span class="sig-name descname"><span class="pre">normalize_probabilities</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pydexpi/syndata/pattern_distribution.html#PatternDistribution.normalize_probabilities"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pydexpi.syndata.pattern_distribution.PatternDistribution.normalize_probabilities" title="Link to this definition"></a></dt>
+<dd><p>Normalize the probabilities in the distribution so they sum to 1.</p>
+<p>This method modifies the probabilities in the distribution such that
+the total sum of all probabilities equals 1. If the total probability
+is greater than 0, each probability is divided by the total probability.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pydexpi.syndata.pattern_distribution.PatternDistribution.random_pattern">
+<span class="sig-name descname"><span class="pre">random_pattern</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pydexpi/syndata/pattern_distribution.html#PatternDistribution.random_pattern"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pydexpi.syndata.pattern_distribution.PatternDistribution.random_pattern" title="Link to this definition"></a></dt>
+<dd><p>Samples a pattern from the distribution completely at random,
+disregarding the probabilities.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The randomly sampled pattern.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="pydexpi.syndata.pattern.html#pydexpi.syndata.pattern.Pattern" title="pydexpi.syndata.pattern.Pattern">Pattern</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pydexpi.syndata.pattern_distribution.PatternDistribution.sample_pattern">
+<span class="sig-name descname"><span class="pre">sample_pattern</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pydexpi/syndata/pattern_distribution.html#PatternDistribution.sample_pattern"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pydexpi.syndata.pattern_distribution.PatternDistribution.sample_pattern" title="Link to this definition"></a></dt>
+<dd><p>Samples a pattern from the pattern distribution with respect to the
+probabilities of the distribution.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The sampled pattern.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><a class="reference internal" href="pydexpi.syndata.pattern.html#pydexpi.syndata.pattern.Pattern" title="pydexpi.syndata.pattern.Pattern">Pattern</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pydexpi.syndata.pattern_distribution.PatternDistribution.save_distribution">
+<span class="sig-name descname"><span class="pre">save_distribution</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">dir_path</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">serializer</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="pydexpi.loaders.serializer.html#pydexpi.loaders.serializer.Serializer" title="pydexpi.loaders.serializer.Serializer"><span class="pre">Serializer</span></a></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pydexpi/syndata/pattern_distribution.html#PatternDistribution.save_distribution"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pydexpi.syndata.pattern_distribution.PatternDistribution.save_distribution" title="Link to this definition"></a></dt>
+<dd><p>Saves a distribution to a directory in dirpath with the folder name
+taken from its name attribute. All patterns are saved in a new folder
+with the distribution name, using the dexpi serializer specified in
+serializer. Metadata, specifically the distribution probabilities, are
+saved along in a separate json in that folder.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>path_dir</strong> (<em>str</em>) – The path of the directory the pattern is stored in</p></li>
+<li><p><strong>serializer</strong> (<a class="reference internal" href="pydexpi.loaders.serializer.html#pydexpi.loaders.serializer.Serializer" title="pydexpi.loaders.serializer.Serializer"><em>Serializer</em></a>) – The serializer object to be used for saving</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="pydexpi.syndata.pattern.html" class="btn btn-neutral float-left" title="pydexpi.syndata.pattern module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="pydexpi.toolkits.html" class="btn btn-neutral float-right" title="pydexpi.toolkits package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Domink Goldstein, Lukas Schulze Balhorn, Artur Schweidtmann.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

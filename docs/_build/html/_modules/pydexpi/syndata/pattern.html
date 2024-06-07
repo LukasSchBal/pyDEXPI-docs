@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>pydexpi.syndata.pattern &mdash; pyDEXPI v0.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../../_static/documentation_options.js?v=fa47ad08"></script>
+        <script src="../../../_static/doctools.js?v=9a2dae69"></script>
+        <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            pyDEXPI
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">pydexpi</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">pyDEXPI</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">pydexpi.syndata.pattern</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for pydexpi.syndata.pattern</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">annotations</span>
+
+<span class="kn">from</span> <span class="nn">abc</span> <span class="kn">import</span> <span class="n">ABC</span><span class="p">,</span> <span class="n">abstractmethod</span>
+<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+
+<span class="kn">from</span> <span class="nn">pydexpi.dexpi_classes</span> <span class="kn">import</span> <span class="n">customization</span><span class="p">,</span> <span class="n">piping</span>
+<span class="kn">from</span> <span class="nn">pydexpi.dexpi_classes.customization</span> <span class="kn">import</span> <span class="n">CustomAttributeOwner</span>
+<span class="kn">from</span> <span class="nn">pydexpi.dexpi_classes.dexpiModel</span> <span class="kn">import</span> <span class="n">DexpiModel</span>
+<span class="kn">from</span> <span class="nn">pydexpi.loaders.serializer</span> <span class="kn">import</span> <span class="n">Serializer</span>
+<span class="kn">from</span> <span class="nn">pydexpi.toolkits</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">model_toolkit</span> <span class="k">as</span> <span class="n">mt</span><span class="p">,</span>
+    <span class="n">piping_toolkit</span> <span class="k">as</span> <span class="n">pt</span><span class="p">,</span>
+<span class="p">)</span>
+
+
+<div class="viewcode-block" id="Connector">
+<a class="viewcode-back" href="../../../pydexpi.syndata.pattern.html#pydexpi.syndata.pattern.Connector">[docs]</a>
+<span class="k">class</span> <span class="nc">Connector</span><span class="p">(</span><span class="n">ABC</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Pattern instances contain connectors. These contain information and logic</span>
+<span class="sd">    on the connector that can be accessed by the generator to base its decision</span>
+<span class="sd">    on connection on.</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    referenced_types : tuple of types</span>
+<span class="sd">        Abstract, static attribute. A tuple of types that may be referenced by</span>
+<span class="sd">        this object</span>
+<span class="sd">    label : str</span>
+<span class="sd">        The label of the connector</span>
+<span class="sd">    kwinfos : dict</span>
+<span class="sd">        A dictionary that contains relevant infos which can be retrieved by</span>
+<span class="sd">        keyword. The contents can be dynamically manipulated during generation.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">label</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">reference_object</span><span class="p">:</span> <span class="n">CustomAttributeOwner</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+    <span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Basic, constructor for a connector</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        label : str</span>
+<span class="sd">            Label of the connector</span>
+<span class="sd">        reference_object : DexpiBaseModel</span>
+<span class="sd">            The object of the dexpi model represented by the connector</span>
+<span class="sd">        **kwargs: dict</span>
+<span class="sd">            kwargs that are to be stored in the information dictionary</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        ValueError</span>
+<span class="sd">            If the reference object is not the correct type</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">reference_object</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">referencable_types</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Referenced object </span><span class="si">{</span><span class="n">reference_object</span><span class="si">}</span><span class="s2"> not of &quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;type </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">referencable_types</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">reference_object</span> <span class="o">=</span> <span class="n">reference_object</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">label</span> <span class="o">=</span> <span class="n">label</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">add_dexpi_label</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">kwinfos</span> <span class="o">=</span> <span class="n">kwargs</span>
+
+    <span class="nd">@property</span>
+    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">referencable_types</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Tuple of classes that are valid to be referenced. This static</span>
+<span class="sd">        attribute is subclass-specific.&quot;&quot;&quot;</span>
+        <span class="k">pass</span>
+
+<div class="viewcode-block" id="Connector.get_dexpi_custom_attribute_label">
+<a class="viewcode-back" href="../../../pydexpi.syndata.pattern.html#pydexpi.syndata.pattern.Connector.get_dexpi_custom_attribute_label">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">get_dexpi_custom_attribute_label</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the name of the attribute label associated to each of the</span>
+<span class="sd">        connector subclasses, as used to store the reference in dexpi.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;ConnectorLabel_</span><span class="si">{</span><span class="bp">cls</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">&quot;</span></div>
+
+
+<div class="viewcode-block" id="Connector.import_from_valid_reference_object">
+<a class="viewcode-back" href="../../../pydexpi.syndata.pattern.html#pydexpi.syndata.pattern.Connector.import_from_valid_reference_object">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">import_from_valid_reference_object</span><span class="p">(</span>
+        <span class="bp">cls</span><span class="p">,</span> <span class="n">reference_object</span><span class="p">:</span> <span class="n">CustomAttributeOwner</span>
+    <span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Create an instance from a valid reference object.</span>
+
+<span class="sd">        This class method attempts to create an instance of the class by</span>
+<span class="sd">        searching for an associated custom attribute within the provided</span>
+<span class="sd">        reference object. If no appropriate label is not found, a `ValueError` is raised.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        reference_object : CustomAttributeOwner</span>
+<span class="sd">            An object that contains custom attributes.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        instance of cls</span>
+<span class="sd">            An instance of the class initialized with the value of the found</span>
+<span class="sd">            custom attribute and the reference object.</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        ValueError</span>
+<span class="sd">            If no appropriate label is not found.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">label_attribute</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">for</span> <span class="n">attribute</span> <span class="ow">in</span> <span class="n">reference_object</span><span class="o">.</span><span class="n">customAttributes</span><span class="p">:</span>
+            <span class="k">if</span> <span class="p">(</span>
+                <span class="n">attribute</span><span class="o">.</span><span class="n">attributeName</span>
+                <span class="o">==</span> <span class="bp">cls</span><span class="o">.</span><span class="n">get_dexpi_custom_attribute_label</span><span class="p">()</span>
+            <span class="p">):</span>
+                <span class="n">label_attribute</span> <span class="o">=</span> <span class="n">attribute</span>
+        <span class="k">if</span> <span class="n">label_attribute</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Object </span><span class="si">{</span><span class="n">reference_object</span><span class="si">}</span><span class="s2"> not a valid reference object&quot;</span>
+            <span class="p">)</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="n">label_attribute</span><span class="o">.</span><span class="n">value</span><span class="p">,</span> <span class="n">reference_object</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Connector.connect_to_counterpart">
+<a class="viewcode-back" href="../../../pydexpi.syndata.pattern.html#pydexpi.syndata.pattern.Connector.connect_to_counterpart">[docs]</a>
+    <span class="nd">@abstractmethod</span>
+    <span class="k">def</span> <span class="nf">connect_to_counterpart</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">counterpart</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;The method invokes a connection between the connection and its</span>
+<span class="sd">        counterpart. The implementation to this is subclass specific.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        counterpart : (subclass specific type)</span>
+<span class="sd">            The other connector that is to be connected to.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        None</span>
+<span class="sd">            This method only performs the connection in the pattern and deletes</span>
+<span class="sd">            the connector object and its counterpart.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span></div>
+
+
+<div class="viewcode-block" id="Connector.add_dexpi_label">
+<a class="viewcode-back" href="../../../pydexpi.syndata.pattern.html#pydexpi.syndata.pattern.Connector.add_dexpi_label">[docs]</a>
+    <span class="k">def</span> <span class="nf">add_dexpi_label</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Adds a label in the form of a custom attribute to the referenced</span>
+<span class="sd">        object, so that it can be recovered after serialization.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">new_attribute</span> <span class="o">=</span> <span class="n">customization</span><span class="o">.</span><span class="n">CustomAttribute</span><span class="p">(</span>
+            <span class="n">attributeName</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;ConnectorLabel_</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+            <span class="n">value</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">label</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">reference_object</span><span class="o">.</span><span class="n">customAttributes</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">new_attribute</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Connector.remove_dexpi_label">
+<a class="viewcode-back" href="../../../pydexpi.syndata.pattern.html#pydexpi.syndata.pattern.Connector.remove_dexpi_label">[docs]</a>
+    <span class="k">def</span> <span class="nf">remove_dexpi_label</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Removes the custom attribute labels used for serialization from the</span>
+<span class="sd">        referenced object to avoid artefacts in exporting patterns.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">custom_attribute</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">reference_object</span><span class="o">.</span><span class="n">customAttributes</span><span class="p">:</span>
+            <span class="k">if</span> <span class="p">(</span>
+                <span class="n">custom_attribute</span><span class="o">.</span><span class="n">attributeName</span>
+                <span class="o">==</span> <span class="sa">f</span><span class="s2">&quot;ConnectorLabel_</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">reference_object</span><span class="o">.</span><span class="n">customAttributes</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">custom_attribute</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Connector.get_information">
+<a class="viewcode-back" href="../../../pydexpi.syndata.pattern.html#pydexpi.syndata.pattern.Connector.get_information">[docs]</a>
+    <span class="k">def</span> <span class="nf">get_information</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">label</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">kwinfos</span><span class="p">)</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="BasicPipingInConnector">
+<a class="viewcode-back" href="../../../pydexpi.syndata.pattern.html#pydexpi.syndata.pattern.BasicPipingInConnector">[docs]</a>
+<span class="k">class</span> <span class="nc">BasicPipingInConnector</span><span class="p">(</span><span class="n">Connector</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Extends the Connector for a basic piping in connection&quot;&quot;&quot;</span>
+
+    <span class="n">referencable_types</span> <span class="o">=</span> <span class="p">(</span><span class="n">piping</span><span class="o">.</span><span class="n">PipingNode</span><span class="p">,</span> <span class="n">piping</span><span class="o">.</span><span class="n">PipingTargetItem</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">label</span><span class="p">,</span> <span class="n">reference_object</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">label</span><span class="p">,</span> <span class="n">reference_object</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+<div class="viewcode-block" id="BasicPipingInConnector.connect_to_counterpart">
+<a class="viewcode-back" href="../../../pydexpi.syndata.pattern.html#pydexpi.syndata.pattern.BasicPipingInConnector.connect_to_counterpart">[docs]</a>
+    <span class="k">def</span> <span class="nf">connect_to_counterpart</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">counterpart</span><span class="p">:</span> <span class="n">BasicPipingOutConnector</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">counterpart</span><span class="p">,</span> <span class="n">BasicPipingOutConnector</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;Counterpart must be a BasicPipingOutConnector&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">counterpart</span><span class="o">.</span><span class="n">connect_to_counterpart</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="BasicPipingOutConnector">
+<a class="viewcode-back" href="../../../pydexpi.syndata.pattern.html#pydexpi.syndata.pattern.BasicPipingOutConnector">[docs]</a>
+<span class="k">class</span> <span class="nc">BasicPipingOutConnector</span><span class="p">(</span><span class="n">Connector</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Extends the Connector for a basic piping out connection&quot;&quot;&quot;</span>
+
+    <span class="n">referencable_types</span> <span class="o">=</span> <span class="n">piping</span><span class="o">.</span><span class="n">PipingNetworkSegment</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">label</span><span class="p">,</span> <span class="n">reference_object</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="c1"># Init super</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">label</span><span class="p">,</span> <span class="n">reference_object</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="c1"># Check if segment is free and unconnected</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">pt</span><span class="o">.</span><span class="n">segment_is_free_and_unconnected</span><span class="p">(</span><span class="n">reference_object</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Segment </span><span class="si">{</span><span class="n">reference_object</span><span class="si">}</span><span class="s2"> isnt unconnected and &quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;is not suitable for the PipingOutConnector&quot;</span>
+            <span class="p">)</span>
+
+<div class="viewcode-block" id="BasicPipingOutConnector.connect_to_counterpart">
+<a class="viewcode-back" href="../../../pydexpi.syndata.pattern.html#pydexpi.syndata.pattern.BasicPipingOutConnector.connect_to_counterpart">[docs]</a>
+    <span class="k">def</span> <span class="nf">connect_to_counterpart</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">counterpart</span><span class="p">:</span> <span class="n">BasicPipingInConnector</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">counterpart</span><span class="p">,</span> <span class="n">BasicPipingInConnector</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;Counterpart must be a BasicPipingInConnector&quot;</span><span class="p">)</span>
+        <span class="n">pt</span><span class="o">.</span><span class="n">connect_piping_network_segment</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">reference_object</span><span class="p">,</span> <span class="n">counterpart</span><span class="o">.</span><span class="n">reference_object</span>
+        <span class="p">)</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="Pattern">
+<a class="viewcode-back" href="../../../pydexpi.syndata.pattern.html#pydexpi.syndata.pattern.Pattern">[docs]</a>
+<span class="k">class</span> <span class="nc">Pattern</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A pattern is a wrapper class for a DexpiModel for the generator.</span>
+<span class="sd">    It describes a given P&amp;ID state and contatins connector references as</span>
+<span class="sd">    interfaces.</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    name : str</span>
+<span class="sd">        The name reference of the Pattern</span>
+<span class="sd">    model : DexpiModel</span>
+<span class="sd">        The instance of the dexpi model wrapped by this pattern for the</span>
+<span class="sd">        generator.</span>
+<span class="sd">    connectors : list[Connectors]</span>
+<span class="sd">        The connectors associated to this pattern, defining its interfaces for</span>
+<span class="sd">        connection by the generator.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">model</span><span class="p">:</span> <span class="n">DexpiModel</span><span class="p">,</span> <span class="n">connectors</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="n">Connector</span><span class="p">]</span>
+    <span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Default constructor for a pattern. Name, model, and connectors are</span>
+<span class="sd">        passed to be stored in the new instance of the Pattern class. The</span>
+<span class="sd">        constructor includes a validity check to make sure all object referenced</span>
+<span class="sd">        by the connectors are in fact part of the model.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        name : str</span>
+<span class="sd">            The name of the new pattern.</span>
+<span class="sd">        model : DexpiModel</span>
+<span class="sd">            The model to be wrapped by the new instance of the pattern.</span>
+<span class="sd">        connectors : list[Connector]</span>
+<span class="sd">            The connectors associated to the pattern.</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        ValueError</span>
+<span class="sd">            If a connector references an object outside the pattern model.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Check if all connectors reference an object in the model</span>
+        <span class="k">for</span> <span class="n">connector</span> <span class="ow">in</span> <span class="n">connectors</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">mt</span><span class="o">.</span><span class="n">object_is_in_model</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">connector</span><span class="o">.</span><span class="n">reference_object</span><span class="p">):</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                    <span class="s2">&quot;Invalid connector references object outside of the model&quot;</span>
+                <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">model</span> <span class="o">=</span> <span class="n">model</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">connectors</span> <span class="o">=</span> <span class="n">connectors</span>
+
+<div class="viewcode-block" id="Pattern.init_by_inferring_connectors">
+<a class="viewcode-back" href="../../../pydexpi.syndata.pattern.html#pydexpi.syndata.pattern.Pattern.init_by_inferring_connectors">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">init_by_inferring_connectors</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">model</span><span class="p">:</span> <span class="n">DexpiModel</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;This method acts as a second constructor in which the connectors are</span>
+<span class="sd">        not passed explicitly, but are inferred by the labels in the dexpi</span>
+<span class="sd">        model.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        name : str</span>
+<span class="sd">            The name of the pattern.</span>
+<span class="sd">        model : DexpiModel</span>
+<span class="sd">            The model to be stored in the pattern.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Pattern</span>
+<span class="sd">            The newly generated pattern.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Infer the connectors from valid types</span>
+        <span class="n">connectors</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">ConnectorType</span> <span class="ow">in</span> <span class="n">Connector</span><span class="o">.</span><span class="n">__subclasses__</span><span class="p">():</span>
+            <span class="n">valid_dexpi_reference_types</span> <span class="o">=</span> <span class="n">ConnectorType</span><span class="o">.</span><span class="n">referencable_types</span>
+            <span class="n">connector_objects</span> <span class="o">=</span> <span class="n">mt</span><span class="o">.</span><span class="n">get_instances_with_attribute</span><span class="p">(</span>
+                <span class="n">model</span><span class="p">,</span>
+                <span class="n">ConnectorType</span><span class="o">.</span><span class="n">get_dexpi_custom_attribute_label</span><span class="p">(),</span>
+                <span class="n">dexpi_classes</span><span class="o">=</span><span class="n">valid_dexpi_reference_types</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="k">for</span> <span class="n">candidate</span> <span class="ow">in</span> <span class="n">connector_objects</span><span class="p">:</span>
+                <span class="n">new_connector</span> <span class="o">=</span> <span class="p">(</span>
+                    <span class="n">ConnectorType</span><span class="o">.</span><span class="n">import_from_valid_reference_object</span><span class="p">(</span><span class="n">candidate</span><span class="p">)</span>
+                <span class="p">)</span>
+                <span class="n">connectors</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">new_connector</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">model</span><span class="p">,</span> <span class="n">connectors</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Pattern.connect_to_counterpart">
+<a class="viewcode-back" href="../../../pydexpi.syndata.pattern.html#pydexpi.syndata.pattern.Pattern.connect_to_counterpart">[docs]</a>
+    <span class="k">def</span> <span class="nf">connect_to_counterpart</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">own_connector</span><span class="p">:</span> <span class="n">Connector</span><span class="p">,</span>
+        <span class="n">counterpart</span><span class="p">:</span> <span class="n">Pattern</span><span class="p">,</span>
+        <span class="n">counterpart_connector</span><span class="p">:</span> <span class="n">Connector</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Pattern</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;This method connects this pattern to another pattern via the</span>
+<span class="sd">        connectors specified.</span>
+
+<span class="sd">        Note that the contents of the counterpart pattern are imported into this</span>
+<span class="sd">        pattern, instead of generating a new pattern (Notably, the contents of</span>
+<span class="sd">        its dexpi model, such as meta data). That way, e.g. the current_pattern</span>
+<span class="sd">        in a generator can be conserved rather than having to be replaced at</span>
+<span class="sd">        every step.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        own_connector : Connector</span>
+<span class="sd">            The connector in this pattern (self) that should be used for</span>
+<span class="sd">            connection to the counterpart.</span>
+<span class="sd">        counterpart : Pattern</span>
+<span class="sd">            The counterpart that should be connected and incorporated to this.</span>
+<span class="sd">            pattern.</span>
+<span class="sd">        counterpart_connector : Connector</span>
+<span class="sd">            The connector in the counterpart pattern that should be used for</span>
+<span class="sd">            connection to this pattern (self).</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Pattern</span>
+<span class="sd">            A reference to self after connection is completed.</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        ValueError</span>
+<span class="sd">            If either the own_connector or the connector of the counterpart are</span>
+<span class="sd">            not associated to the corresponding patterns.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">own_connector</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">connectors</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s2">&quot;Connector argument own_connector not in this patterns connectors&quot;</span>
+            <span class="p">)</span>
+        <span class="k">if</span> <span class="n">counterpart_connector</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">counterpart</span><span class="o">.</span><span class="n">connectors</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s2">&quot;Connector argument counterpart_connector not in the counterpart patterns connectors&quot;</span>
+            <span class="p">)</span>
+
+        <span class="c1"># Connect connectors</span>
+        <span class="n">own_connector</span><span class="o">.</span><span class="n">connect_to_counterpart</span><span class="p">(</span><span class="n">counterpart_connector</span><span class="p">)</span>
+
+        <span class="c1"># Append new connectors to the pattern and delete connected connectors</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">connectors</span> <span class="o">+=</span> <span class="n">counterpart</span><span class="o">.</span><span class="n">connectors</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">connectors</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">own_connector</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">connectors</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">counterpart_connector</span><span class="p">)</span>
+
+        <span class="c1"># Combine models (If everything above has passed without exceptions)</span>
+        <span class="n">mt</span><span class="o">.</span><span class="n">import_model_contents_into_model</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">,</span> <span class="p">[</span><span class="n">counterpart</span><span class="o">.</span><span class="n">model</span><span class="p">])</span>
+
+        <span class="k">return</span> <span class="bp">self</span></div>
+
+
+<div class="viewcode-block" id="Pattern.load_pattern">
+<a class="viewcode-back" href="../../../pydexpi.syndata.pattern.html#pydexpi.syndata.pattern.Pattern.load_pattern">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">load_pattern</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">path_dir</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">serializer</span><span class="p">:</span> <span class="n">Serializer</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Loads a pattern in the directory specified in path_dir with the name</span>
+<span class="sd">        given in name.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        path_dir : Path</span>
+<span class="sd">            The directory the pattern is saved in.</span>
+<span class="sd">        name : str</span>
+<span class="sd">            The name of the pattern.</span>
+<span class="sd">        serializer : Serializer</span>
+<span class="sd">            The serializer to be used for loading.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Pattern</span>
+<span class="sd">            The loaded pattern.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">new_model</span> <span class="o">=</span> <span class="n">serializer</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">path_dir</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="o">.</span><span class="n">init_by_inferring_connectors</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">new_model</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Pattern.save_pattern">
+<a class="viewcode-back" href="../../../pydexpi.syndata.pattern.html#pydexpi.syndata.pattern.Pattern.save_pattern">[docs]</a>
+    <span class="k">def</span> <span class="nf">save_pattern</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path_dir</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span> <span class="n">serializer</span><span class="p">:</span> <span class="n">Serializer</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Saves a pattern to a directory in dirpath with the file name taken</span>
+<span class="sd">        from its name attribute. For this, it uses the dexpi serializer</span>
+<span class="sd">        specified in serializer.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        path_dir : Path</span>
+<span class="sd">            The path of the directory the pattern is stored in</span>
+<span class="sd">        serializer : Serializer</span>
+<span class="sd">            The serializer object to be used for saving</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">serializer</span><span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">,</span> <span class="n">path_dir</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span></div>
+
+
+    <span class="c1"># Some dunder methods to make patterns suitable for keys in dicts in</span>
+    <span class="c1"># PatternDistributions</span>
+    <span class="k">def</span> <span class="fm">__eq__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">id</span> <span class="o">==</span> <span class="n">other</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">id</span>
+
+    <span class="k">def</span> <span class="fm">__hash__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">hash</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">id</span><span class="p">)</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Domink Goldstein, Lukas Schulze Balhorn, Artur Schweidtmann.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

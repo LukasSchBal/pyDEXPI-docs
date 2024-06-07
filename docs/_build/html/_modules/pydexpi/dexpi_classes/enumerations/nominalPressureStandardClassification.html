@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>pydexpi.dexpi_classes.enumerations.nominalPressureStandardClassification &mdash; pyDEXPI v0.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../../../_static/documentation_options.js?v=fa47ad08"></script>
+        <script src="../../../../_static/doctools.js?v=9a2dae69"></script>
+        <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../../index.html" class="icon icon-home">
+            pyDEXPI
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../modules.html">pydexpi</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">pyDEXPI</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">pydexpi.dexpi_classes.enumerations.nominalPressureStandardClassification</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for pydexpi.dexpi_classes.enumerations.nominalPressureStandardClassification</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;This module contains a pydantic class for the DEXPI NominalPressureStandardClassification enumeration&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">enum</span> <span class="kn">import</span> <span class="n">Enum</span>
+
+
+<div class="viewcode-block" id="NominalPressureStandardClassification">
+<a class="viewcode-back" href="../../../../pydexpi.dexpi_classes.enumerations.nominalPressureStandardClassification.html#pydexpi.dexpi_classes.enumerations.nominalPressureStandardClassification.NominalPressureStandardClassification">[docs]</a>
+<span class="k">class</span> <span class="nc">NominalPressureStandardClassification</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">Enum</span><span class="p">):</span>
+    <span class="c1"># Literals:</span>
+    <span class="n">NULL</span> <span class="o">=</span> <span class="s2">&quot;null&quot;</span>
+    <span class="n">Class10000PsiArtefact</span> <span class="o">=</span> <span class="s2">&quot;Class 10000 psi&quot;</span>
+    <span class="n">Class1000KpaArtefact</span> <span class="o">=</span> <span class="s2">&quot;Class 1000 kpa&quot;</span>
+    <span class="n">Class125LbsArtefact</span> <span class="o">=</span> <span class="s2">&quot;Class 125 lbs&quot;</span>
+    <span class="n">Class15000PsiArtefact</span> <span class="o">=</span> <span class="s2">&quot;Class 15000 psi&quot;</span>
+    <span class="n">Class1500LbsArtefact</span> <span class="o">=</span> <span class="s2">&quot;Class 1500 lbs&quot;</span>
+    <span class="n">Class150LbsArtefact</span> <span class="o">=</span> <span class="s2">&quot;Class 150 lbs&quot;</span>
+    <span class="n">Class16BarArtefact</span> <span class="o">=</span> <span class="s2">&quot;Class 16 bar&quot;</span>
+    <span class="n">Class20000PsiArtefact</span> <span class="o">=</span> <span class="s2">&quot;Class 20000 psi&quot;</span>
+    <span class="n">Class2000PsiArtefact</span> <span class="o">=</span> <span class="s2">&quot;Class 2000 psi&quot;</span>
+    <span class="n">Class2500LbsArtefact</span> <span class="o">=</span> <span class="s2">&quot;Class 2500 lbs&quot;</span>
+    <span class="n">Class250PsiArtefact</span> <span class="o">=</span> <span class="s2">&quot;Class 250 psi&quot;</span>
+    <span class="n">Class3000PsiArtefact</span> <span class="o">=</span> <span class="s2">&quot;Class 3000 psi&quot;</span>
+    <span class="n">Class300LbsArtefact</span> <span class="o">=</span> <span class="s2">&quot;Class 300 lbs&quot;</span>
+    <span class="n">Class300PsiArtefact</span> <span class="o">=</span> <span class="s2">&quot;Class 300 psi&quot;</span>
+    <span class="n">Class315BarArtefact</span> <span class="o">=</span> <span class="s2">&quot;Class 315 bar&quot;</span>
+    <span class="n">Class345BarArtefact</span> <span class="o">=</span> <span class="s2">&quot;Class 345 bar&quot;</span>
+    <span class="n">Class350BarArtefact</span> <span class="o">=</span> <span class="s2">&quot;Class 350 bar&quot;</span>
+    <span class="n">Class4000PsiArtefact</span> <span class="o">=</span> <span class="s2">&quot;Class 4000 psi&quot;</span>
+    <span class="n">Class400LbsArtefact</span> <span class="o">=</span> <span class="s2">&quot;Class 400 lbs&quot;</span>
+    <span class="n">Class4500LbsArtefact</span> <span class="o">=</span> <span class="s2">&quot;Class 4500 lbs&quot;</span>
+    <span class="n">Class4500PsiArtefact</span> <span class="o">=</span> <span class="s2">&quot;Class 4500 psi&quot;</span>
+    <span class="n">Class5000PsiArtefact</span> <span class="o">=</span> <span class="s2">&quot;Class 5000 psi&quot;</span>
+    <span class="n">Class50BarArtefact</span> <span class="o">=</span> <span class="s2">&quot;Class 50 bar&quot;</span>
+    <span class="n">Class517BarArtefact</span> <span class="o">=</span> <span class="s2">&quot;Class 517 bar&quot;</span>
+    <span class="n">Class6000PsiArtefact</span> <span class="o">=</span> <span class="s2">&quot;Class 6000 psi&quot;</span>
+    <span class="n">Class600LbsArtefact</span> <span class="o">=</span> <span class="s2">&quot;Class 600 lbs&quot;</span>
+    <span class="n">Class690BarArtefact</span> <span class="o">=</span> <span class="s2">&quot;Class 690 bar&quot;</span>
+    <span class="n">Class800LbsArtefact</span> <span class="o">=</span> <span class="s2">&quot;Class 800 lbs&quot;</span>
+    <span class="n">Class800PsiArtefact</span> <span class="o">=</span> <span class="s2">&quot;Class 800 psi&quot;</span>
+    <span class="n">Class850KpaArtefact</span> <span class="o">=</span> <span class="s2">&quot;Class 850 kpa&quot;</span>
+    <span class="n">Class9000LbsArtefact</span> <span class="o">=</span> <span class="s2">&quot;Class 9000 lbs&quot;</span>
+    <span class="n">Class900LbsArtefact</span> <span class="o">=</span> <span class="s2">&quot;Class 900 lbs&quot;</span>
+    <span class="n">En1333Pn100Artefact</span> <span class="o">=</span> <span class="s2">&quot;PN 100 (EN 1333)&quot;</span>
+    <span class="n">En1333Pn10Artefact</span> <span class="o">=</span> <span class="s2">&quot;PN 10 (EN 1333)&quot;</span>
+    <span class="n">En1333Pn160Artefact</span> <span class="o">=</span> <span class="s2">&quot;PN 160 (EN 1333)&quot;</span>
+    <span class="n">En1333Pn16Artefact</span> <span class="o">=</span> <span class="s2">&quot;PN 16 (EN 1333)&quot;</span>
+    <span class="n">En1333Pn2_c_5Artefact</span> <span class="o">=</span> <span class="s2">&quot;PN 2,5 (EN 1333)&quot;</span>
+    <span class="n">En1333Pn250Artefact</span> <span class="o">=</span> <span class="s2">&quot;PN 250 (EN 1333)&quot;</span>
+    <span class="n">En1333Pn25Artefact</span> <span class="o">=</span> <span class="s2">&quot;PN 25 (EN 1333)&quot;</span>
+    <span class="n">En1333Pn320Artefact</span> <span class="o">=</span> <span class="s2">&quot;PN 320 (EN 1333)&quot;</span>
+    <span class="n">En1333Pn400Artefact</span> <span class="o">=</span> <span class="s2">&quot;PN 400 (EN 1333)&quot;</span>
+    <span class="n">En1333Pn40Artefact</span> <span class="o">=</span> <span class="s2">&quot;PN 40 (EN 1333)&quot;</span>
+    <span class="n">En1333Pn63Artefact</span> <span class="o">=</span> <span class="s2">&quot;PN 63 (EN 1333)&quot;</span>
+    <span class="n">En1333Pn6Artefact</span> <span class="o">=</span> <span class="s2">&quot;PN 6 (EN 1333)&quot;</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Domink Goldstein, Lukas Schulze Balhorn, Artur Schweidtmann.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

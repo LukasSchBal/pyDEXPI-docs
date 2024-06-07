@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>pydexpi.syndata.pattern_distribution &mdash; pyDEXPI v0.1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../../_static/documentation_options.js?v=fa47ad08"></script>
+        <script src="../../../_static/doctools.js?v=9a2dae69"></script>
+        <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            pyDEXPI
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">pydexpi</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">pyDEXPI</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">pydexpi.syndata.pattern_distribution</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for pydexpi.syndata.pattern_distribution</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">from</span> <span class="nn">copy</span> <span class="kn">import</span> <span class="n">deepcopy</span>
+<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">from</span> <span class="nn">random</span> <span class="kn">import</span> <span class="n">choices</span><span class="p">,</span> <span class="n">randint</span>
+
+<span class="kn">from</span> <span class="nn">pydexpi.loaders.serializer</span> <span class="kn">import</span> <span class="n">Serializer</span>
+<span class="kn">from</span> <span class="nn">pydexpi.syndata.pattern</span> <span class="kn">import</span> <span class="n">Pattern</span>
+
+
+<div class="viewcode-block" id="PatternDistribution">
+<a class="viewcode-back" href="../../../pydexpi.syndata.pattern_distribution.html#pydexpi.syndata.pattern_distribution.PatternDistribution">[docs]</a>
+<span class="k">class</span> <span class="nc">PatternDistribution</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A PatternDistribution is a collection of Patterns that share the same</span>
+<span class="sd">    properties with regards to the generation logic. The patterns are grouped</span>
+<span class="sd">    for the sake of randomness and for structure. The grouping is based on</span>
+<span class="sd">    similarity mainly regarding:</span>
+<span class="sd">        - Outside connectors.</span>
+<span class="sd">        - Transition logic.</span>
+<span class="sd">        - Conceptual similarity (e.g. distillation equipment).</span>
+
+<span class="sd">    Attributes</span>
+<span class="sd">    ----------</span>
+<span class="sd">    name : str</span>
+<span class="sd">        The name of the pattern distribution, preferably an umbrella term for</span>
+<span class="sd">        the patterns contained.</span>
+<span class="sd">    distribution : dict[Pattern, float]</span>
+<span class="sd">        The patterns contained in the distribution(keys), with the corresponding</span>
+<span class="sd">        probabilities stored as the dictionary values.</span>
+<span class="sd">    connector_labels : list[str]</span>
+<span class="sd">        The labels of the connectors that each of the patterns in the</span>
+<span class="sd">        distribution must contain.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+        <span class="n">distribution</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="n">Pattern</span><span class="p">,</span> <span class="nb">float</span><span class="p">],</span>
+        <span class="n">connector_labels</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Constructor of a pattern distribution. Name, distribution, and</span>
+<span class="sd">        connector_labels stored as attributes. Each pattern in the distribution</span>
+<span class="sd">        is validated against the connector labels.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        name : str</span>
+<span class="sd">            The name of the distribution.</span>
+<span class="sd">        distribution : dict[Pattern, float]</span>
+<span class="sd">            Dictionary of patterns and corresponding probabilities stored by the</span>
+<span class="sd">            new distribution.</span>
+<span class="sd">        connector_labels : list[str]</span>
+<span class="sd">            The labels of the connectors that each pattern needs to have to be</span>
+<span class="sd">            part of the distribution.</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        ValueError</span>
+<span class="sd">            In case a pattern of the distribution does not fulfil the connector</span>
+<span class="sd">            requirements.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">connector_labels</span> <span class="o">=</span> <span class="n">connector_labels</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">name</span>
+        <span class="k">for</span> <span class="n">pattern</span> <span class="ow">in</span> <span class="n">distribution</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">check_pattern_compatibility</span><span class="p">(</span><span class="n">pattern</span><span class="p">):</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                    <span class="s2">&quot;Not all patterns in passed distribution compatible&quot;</span>
+                <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">distribution</span> <span class="o">=</span> <span class="n">distribution</span>
+
+<div class="viewcode-block" id="PatternDistribution.add_pattern">
+<a class="viewcode-back" href="../../../pydexpi.syndata.pattern_distribution.html#pydexpi.syndata.pattern_distribution.PatternDistribution.add_pattern">[docs]</a>
+    <span class="k">def</span> <span class="nf">add_pattern</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">pattern</span><span class="p">:</span> <span class="n">Pattern</span><span class="p">,</span> <span class="n">probability</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">normalize</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Add a pattern to the distribution with a specified probability.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        name: str</span>
+<span class="sd">            Name of the new patterndistribution</span>
+<span class="sd">        pattern : Pattern</span>
+<span class="sd">            The pattern to be added to the distribution.</span>
+<span class="sd">        probability : float</span>
+<span class="sd">            The probability associated with the pattern. Must be between 0 and 1.</span>
+<span class="sd">        normalize: bool</span>
+<span class="sd">            Wherther the probabilities should be normalized after adding the pattern.</span>
+
+<span class="sd">        Raises</span>
+<span class="sd">        ------</span>
+<span class="sd">        ValueError</span>
+<span class="sd">            If the pattern does not contain all required connectors.</span>
+<span class="sd">            If the pattern is already part of the distribution.</span>
+<span class="sd">            If the probability is not between 0 and 1.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">check_pattern_compatibility</span><span class="p">(</span><span class="n">pattern</span><span class="p">):</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;Pattern </span><span class="si">{</span><span class="n">pattern</span><span class="si">}</span><span class="s2"> does not contain all required connectors to be added to distribution.&quot;</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">pattern</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">distribution</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Pattern </span><span class="si">{</span><span class="n">pattern</span><span class="si">}</span><span class="s2"> already part of distribution.&quot;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">distribution</span><span class="p">[</span><span class="n">pattern</span><span class="p">]</span> <span class="o">=</span> <span class="n">probability</span>
+        <span class="k">if</span> <span class="n">normalize</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">normalize_probabilities</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="PatternDistribution.normalize_probabilities">
+<a class="viewcode-back" href="../../../pydexpi.syndata.pattern_distribution.html#pydexpi.syndata.pattern_distribution.PatternDistribution.normalize_probabilities">[docs]</a>
+    <span class="k">def</span> <span class="nf">normalize_probabilities</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Normalize the probabilities in the distribution so they sum to 1.</span>
+
+<span class="sd">        This method modifies the probabilities in the distribution such that</span>
+<span class="sd">        the total sum of all probabilities equals 1. If the total probability</span>
+<span class="sd">        is greater than 0, each probability is divided by the total probability.</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">total_prob</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">distribution</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
+        <span class="k">if</span> <span class="n">total_prob</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">pattern</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">distribution</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">distribution</span><span class="p">[</span><span class="n">pattern</span><span class="p">]</span> <span class="o">/=</span> <span class="n">total_prob</span></div>
+
+
+<div class="viewcode-block" id="PatternDistribution.check_pattern_compatibility">
+<a class="viewcode-back" href="../../../pydexpi.syndata.pattern_distribution.html#pydexpi.syndata.pattern_distribution.PatternDistribution.check_pattern_compatibility">[docs]</a>
+    <span class="k">def</span> <span class="nf">check_pattern_compatibility</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pattern</span><span class="p">:</span> <span class="n">Pattern</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Checks if the pattern is compatible with the pattern distribution, ie</span>
+<span class="sd">        contains all required connector labels. Note that a pattern may have more</span>
+<span class="sd">        connectors than the required ones to be valid.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        pattern : Pattern</span>
+<span class="sd">            The pattern to be evaluated for compatibility</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        bool</span>
+<span class="sd">            True if compatible, else False</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">visited</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">connector_label</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">connector_labels</span><span class="p">:</span>
+            <span class="n">label_found</span> <span class="o">=</span> <span class="kc">False</span>
+            <span class="k">for</span> <span class="n">con</span> <span class="ow">in</span> <span class="n">pattern</span><span class="o">.</span><span class="n">connectors</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">con</span><span class="o">.</span><span class="n">label</span> <span class="o">==</span> <span class="n">connector_label</span> <span class="ow">and</span> <span class="n">con</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">visited</span><span class="p">:</span>
+                    <span class="n">label_found</span> <span class="o">=</span> <span class="kc">True</span>
+                    <span class="n">visited</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">con</span><span class="p">)</span>
+                    <span class="k">break</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">label_found</span><span class="p">:</span>
+                <span class="k">return</span> <span class="kc">False</span>
+        <span class="k">return</span> <span class="kc">True</span></div>
+
+
+    <span class="k">def</span> <span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Defines iterable as iterating over the contents of the elements of</span>
+<span class="sd">        the distribution.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">pattern</span><span class="p">,</span> <span class="n">probability</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">distribution</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">yield</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">pattern</span><span class="p">),</span> <span class="n">probability</span>
+
+<div class="viewcode-block" id="PatternDistribution.sample_pattern">
+<a class="viewcode-back" href="../../../pydexpi.syndata.pattern_distribution.html#pydexpi.syndata.pattern_distribution.PatternDistribution.sample_pattern">[docs]</a>
+    <span class="k">def</span> <span class="nf">sample_pattern</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Samples a pattern from the pattern distribution with respect to the</span>
+<span class="sd">        probabilities of the distribution.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Pattern</span>
+<span class="sd">            The sampled pattern.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">pattern_choices</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">distribution</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+        <span class="n">probabilities</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">distribution</span><span class="o">.</span><span class="n">values</span><span class="p">())</span>
+        <span class="n">sampled_pattern</span> <span class="o">=</span> <span class="n">choices</span><span class="p">(</span><span class="n">pattern_choices</span><span class="p">,</span> <span class="n">weights</span><span class="o">=</span><span class="n">probabilities</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">1</span><span class="p">)[</span>
+            <span class="mi">0</span>
+        <span class="p">]</span>
+        <span class="k">return</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">sampled_pattern</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">distribution</span><span class="p">[</span><span class="n">sampled_pattern</span><span class="p">]</span></div>
+
+
+<div class="viewcode-block" id="PatternDistribution.random_pattern">
+<a class="viewcode-back" href="../../../pydexpi.syndata.pattern_distribution.html#pydexpi.syndata.pattern_distribution.PatternDistribution.random_pattern">[docs]</a>
+    <span class="k">def</span> <span class="nf">random_pattern</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Samples a pattern from the distribution completely at random,</span>
+<span class="sd">        disregarding the probabilities.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Pattern</span>
+<span class="sd">            The randomly sampled pattern.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">random_index</span> <span class="o">=</span> <span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">distribution</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">random_pattern</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">distribution</span><span class="o">.</span><span class="n">keys</span><span class="p">())[</span><span class="n">random_index</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">random_pattern</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">distribution</span><span class="p">[</span><span class="n">random_pattern</span><span class="p">]</span></div>
+
+
+<div class="viewcode-block" id="PatternDistribution.load_distribution">
+<a class="viewcode-back" href="../../../pydexpi.syndata.pattern_distribution.html#pydexpi.syndata.pattern_distribution.PatternDistribution.load_distribution">[docs]</a>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">load_distribution</span><span class="p">(</span>
+        <span class="bp">cls</span><span class="p">,</span> <span class="n">dir_path</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span> <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">serializer</span><span class="p">:</span> <span class="n">Serializer</span>
+    <span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Loads a distribution in the directory specified in path_dir with the</span>
+<span class="sd">        name given in name, as previously saved by the save_distribution method.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        path_dir : Path</span>
+<span class="sd">            The directory the distribution is saved in.</span>
+<span class="sd">        name : str</span>
+<span class="sd">            The name of the distribution.</span>
+<span class="sd">        serializer : Serializer</span>
+<span class="sd">            The serializer to be used for loading.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        Pattern</span>
+<span class="sd">            The loaded pattern.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">distribution_directory</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">dir_path</span><span class="p">)</span> <span class="o">/</span> <span class="n">name</span>
+        <span class="n">patterns</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">filename</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">distribution_directory</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">filename</span> <span class="o">==</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">.json&quot;</span><span class="p">:</span>
+                <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">distribution_directory</span> <span class="o">/</span> <span class="n">filename</span><span class="p">)</span> <span class="k">as</span> <span class="n">json_file</span><span class="p">:</span>
+                    <span class="n">probabilities</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">json_file</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">pattern_name</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span><span class="o">.</span><span class="n">stem</span>
+                <span class="n">new_pattern</span> <span class="o">=</span> <span class="n">Pattern</span><span class="o">.</span><span class="n">load_pattern</span><span class="p">(</span>
+                    <span class="n">distribution_directory</span><span class="p">,</span> <span class="n">pattern_name</span><span class="p">,</span> <span class="n">serializer</span>
+                <span class="p">)</span>
+                <span class="n">patterns</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">new_pattern</span><span class="p">)</span>
+        <span class="n">pattern_labels</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">connector</span><span class="o">.</span><span class="n">label</span> <span class="k">for</span> <span class="n">connector</span> <span class="ow">in</span> <span class="n">patterns</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">connectors</span>
+        <span class="p">]</span>
+        <span class="n">distribution</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="n">pattern</span><span class="p">:</span> <span class="n">probabilities</span><span class="p">[</span><span class="n">pattern</span><span class="o">.</span><span class="n">name</span><span class="p">]</span> <span class="k">for</span> <span class="n">pattern</span> <span class="ow">in</span> <span class="n">patterns</span>
+        <span class="p">}</span>
+        <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">distribution</span><span class="p">,</span> <span class="n">pattern_labels</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="PatternDistribution.save_distribution">
+<a class="viewcode-back" href="../../../pydexpi.syndata.pattern_distribution.html#pydexpi.syndata.pattern_distribution.PatternDistribution.save_distribution">[docs]</a>
+    <span class="k">def</span> <span class="nf">save_distribution</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dir_path</span><span class="p">:</span> <span class="n">Path</span><span class="p">,</span> <span class="n">serializer</span><span class="p">:</span> <span class="n">Serializer</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Saves a distribution to a directory in dirpath with the folder name</span>
+<span class="sd">        taken from its name attribute. All patterns are saved in a new folder</span>
+<span class="sd">        with the distribution name, using the dexpi serializer specified in</span>
+<span class="sd">        serializer. Metadata, specifically the distribution probabilities, are</span>
+<span class="sd">        saved along in a separate json in that folder.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        path_dir : str</span>
+<span class="sd">            The path of the directory the pattern is stored in</span>
+<span class="sd">        serializer : Serializer</span>
+<span class="sd">            The serializer object to be used for saving</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Make a directory for the distribution</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">dir_path</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">FileNotFoundError</span><span class="p">(</span><span class="s2">&quot;No directory found in path&quot;</span><span class="p">)</span>
+        <span class="n">distribution_directory</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">dir_path</span><span class="p">)</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">name</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">distribution_directory</span><span class="p">):</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">distribution_directory</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">FileExistsError</span><span class="p">(</span>
+                <span class="s2">&quot;Already a file for a pattern distribution found in the path loacation.&quot;</span>
+            <span class="p">)</span>
+
+        <span class="n">probabilities</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="n">pattern</span><span class="o">.</span><span class="n">name</span><span class="p">:</span> <span class="n">probability</span>
+            <span class="k">for</span> <span class="n">pattern</span><span class="p">,</span> <span class="n">probability</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">distribution</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
+        <span class="p">}</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span>
+            <span class="n">distribution_directory</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">.json&quot;</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span>
+        <span class="p">)</span> <span class="k">as</span> <span class="n">json_file</span><span class="p">:</span>
+            <span class="n">json</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">probabilities</span><span class="p">,</span> <span class="n">json_file</span><span class="p">,</span> <span class="n">indent</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">pattern</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">distribution</span><span class="p">:</span>
+            <span class="n">pattern</span><span class="o">.</span><span class="n">save_pattern</span><span class="p">(</span><span class="n">distribution_directory</span><span class="p">,</span> <span class="n">serializer</span><span class="p">)</span></div>
+</div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Domink Goldstein, Lukas Schulze Balhorn, Artur Schweidtmann.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

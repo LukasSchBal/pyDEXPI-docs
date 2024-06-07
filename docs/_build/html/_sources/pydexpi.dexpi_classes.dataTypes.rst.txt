@@ -4,21 +4,11 @@ pydexpi.dexpi\_classes.dataTypes package
 Submodules
 ----------
 
-pydexpi.dexpi\_classes.dataTypes.multiLanguageString module
------------------------------------------------------------
+.. toctree::
+   :maxdepth: 4
 
-.. automodule:: pydexpi.dexpi_classes.dataTypes.multiLanguageString
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-pydexpi.dexpi\_classes.dataTypes.singleLanguageString module
-------------------------------------------------------------
-
-.. automodule:: pydexpi.dexpi_classes.dataTypes.singleLanguageString
-   :members:
-   :undoc-members:
-   :show-inheritance:
+   pydexpi.dexpi_classes.dataTypes.multiLanguageString
+   pydexpi.dexpi_classes.dataTypes.singleLanguageString
 
 Module contents
 ---------------

@@ -21,8 +21,8 @@
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="pydexpi.dexpi_classes.dexpiModel package" href="pydexpi.dexpi_classes.dexpiModel.html" />
-    <link rel="prev" title="pydexpi.dexpi_classes.customization package" href="pydexpi.dexpi_classes.customization.html" /> 
+    <link rel="next" title="pydexpi.dexpi_classes.dataTypes.multiLanguageString module" href="pydexpi.dexpi_classes.dataTypes.multiLanguageString.html" />
+    <link rel="prev" title="pydexpi.dexpi_classes.customization.customVolumeFlowRateAttribute module" href="pydexpi.dexpi_classes.customization.customVolumeFlowRateAttribute.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -94,71 +94,29 @@
 <h1>pydexpi.dexpi_classes.dataTypes package<a class="headerlink" href="#pydexpi-dexpi-classes-datatypes-package" title="Link to this heading"></a></h1>
 <section id="submodules">
 <h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading"></a></h2>
-</section>
-<section id="module-pydexpi.dexpi_classes.dataTypes.multiLanguageString">
-<span id="pydexpi-dexpi-classes-datatypes-multilanguagestring-module"></span><h2>pydexpi.dexpi_classes.dataTypes.multiLanguageString module<a class="headerlink" href="#module-pydexpi.dexpi_classes.dataTypes.multiLanguageString" title="Link to this heading"></a></h2>
-<p>This module contains a pydantic class for the DEXPI MultiLanguageString class</p>
-<dl class="py class">
-<dt class="sig sig-object py" id="pydexpi.dexpi_classes.dataTypes.multiLanguageString.MultiLanguageString">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pydexpi.dexpi_classes.dataTypes.multiLanguageString.</span></span><span class="sig-name descname"><span class="pre">MultiLanguageString</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">singleLanguageStrings</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#pydexpi.dexpi_classes.dataTypes.singleLanguageString.SingleLanguageString" title="pydexpi.dexpi_classes.dataTypes.singleLanguageString.SingleLanguageString"><span class="pre">SingleLanguageString</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pydexpi.dexpi_classes.dataTypes.multiLanguageString.MultiLanguageString" title="Link to this definition"></a></dt>
-<dd><p>Bases: <a class="reference internal" href="pydexpi.dexpi_classes.html#pydexpi.dexpi_classes.dexpiDataTypeBaseModel.DexpiDataTypeBaseModel" title="pydexpi.dexpi_classes.dexpiDataTypeBaseModel.DexpiDataTypeBaseModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">DexpiDataTypeBaseModel</span></code></a></p>
-<p>A container for one or more SingleLanguageStrings. MultiLanguageString is used as the type of data attributes which have language-dependent string values: Each SingleLanguageString contains a NullableString Value and a Language tag.</p>
-<dl class="py attribute">
-<dt class="sig sig-object py" id="pydexpi.dexpi_classes.dataTypes.multiLanguageString.MultiLanguageString.model_config">
-<span class="sig-name descname"><span class="pre">model_config</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar</span><span class="p"><span class="pre">[</span></span><span class="pre">ConfigDict</span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'validate_assignment':</span> <span class="pre">True}</span></em><a class="headerlink" href="#pydexpi.dexpi_classes.dataTypes.multiLanguageString.MultiLanguageString.model_config" title="Link to this definition"></a></dt>
-<dd><p>Configuration for the model, should be a dictionary conforming to [<cite>ConfigDict</cite>][pydantic.config.ConfigDict].</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="pydexpi.dexpi_classes.dataTypes.multiLanguageString.MultiLanguageString.model_fields">
-<span class="sig-name descname"><span class="pre">model_fields</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar</span><span class="p"><span class="pre">[</span></span><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">FieldInfo</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'id':</span> <span class="pre">FieldInfo(annotation=str,</span> <span class="pre">required=False,</span> <span class="pre">default_factory=&lt;lambda&gt;),</span> <span class="pre">'singleLanguageStrings':</span> <span class="pre">FieldInfo(annotation=list[SingleLanguageString],</span> <span class="pre">required=True)}</span></em><a class="headerlink" href="#pydexpi.dexpi_classes.dataTypes.multiLanguageString.MultiLanguageString.model_fields" title="Link to this definition"></a></dt>
-<dd><p>Metadata about the fields defined on the model,
-mapping of field names to [<cite>FieldInfo</cite>][pydantic.fields.FieldInfo].</p>
-<p>This replaces <cite>Model.__fields__</cite> from Pydantic V1.</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="pydexpi.dexpi_classes.dataTypes.multiLanguageString.MultiLanguageString.singleLanguageStrings">
-<span class="sig-name descname"><span class="pre">singleLanguageStrings</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">list</span><span class="p"><span class="pre">[</span></span><a class="reference internal" href="#pydexpi.dexpi_classes.dataTypes.singleLanguageString.SingleLanguageString" title="pydexpi.dexpi_classes.dataTypes.singleLanguageString.SingleLanguageString"><span class="pre">SingleLanguageString</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#pydexpi.dexpi_classes.dataTypes.multiLanguageString.MultiLanguageString.singleLanguageStrings" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
-</section>
-<section id="module-pydexpi.dexpi_classes.dataTypes.singleLanguageString">
-<span id="pydexpi-dexpi-classes-datatypes-singlelanguagestring-module"></span><h2>pydexpi.dexpi_classes.dataTypes.singleLanguageString module<a class="headerlink" href="#module-pydexpi.dexpi_classes.dataTypes.singleLanguageString" title="Link to this heading"></a></h2>
-<p>This module contains a pydantic class for the DEXPI SingleLanguageString class</p>
-<dl class="py class">
-<dt class="sig sig-object py" id="pydexpi.dexpi_classes.dataTypes.singleLanguageString.SingleLanguageString">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pydexpi.dexpi_classes.dataTypes.singleLanguageString.</span></span><span class="sig-name descname"><span class="pre">SingleLanguageString</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">language</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pydexpi.dexpi_classes.dataTypes.singleLanguageString.SingleLanguageString" title="Link to this definition"></a></dt>
-<dd><p>Bases: <a class="reference internal" href="pydexpi.dexpi_classes.html#pydexpi.dexpi_classes.dexpiDataTypeBaseModel.DexpiDataTypeBaseModel" title="pydexpi.dexpi_classes.dexpiDataTypeBaseModel.DexpiDataTypeBaseModel"><code class="xref py py-class docutils literal notranslate"><span class="pre">DexpiDataTypeBaseModel</span></code></a></p>
-<p>A SingleLanguageString contains a NullableString as its Value and a Language tag. SingleLanguageString is only used within MultiLanguageString. See the latter data type for more details.</p>
-<dl class="py attribute">
-<dt class="sig sig-object py" id="pydexpi.dexpi_classes.dataTypes.singleLanguageString.SingleLanguageString.language">
-<span class="sig-name descname"><span class="pre">language</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#pydexpi.dexpi_classes.dataTypes.singleLanguageString.SingleLanguageString.language" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="pydexpi.dexpi_classes.dataTypes.singleLanguageString.SingleLanguageString.model_config">
-<span class="sig-name descname"><span class="pre">model_config</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar</span><span class="p"><span class="pre">[</span></span><span class="pre">ConfigDict</span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'validate_assignment':</span> <span class="pre">True}</span></em><a class="headerlink" href="#pydexpi.dexpi_classes.dataTypes.singleLanguageString.SingleLanguageString.model_config" title="Link to this definition"></a></dt>
-<dd><p>Configuration for the model, should be a dictionary conforming to [<cite>ConfigDict</cite>][pydantic.config.ConfigDict].</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="pydexpi.dexpi_classes.dataTypes.singleLanguageString.SingleLanguageString.model_fields">
-<span class="sig-name descname"><span class="pre">model_fields</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">ClassVar</span><span class="p"><span class="pre">[</span></span><span class="pre">dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">FieldInfo</span><span class="p"><span class="pre">]</span></span><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">{'id':</span> <span class="pre">FieldInfo(annotation=str,</span> <span class="pre">required=False,</span> <span class="pre">default_factory=&lt;lambda&gt;),</span> <span class="pre">'language':</span> <span class="pre">FieldInfo(annotation=Union[str,</span> <span class="pre">NoneType],</span> <span class="pre">required=False),</span> <span class="pre">'value':</span> <span class="pre">FieldInfo(annotation=Union[str,</span> <span class="pre">NoneType],</span> <span class="pre">required=False)}</span></em><a class="headerlink" href="#pydexpi.dexpi_classes.dataTypes.singleLanguageString.SingleLanguageString.model_fields" title="Link to this definition"></a></dt>
-<dd><p>Metadata about the fields defined on the model,
-mapping of field names to [<cite>FieldInfo</cite>][pydantic.fields.FieldInfo].</p>
-<p>This replaces <cite>Model.__fields__</cite> from Pydantic V1.</p>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="pydexpi.dexpi_classes.dataTypes.singleLanguageString.SingleLanguageString.value">
-<span class="sig-name descname"><span class="pre">value</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></em><a class="headerlink" href="#pydexpi.dexpi_classes.dataTypes.singleLanguageString.SingleLanguageString.value" title="Link to this definition"></a></dt>
-<dd></dd></dl>
-
-</dd></dl>
-
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="pydexpi.dexpi_classes.dataTypes.multiLanguageString.html">pydexpi.dexpi_classes.dataTypes.multiLanguageString module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="pydexpi.dexpi_classes.dataTypes.multiLanguageString.html#pydexpi.dexpi_classes.dataTypes.multiLanguageString.MultiLanguageString"><code class="docutils literal notranslate"><span class="pre">MultiLanguageString</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pydexpi.dexpi_classes.dataTypes.multiLanguageString.html#pydexpi.dexpi_classes.dataTypes.multiLanguageString.MultiLanguageString.model_config"><code class="docutils literal notranslate"><span class="pre">MultiLanguageString.model_config</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pydexpi.dexpi_classes.dataTypes.multiLanguageString.html#pydexpi.dexpi_classes.dataTypes.multiLanguageString.MultiLanguageString.model_fields"><code class="docutils literal notranslate"><span class="pre">MultiLanguageString.model_fields</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pydexpi.dexpi_classes.dataTypes.multiLanguageString.html#pydexpi.dexpi_classes.dataTypes.multiLanguageString.MultiLanguageString.singleLanguageStrings"><code class="docutils literal notranslate"><span class="pre">MultiLanguageString.singleLanguageStrings</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="pydexpi.dexpi_classes.dataTypes.singleLanguageString.html">pydexpi.dexpi_classes.dataTypes.singleLanguageString module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="pydexpi.dexpi_classes.dataTypes.singleLanguageString.html#pydexpi.dexpi_classes.dataTypes.singleLanguageString.SingleLanguageString"><code class="docutils literal notranslate"><span class="pre">SingleLanguageString</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="pydexpi.dexpi_classes.dataTypes.singleLanguageString.html#pydexpi.dexpi_classes.dataTypes.singleLanguageString.SingleLanguageString.language"><code class="docutils literal notranslate"><span class="pre">SingleLanguageString.language</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pydexpi.dexpi_classes.dataTypes.singleLanguageString.html#pydexpi.dexpi_classes.dataTypes.singleLanguageString.SingleLanguageString.model_config"><code class="docutils literal notranslate"><span class="pre">SingleLanguageString.model_config</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pydexpi.dexpi_classes.dataTypes.singleLanguageString.html#pydexpi.dexpi_classes.dataTypes.singleLanguageString.SingleLanguageString.model_fields"><code class="docutils literal notranslate"><span class="pre">SingleLanguageString.model_fields</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="pydexpi.dexpi_classes.dataTypes.singleLanguageString.html#pydexpi.dexpi_classes.dataTypes.singleLanguageString.SingleLanguageString.value"><code class="docutils literal notranslate"><span class="pre">SingleLanguageString.value</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</div>
 </section>
 <section id="module-pydexpi.dexpi_classes.dataTypes">
 <span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-pydexpi.dexpi_classes.dataTypes" title="Link to this heading"></a></h2>
@@ -169,8 +127,8 @@ mapping of field names to [<cite>FieldInfo</cite>][pydantic.fields.FieldInfo].</
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="pydexpi.dexpi_classes.customization.html" class="btn btn-neutral float-left" title="pydexpi.dexpi_classes.customization package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="pydexpi.dexpi_classes.dexpiModel.html" class="btn btn-neutral float-right" title="pydexpi.dexpi_classes.dexpiModel package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="pydexpi.dexpi_classes.customization.customVolumeFlowRateAttribute.html" class="btn btn-neutral float-left" title="pydexpi.dexpi_classes.customization.customVolumeFlowRateAttribute module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="pydexpi.dexpi_classes.dataTypes.multiLanguageString.html" class="btn btn-neutral float-right" title="pydexpi.dexpi_classes.dataTypes.multiLanguageString module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>

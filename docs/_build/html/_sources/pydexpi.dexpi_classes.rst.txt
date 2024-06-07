@@ -22,21 +22,11 @@ Subpackages
 Submodules
 ----------
 
-pydexpi.dexpi\_classes.dexpiBaseModel module
---------------------------------------------
+.. toctree::
+   :maxdepth: 4
 
-.. automodule:: pydexpi.dexpi_classes.dexpiBaseModel
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-pydexpi.dexpi\_classes.dexpiDataTypeBaseModel module
-----------------------------------------------------
-
-.. automodule:: pydexpi.dexpi_classes.dexpiDataTypeBaseModel
-   :members:
-   :undoc-members:
-   :show-inheritance:
+   pydexpi.dexpi_classes.dexpiBaseModel
+   pydexpi.dexpi_classes.dexpiDataTypeBaseModel
 
 Module contents
 ---------------

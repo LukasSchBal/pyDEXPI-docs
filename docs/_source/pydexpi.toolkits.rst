@@ -4,21 +4,11 @@ pydexpi.toolkits package
 Submodules
 ----------
 
-pydexpi.toolkits.model\_toolkit module
---------------------------------------
+.. toctree::
+   :maxdepth: 4
 
-.. automodule:: pydexpi.toolkits.model_toolkit
-   :members:
-   :undoc-members:
-   :show-inheritance:
-
-pydexpi.toolkits.piping\_toolkit module
----------------------------------------
-
-.. automodule:: pydexpi.toolkits.piping_toolkit
-   :members:
-   :undoc-members:
-   :show-inheritance:
+   pydexpi.toolkits.model_toolkit
+   pydexpi.toolkits.piping_toolkit
 
 Module contents
 ---------------
